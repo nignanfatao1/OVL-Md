@@ -10,8 +10,8 @@ RUN apt-get update && \
   npm i pm2 -g && \
   rm -rf /var/lib/apt/lists/*
   
-RUN git clone https://github.com/Nignanfatao/OVL-Md  /root/Zokou_BOt
-WORKDIR /root/Zokou_Bot/
+RUN git clone https://github.com/Nignanfatao/OVL-Md  /root/Ovl_BOt
+WORKDIR /root/Ovl_Bot/
 
 
 COPY package.json .
