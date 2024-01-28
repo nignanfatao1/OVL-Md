@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "Ovl": "pm2 start index.js --attach --max-memory-restart 490M",
+    "start": "node index.js",
+    "Ovl": "pm2 start index.js --attach --max-memory-restart 490M"
   },
   "keywords": ["baileysQr", "MdLogin", "Ovl-Md", "whatsapp-bot", "BotWhatsapp", "whatsappMdLogin", "adiwajshing/baileys", "baileys-md-qr", "multi-device-qr", "md-qr", "bot-qr", "baileysQrScanner", "wabot"],
   "author": "Fatao",
