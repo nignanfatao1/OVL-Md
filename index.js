@@ -66,7 +66,7 @@ SESSION-ID ==> ${Scan_Id}
               console.log("Connexion perdue avec le serveur !");
             } else if (reason === DisconnectReason.restartRequired) {
               console.log("Redémarrage requis, redémarrage...");
-              IZUKU().catch(err => console.log(err));
+              ovl().catch(err => console.log(err));
             } else if (reason === DisconnectReason.timedOut) {
               console.log("Connexion expirée !");
             } else {
