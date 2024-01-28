@@ -1,6 +1,6 @@
 {
   "name":"OVL-Md",
-  "description":"bot whatsapp développé par @Fatao",
+  "description":"bot whatsapp développé par @fatao",
   "keywords":["bot","node","baileys","whatsapp"],
   "logo": "https://telegra.ph/file/0d81626ca4a81fe93303a.jpg",
   "repository":"https://github.com/Nignanfatao/OVL-Md",
@@ -13,20 +13,61 @@
       "value":"#",
       "required":true
     },
+    "LECTURE_AUTO_STATUS":
+    {
+      "description":"le bot lira tous les status automatiquement (oui pour activer et non pour désactiver)",
+      "value":"oui",
+      "required":false
+    }, "TELECHARGER_AUTO_STATUS":
+    {
+      "description":"le bot téléchargera tous les status automatiquement (oui pour activer et non pour désactiver)",
+      "value":"oui",
+      "required":false
+    }
+    ,
     "NOM_BOT" : {
        
       "description":"Un nom pour votre bot",
-      "value":"OVL-Md",
+      "value":"Zokou-MD",
       "required":false
 
     } ,
      "LIENS_MENU" : {
     
       "description":"Ajoutez un ou plusieurs lien(s) d'image ou de video pour votre bot ; exemple : lien1,lien2,lien3......",
-      "value":"https://telegra.ph/file/0d81626ca4a81fe93303a.jpg",
+      "value":"https://wallpapercave.com/uwp/uwp3943464.jpeg",
       "required":false
        
      },
+
+     "PM_PERMIT" :
+     {
+      "description":"Les commandes seront pas fonctionnelles en priver pour les autres utilisateurs (oui pour activer et non pour désactiver)",
+      "value":"non",
+      "required":false
+    }
+    ,
+    "MODE_PUBLIC":
+    {
+      "description":"oui pour le mode public ou non pour le mode privé(Dans ce vous seul  utiliserez le bot)",
+      "value":"oui",
+      "required":false
+    }
+	,
+    "HEROKU_APY_KEY": {
+    "description": "inserez l'apikey de votre compte heroku",
+     "required" :false
+    },
+  "HEROKU_APP_NAME": {
+    "description": "inserez le nom que vous avez inserez(APP NAME) au tout debut de la page",
+     "required" :false
+    }  
+	  ,
+    "ETAT":{
+		  "description":"marquez votre présence : 1 pour signaler que vous êtes en ligne même si vous ne l'êtes pas . 2 pour dire que vous êtes entrain d écrire un message. 3 pour signaler que vous êtes entrain de d enregistrer un audio . ou laissez le champs  vide pour signaler votre état réel.  ",
+		  "value":"1",
+		  "required":"false"
+	  },
     "SESSION_ID":
     {
       "description":"veuillez renseigner votre id de session",   
@@ -39,17 +80,32 @@
     
     "description": "Votre nom",
     "required": false,
-    "value": "Fatao"
+    "value": "Djalega++"
   },
     "NUMERO_OWNER":
   {
     
     "description": "Votre numero de telephone; il doit etre dans le format ID+numero",
     "required":false,
-    "value": "226xxxxxxxx"
+    "value": "22891733300"
   },
+    
+
+    "WARN_COUNT":
+  {
+    "description": "il s'agit de nombre d'avertissement limite",
+    "required": false,
+    "value": "3"
   },
-"formation": {
+  "STARTING_BOT_MESSAGE":
+  {
+    "description": "Mettez oui si vous voulez avoir le message du bot qu'il vous envoie en pv ou non si vous en voulez pas",
+    "required": true,
+    "value": "oui"
+  }
+  },
+
+  "formation": {
 		"worker": {
 			"quantity": 1,
 			"size": "basic"
