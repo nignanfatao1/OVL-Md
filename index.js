@@ -123,5 +123,3 @@ console.log("=========== Nouveau message ===========");
         
 function repondre(mes) { ovl.sendMessage(origineMessage, { text: mes }, { quoted: ms }); }
                }
-
-main();  
