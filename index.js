@@ -10,6 +10,8 @@ const { toBuffer } = require("qrcode");
 const path = require('path');
 const fs = require("fs-extra");
 
+const session = conf.SESSION_ID || "";
+
 async function authentification() {
         try {
             
