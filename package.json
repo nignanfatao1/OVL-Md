@@ -2,7 +2,7 @@
 {
   "name": "OVL-qr",
   "version": "0.0.1",
-  "description": "Qr de liaison a whatsapp.",
+  "description": "bot whatsapp developpe oar @Fatao",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -61,8 +61,3 @@
     "yt-search": "^2.10.4",
     "ytdl-core": "^4.10.0"
   };
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.dev/Nignanfatao/OVL-Md.git"
-  }
-}
