@@ -3,7 +3,7 @@
   "description":"bot whatsapp développé par @Fatao",
   "keywords":["bot","node","baileys","whatsapp"],
   "logo": "https://telegra.ph/file/0d81626ca4a81fe93303a.jpg",
-  "repository":"https://github.com/Nignanafatao/OVL-Md",
+  "repository":"https://github.com/Nignanfatao/OVL-Md",
   "succes_url":"/",
   "stack":"container",
   "env":{
