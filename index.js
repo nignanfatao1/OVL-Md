@@ -4,7 +4,7 @@ const logger = logger_1.default.child({});
 logger.level = 'silent';
 const boom_1 = require("@hapi/boom");
 const conf = require("./set");
-const axios = require("axios");à
+const axios = require("axios");
 const pino = require("pino");
 const { toBuffer } = require("qrcode");
 const path = require('path');
@@ -13,68 +13,63 @@ const fs = require("fs-extra");
 const session = conf.SESSION_ID || "";
 
 async function authentification() {
-        try {
-            
-            //console.log("le data "+data)
-            if (!fs.existsSync(__dirname + "/auth_info_baileys/creds.json")) {
-                console.log("connexion en cour ...");
-                await fs.writeFileSync(__dirname + "/auth_info_baileys/creds.json", atob(session), "utf8");
-                //console.log(session)
-            }
-            else if (fs.existsSync(__dirname + "/auth_info_baileys/creds.json") && session != "ovl") {
-                await fs.writeFileSync(__dirname + "/auth_info_baileys/creds.json", atob(session), "utf8");
-            }
+    try {
+        if (!fs.existsSync(__dirname + "/auth_info_baileys/creds.json")) {
+            console.log("connexion en cours ...");
+            await fs.writeFileSync(__dirname + "/auth_info_baileys/creds.json", atob(session), "utf8");
+        } else if (fs.existsSync(__dirname + "/auth_info_baileys/creds.json") && session !== "ovl") {
+            await fs.writeFileSync(__dirname + "/auth_info_baileys/creds.json", atob(session), "utf8");
         }
-        catch (e) {
-            console.log("Session Invalide " + e );
-            return;
-        }
+    } catch (e) {
+        console.log("Session Invalide " + e);
+        return;
     }
-    authentification();
-    const store = (0, baileys_1.makeInMemoryStore)({
-        logger: pino().child({ level: "silent", stream: "store" }),
-    });
-    setTimeout(() => {
-        async function main() {
-            const { version, isLatest } = await (0, baileys_1.fetchLatestBaileysVersion)();
-            const { state, saveCreds } = await (0, baileys_1.useMultiFileAuthState)(__dirname + "/auth_info_baileys");
-            const sockOptions = {
-                version,
-                logger: pino({ level: "silent" }),
-                browser: ['ovl-Md', "safari", "0.0.1"],
-                printQRInTerminal: true,
-                fireInitQueries: false,
-                shouldSyncHistoryMessage: true,
-                downloadHistory: true,
-                syncFullHistory: true,
-                generateHighQualityLinkPreview: true,
-                markOnlineOnConnect: false,
-                keepAliveIntervalMs: 30_000,
-                /* auth: state*/ auth: {
-                    creds: state.creds,
-                    /** caching makes the store faster to send/recv messages */
-                    keys: (0, baileys_1.makeCacheableSignalKeyStore)(state.keys, logger),
-                },
-                //////////
-                getMessage: async (key) => {
-                    if (store) {
-                        const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
-                        return msg.message || undefined;
-                    }
-                    return {
-                        conversation: 'An Error Occurred, Repeat Command!'
-                    };
-                }
-                ///////
-            };
-            const ovl = (0, baileys_1.default)(sockOptions);
+}
 
-ovl.ev.on("messages.upsert", async (m) => {
-                const { messages } = m;
-                const ms = messages[0];
-                if (!ms.message)
-                    return;
-                const decodeJid = (jid) => {
+authentification();
+
+const store = baileys_1.makeInMemoryStore({
+    logger: pino().child({ level: "silent", stream: "store" }),
+});
+
+setTimeout(async () => {
+    async function main() {
+        const { version, isLatest } = await baileys_1.fetchLatestBaileysVersion();
+        const { state, saveCreds } = await baileys_1.useMultiFileAuthState(__dirname + "/auth_info_baileys");
+        const sockOptions = {
+            version,
+            logger: pino({ level: "silent" }),
+            browser: ['ovl-Md', "safari", "0.0.1"],
+            printQRInTerminal: true,
+            fireInitQueries: false,
+            shouldSyncHistoryMessage: true,
+            downloadHistory: true,
+            syncFullHistory: true,
+            generateHighQualityLinkPreview: true,
+            markOnlineOnConnect: false,
+            keepAliveIntervalMs: 30_000,
+            auth_info_baileys: {
+                creds: state.creds,
+                keys: baileys_1.makeCacheableSignalKeyStore(state.keys, logger),
+            },
+            getMessage: async (key) => {
+                if (store) {
+                    const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
+                    return msg.message || undefined;
+                }
+                return {
+                    conversation: 'An Error Occurred, Repeat Command!'
+                };
+            }
+        };
+
+        const ovl = baileys_1.default(sockOptions);
+
+        ovl.ev.on("messages.upsert", async (m) => {
+            const { messages } = m;
+            const ms = messages[0];
+            if (!ms.message) return;
+const decodeJid = (jid) => {
                     if (!jid)
                         return jid;
                     if (/:\d+@/gi.test(jid)) {
@@ -120,6 +115,11 @@ console.log("=========== Nouveau message ===========");
                 console.log("------ contenu du message ------");
                 console.log(texte);
 
-        
-function repondre(mes) { ovl.sendMessage(origineMessage, { text: mes }, { quoted: ms }); }
-               }
+
+            function repondre(mes) {
+                ovl.sendMessage(origineMessage, { text: mes }, { quoted: ms });
+            }
+        });
+    }
+        main()
+});
