@@ -6,8 +6,9 @@ const path = require('path');
 // Remplacez 'YOUR_TOKEN' par le token de votre bot
 const token = '6467806947:AAGL74S28MeTHz9qNwjA1cnb-f8sgUewPnM';
 const bot = new TelegramBot(token, { polling: true });
+const  superUser = ['@NEOverse_2k24_bot', '5829888322', '6912879147', conf.SUDO_ID || ''];
 let commandeOptions;
-async function main() {
+
 // Fonction pour répondre à un message
 function repondre(chatId, message) {
     bot.sendMessage(chatId, message);
@@ -39,8 +40,7 @@ bot.on('message', (msg) => {
   const  arg = textReceived.split(' ').slice(1);
     const userId = msg.from.id; // if (superUser.includes(userId))
     const nomAuteurMessage = msg.from.first_name;
-  const  superUser = ['@NEOverse_2k24_bot', '5829888322', '6912879147', conf.SUDO_ID || ''];
-
+  
     // Affichage des informations sur le message reçu
     console.log("[][]...{NEOverse-Md}...[][]");
     console.log("=========== Nouveau message ===========");
@@ -80,7 +80,6 @@ async function loadCommands() {
         console.error('Erreur lors du chargement des commandes:', error);
     }
 }; loadCommands();
-}
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -113,4 +112,11 @@ bot.on('webhook_error', (error) => {
 // Chargez les commandes lors de la connexion initiale du bot
 main()
 
-module.exports = { bot, repondre };
+module.exports = { 
+        bot,
+        arg,
+        mybotpic,
+        image,
+        video,
+        superUser,
+        repondre };
