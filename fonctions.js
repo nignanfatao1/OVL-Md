@@ -18,9 +18,24 @@ function video(chatId, videoUrl, caption) {
     bot.sendVideo(chatId, videoUrl, { caption: caption });
 }
 
-function arg(text) {
-    const arguments = text.split(' ').slice(1)
-    return arguments;
+function arg(msg) {
+    if (msg.text) {
+        return msg.text.split(' ').slice(1);
+    } else {
+        return [];
+    }
 }
 
-module.exports = { bot, dev, repondre, image, video, arg };
+function mybotpic() {
+    const liens = [
+        'https://telegra.ph/file/e4f27e467089eb3e31463.jpg', 
+        'https://telegra.ph/file/00fd279ccd45bef04b52a.jpg', 
+        'https://telegra.ph/file/d8a070a1d819297ed8b29.jpg', 
+        'https://telegra.ph/file/e9128988e705cc33ce72f.jpg'
+    ];
+    const indiceAleatoire = Math.floor(Math.random() * liens.length);
+    const lienAleatoire = liens[indiceAleatoire];
+    return lienAleatoire;
+}
+
+module.exports = { bot, dev, repondre, image, video, arg, mybotpic };
