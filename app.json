@@ -20,9 +20,9 @@
       "required":false
 
     } ,
-     "LIENS_MENU" : {
+     "SUDO_ID" : {
     
-      "description":"Ajoutez un ou plusieurs lien(s) d'image ou de video pour votre bot ; exemple : lien1,lien2,lien3......",
+      "description":"Ajouter les ID des sudo",
       "value": "https://telegra.ph/file/0d81626ca4a81fe93303a.jpg",
       "required":false
        
