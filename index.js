@@ -121,4 +121,4 @@ bot.on('webhook_error', (error) => {
 // Chargez les commandes lors de la connexion initiale du bot
 loadCommands();
 
-module.exports = { repondre, image, video, mybotpic, superUser, arg}
+module.exports = { repondre, image, video, mybotpic, superUser, arg, bot}
