@@ -1,5 +1,8 @@
 const TelegramBot = require('node-telegram-bot-api');
 const conf = require('./set');
+const fs = require('fs');
+const path = require('path');
+
 
 // Remplacez 'YOUR_TOKEN' par le token de votre bot
 const token = '6467806947:AAGL74S28MeTHz9qNwjA1cnb-f8sgUewPnM';
@@ -14,21 +17,21 @@ const superUser = ['@NEOverse_2k24_bot', '5829888322', '6912879147', conf.SUDO_I
 let chatId, textReceived, userId, nomAuteurMessage, arg;
 
 // Fonction pour répondre à un message
-function repondre(message) {
+async function repondre(message) {
     bot.sendMessage(chatId, message);
 }
 
 // Fonction pour envoyer une image avec une légende
-function image(imageUrl, caption) {
+async function image(imageUrl, caption) {
     bot.sendPhoto(chatId, imageUrl, { caption: caption });
 }
 // Fonction pour envoyer une video avec une légende
-function video(videoUrl, caption) {
+async function video(videoUrl, caption) {
     bot.sendVideo(chatId, videoUrl, { caption: caption });
 }
 
 // Fonction pour obtenir un lien aléatoire
-function mybotpic() {
+async function mybotpic() {
     const liens = ['https://telegra.ph/file/e4f27e467089eb3e31463.jpg', 'https://telegra.ph/file/00fd279ccd45bef04b52a.jpg', 'https://telegra.ph/file/d8a070a1d819297ed8b29.jpg', 'https://telegra.ph/file/e9128988e705cc33ce72f.jpg'];
     const indiceAleatoire = Math.floor(Math.random() * liens.length);
     const lienAleatoire = liens[indiceAleatoire];
@@ -66,3 +69,54 @@ const commandeOptions = {
     repondre // Fonction pour répondre à un message
 };
 
+async function loadCommands() {
+    console.log("Chargement des commandes...");
+    const commandsDir = path.join(__dirname, 'commandes');
+    try {
+        const commandFiles = fs.readdirSync(commandsDir).filter(file => file.endsWith('.js'));
+        for (const file of commandFiles) {
+            try {
+                require(path.join(commandsDir, file))(bot);
+                console.log(`${file} installé ✔️`);
+                await delay(300);
+            } catch (error) {
+                console.error(`Erreur lors du chargement de ${file}: ${error.message}`);
+            }
+        }
+        console.log("Chargement des commandes terminé ✅");
+    } catch (error) {
+        console.error('Erreur lors du chargement des commandes:', error);
+    }
+}
+
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Chargez les commandes lors de la connexion initiale du bot
+bot.on('polling_error', (error) => {
+    console.error('Erreur de polling:', error);
+});
+
+bot.on('webhook_error', (error) => {
+    console.error('Erreur de webhook:', error);
+});
+
+bot.on('message', (msg) => {
+    console.log('Message reçu:', msg);
+});
+
+bot.on('error', (error) => {
+    console.error('Erreur:', error);
+});
+
+bot.on('polling_error', (error) => {
+    console.error('Erreur de polling:', error);
+});
+
+bot.on('webhook_error', (error) => {
+    console.error('Erreur de webhook:', error);
+});
+
+// Chargez les commandes lors de la connexion initiale du bot
+loadCommands();
