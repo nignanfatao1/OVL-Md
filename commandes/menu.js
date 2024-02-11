@@ -1,4 +1,4 @@
-const { bot, repondre, image, video, nomAuteurMessage, mybotpic } = require('../fonctions');
+const { bot,/* repondre, image, video, nomAuteurMessage,*/ mybotpic } = require('../fonctions');
     
     //const conf = require('../set');
 const commands = { 
@@ -33,19 +33,19 @@ Voici la liste de mes commandes :\n`;
 
         if (lien.match(/\.(mp4|gif)$/i)) {
             try {
-                video(chatId, lien, infomsg);
+                bot.sendVideo(chatId, lien, { caption: infomsg});
             } catch (e) {
                 console.log("🥵🥵 Menu erreur " + e);
-                repondre(chatId, "🥵🥵 Menu erreur " + e);
+                bot.sendMessage(chatId, "🥵🥵 Menu erreur " + e);
             }
         }
         // Vérification pour .jpeg ou .png
         else if (lien.match(/\.(jpeg|png|jpg)$/i)) {
             try {
-                image(chatId, lien, infomsg);
+               bot.sendPhoto(chatId, lien, { caption: infomsg });
             } catch (e) {
                 console.log("🥵🥵 Menu erreur " + e);
-                repondre(chatId, "🥵🥵 Menu erreur " + e);
+                bot.sendMessage(chatId, "🥵🥵 Menu erreur " + e);
             }
         }
     });
