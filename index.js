@@ -6,57 +6,47 @@ const path = require('path');
 
 // Remplacez 'YOUR_TOKEN' par le token de votre bot
 const token = '6467806947:AAGL74S28MeTHz9qNwjA1cnb-f8sgUewPnM';
-
-// Créer un bot qui utilise le token d'authentification
 const bot = new TelegramBot(token, { polling: true });
-
-// Liste des super utilisateurs
-const superUser = ['@NEOverse_2k24_bot', '5829888322', '6912879147', conf.SUDO_ID || ''];
-
-// Déclaration des variables globales
-let chatId, textReceived, userId, nomAuteurMessage, arg;
+  
+// Événement déclenché lorsque le bot reçoit un message texte
+bot.on('message', (msg) => {
+    // Mise à jour des variables globales
+    const chatId = msg.chat.id;
+    const textReceived = msg.text;
+    const  arg = textReceived.split(' ').slice(1);
+    const userId = msg.from.id; // if (superUser.includes(userId))
+    const nomAuteurMessage = msg.from.first_name;
+    const superUser = ['@NEOverse_2k24_bot', '5829888322', '6912879147', conf.SUDO_ID || ''];
 
 // Fonction pour répondre à un message
-async function repondre(message) {
+ function repondre(message) {
     bot.sendMessage(chatId, message);
 }
 
 // Fonction pour envoyer une image avec une légende
-async function image(imageUrl, caption) {
+ function image(imageUrl, caption) {
     bot.sendPhoto(chatId, imageUrl, { caption: caption });
 }
 // Fonction pour envoyer une video avec une légende
-async function video(videoUrl, caption) {
+function video(videoUrl, caption) {
     bot.sendVideo(chatId, videoUrl, { caption: caption });
 }
 
 // Fonction pour obtenir un lien aléatoire
-async function mybotpic() {
+ function mybotpic() {
     const liens = ['https://telegra.ph/file/e4f27e467089eb3e31463.jpg', 'https://telegra.ph/file/00fd279ccd45bef04b52a.jpg', 'https://telegra.ph/file/d8a070a1d819297ed8b29.jpg', 'https://telegra.ph/file/e9128988e705cc33ce72f.jpg'];
     const indiceAleatoire = Math.floor(Math.random() * liens.length);
     const lienAleatoire = liens[indiceAleatoire];
     return lienAleatoire;
 }
-
-// Événement déclenché lorsque le bot reçoit un message texte
-bot.on('message', (msg) => {
-    // Mise à jour des variables globales
-     chatId = msg.chat.id;
-     textReceived = msg.text;
-     userId = msg.from.id; // if (superUser.includes(userId))
-     nomAuteurMessage = msg.from.first_name;
-
-    // Extraction des parties du message, en excluant le premier élément (la commande)
-     arg = textReceived.split(' ').slice(1);
-
-    // Affichage des informations sur le message reçu
+   // Affichage des informations sur le message reçu
     console.log("[][]...{NEOverse-Md}...[][]");
     console.log("=========== Nouveau message ===========");
     console.log(`Message envoyé par : ${nomAuteurMessage}`);
     console.log("------ Contenu du message ------");
     console.log(textReceived);
     // Autres traitements en fonction du message reçu...
-});
+
 
 // Options de commande
 const commandeOptions = {
@@ -68,6 +58,7 @@ const commandeOptions = {
     userId,
     repondre // Fonction pour répondre à un message
 };
+});
 
 async function loadCommands() {
     console.log("Chargement des commandes...");
@@ -121,4 +112,4 @@ bot.on('webhook_error', (error) => {
 // Chargez les commandes lors de la connexion initiale du bot
 loadCommands();
 
-module.exports = { repondre, image, video, mybotpic, superUser, arg, bot}
+module.exports = { repondre, image, video, mybotpic, superUser, arg, bot }
