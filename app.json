@@ -28,9 +28,9 @@
        
      },
 
-     "SESSION_ID":
+     "TOKEN":
     {
-      "description":"veuillez renseigner votre id de session",   
+      "description":"veuillez renseigner votre id du bot telegram",   
       "value":"",
       "required":true
       
