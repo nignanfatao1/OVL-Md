@@ -1,66 +1,8 @@
-const TelegramBot = require('node-telegram-bot-api');
-const conf = require('./set');
 const fs = require('fs');
 const path = require('path');
+const { bot } = require('./fonctions');
 
-// Remplacez 'YOUR_TOKEN' par le token de votre bot
-const token = '6467806947:AAGL74S28MeTHz9qNwjA1cnb-f8sgUewPnM';
-const bot = new TelegramBot(token, { polling: true });
-const  superUser = ['@NEOverse_2k24_bot', '5829888322', '6912879147', conf.SUDO_ID || ''];
-let arg;
-
-// Fonction pour répondre à un message
-function repondre(chatId, message) {
-    bot.sendMessage(chatId, message);
-}
-
-// Fonction pour envoyer une image avec une légende
-function image(chatId, imageUrl, caption) {
-    bot.sendPhoto(chatId, imageUrl, { caption: caption });
-}
-
-// Fonction pour envoyer une vidéo avec une légende
-function video(chatId, videoUrl, caption) {
-    bot.sendVideo(chatId, videoUrl, { caption: caption });
-}
-
-// Fonction pour obtenir un lien aléatoire
-function mybotpic() {
-    const liens = ['https://telegra.ph/file/e4f27e467089eb3e31463.jpg', 'https://telegra.ph/file/00fd279ccd45bef04b52a.jpg', 'https://telegra.ph/file/d8a070a1d819297ed8b29.jpg', 'https://telegra.ph/file/e9128988e705cc33ce72f.jpg'];
-    const indiceAleatoire = Math.floor(Math.random() * liens.length);
-    const lienAleatoire = liens[indiceAleatoire];
-    return lienAleatoire;
-}
-
-// Événement déclenché lorsque le bot reçoit un message texte
-bot.on('message', (msg) => {
-    // Mise à jour des variables globales
-    const chatId = msg.chat.id;
-    const textReceived = msg.text;
-  arg = textReceived.split(' ').slice(1);
-    const userId = msg.from.id; // if (superUser.includes(userId))
-    const nomAuteurMessage = msg.from.first_name;
-  
-    // Affichage des informations sur le message reçu
-    console.log("[][]...{NEOverse-Md}...[][]");
-    console.log("=========== Nouveau message ===========");
-    console.log(`Message envoyé par : ${nomAuteurMessage}`);
-    console.log("------ Contenu du message ------");
-    console.log(textReceived);
-    // Autres traitements en fonction du message reçu...
-
-    // Options de commande
- commandeOptions = {
-        superUser,
-        arg,
-        mybotpic,
-        image,
-        userId,
-        video,
-        repondre
-    };
-});
-    
+// Fonction pour charger les commandes depuis les fichiers externes
 async function loadCommands() {
     console.log("Chargement des commandes...");
     const commandsDir = path.join(__dirname, 'commandes');
@@ -68,9 +10,10 @@ async function loadCommands() {
         const commandFiles = fs.readdirSync(commandsDir).filter(file => file.endsWith('.js'));
         for (const file of commandFiles) {
             try {
+                // Exécute la commande exportée depuis le fichier
                 require(path.join(commandsDir, file))(bot);
                 console.log(`${file} installé ✔️`);
-                await delay(300);
+                await delay(300); // Attend 300 millisecondes entre chaque chargement de commande
             } catch (error) {
                 console.error(`Erreur lors du chargement de ${file}: ${error.message}`);
             }
@@ -79,12 +22,17 @@ async function loadCommands() {
     } catch (error) {
         console.error('Erreur lors du chargement des commandes:', error);
     }
-}; loadCommands();
+}
+
+// Fonction pour retarder l'exécution
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// Chargez les commandes lors de la connexion initiale du bot
+// Appel à la fonction pour charger les commandes
+loadCommands();
+
+// Gestion des erreurs
 bot.on('polling_error', (error) => {
     console.error('Erreur de polling:', error);
 });
@@ -93,29 +41,22 @@ bot.on('webhook_error', (error) => {
     console.error('Erreur de webhook:', error);
 });
 
+// Affichage des messages reçus sur la console
 bot.on('message', (msg) => {
-    console.log('Message reçu:', msg);
+    // Mise à jour des variables globales
+    const chatId = msg.chat.id;
+    const textReceived = msg.text;
+    const userId = msg.from.id;
+    const nomAuteurMessage = msg.from.first_name;
+
+    // Affichage des informations sur le message reçu
+    console.log("[][]...{NEOverse-Md}...[][]");
+    console.log("=========== Nouveau message ===========");
+    console.log(`Message envoyé par : ${nomAuteurMessage}`);
+    console.log("Contenu du message : ", textReceived);
+    console.log("=========== Fin du message ===========");
 });
 
 bot.on('error', (error) => {
     console.error('Erreur:', error);
 });
-
-bot.on('polling_error', (error) => {
-    console.error('Erreur de polling:', error);
-});
-
-bot.on('webhook_error', (error) => {
-    console.error('Erreur de webhook:', error);
-});
-
-// Chargez les commandes lors de la connexion initiale du bot
-
-module.exports = { 
-        bot,
-        arg,
-        mybotpic,
-        image,
-        video,
-        superUser,
-        repondre };
