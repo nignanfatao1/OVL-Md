@@ -10,14 +10,14 @@ bot.onText(/*new RegExp(`${conf.PREFIXE}menu`)*//\/menu/, (msg) => {
         const chatId = msg.chat.id;
         const nomAuteurMessage = msg.pushName;
         let infomsg = `╔═════ •✧✧• ════╗
-┃   Préfixe : ${conf.PREFIXE}
-┃   Owner : ${conf.NOM_OWNER}
+┃   Préfixe : /
+┃   Owner : Fatao
 ┃   Commandes  : ${Object.keys(commands).length}
 ┃   Développeurs : FATAO & WHITE KÏNGS
 ╚═════ •✧✧• ════╝
 
 👋 salut ${nomAuteurMessage} 👋
-Je suis ${conf.BOT}, un bot développé par la Ns.
+Je suis NEOverse-Md, un bot développé par la Ns.
 
 Voici la liste de mes commandes :\n`;
 
