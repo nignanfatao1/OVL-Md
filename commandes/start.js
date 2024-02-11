@@ -1,4 +1,4 @@
-async (bot, commandeOptions) => {
+const { bot, commandeOptions } = require('../index');
     let { repondre } = commandeOptions;
     bot.onText(/\/start/, (msg) => {
         const chatId = msg.chat.id;
