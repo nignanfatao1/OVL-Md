@@ -6,4 +6,3 @@ const { bot, commandeOptions } = require('../index');
         let nss = `${nomAuteurMessage} salut je suis votre bot telegram`;
         repondre(chatId, nss);
     });
-};
