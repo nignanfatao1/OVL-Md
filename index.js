@@ -3,43 +3,48 @@ const conf = require('./set');
 const fs = require('fs');
 const path = require('path');
 
-
 // Remplacez 'YOUR_TOKEN' par le token de votre bot
-const token = '6467806947:AAGL74S28MeTHz9qNwjA1cnb-f8sgUewPnM';
+const token = 'YOUR_BOT_TOKEN';
 const bot = new TelegramBot(token, { polling: true });
-  
-// Événement déclenché lorsque le bot reçoit un message texte
-bot.on('message', (msg) => {
-    // Mise à jour des variables globales
-    const chatId = msg.chat.id;
-    const textReceived = msg.text;
-    const  arg = textReceived.split(' ').slice(1);
-    const userId = msg.from.id; // if (superUser.includes(userId))
-    const nomAuteurMessage = msg.from.first_name;
-    const superUser = ['@NEOverse_2k24_bot', '5829888322', '6912879147', conf.SUDO_ID || ''];
+
+// Variables globales pour superUser et arg
+let superUser = [];
+let arg = [];
 
 // Fonction pour répondre à un message
- function repondre(message) {
+function repondre(chatId, message) {
     bot.sendMessage(chatId, message);
 }
 
 // Fonction pour envoyer une image avec une légende
- function image(imageUrl, caption) {
+function image(chatId, imageUrl, caption) {
     bot.sendPhoto(chatId, imageUrl, { caption: caption });
 }
-// Fonction pour envoyer une video avec une légende
-function video(videoUrl, caption) {
+
+// Fonction pour envoyer une vidéo avec une légende
+function video(chatId, videoUrl, caption) {
     bot.sendVideo(chatId, videoUrl, { caption: caption });
 }
 
 // Fonction pour obtenir un lien aléatoire
- function mybotpic() {
+function mybotpic() {
     const liens = ['https://telegra.ph/file/e4f27e467089eb3e31463.jpg', 'https://telegra.ph/file/00fd279ccd45bef04b52a.jpg', 'https://telegra.ph/file/d8a070a1d819297ed8b29.jpg', 'https://telegra.ph/file/e9128988e705cc33ce72f.jpg'];
     const indiceAleatoire = Math.floor(Math.random() * liens.length);
     const lienAleatoire = liens[indiceAleatoire];
     return lienAleatoire;
 }
-   // Affichage des informations sur le message reçu
+
+// Événement déclenché lorsque le bot reçoit un message texte
+bot.on('message', (msg) => {
+    // Mise à jour des variables globales
+    const chatId = msg.chat.id;
+    const textReceived = msg.text;
+    arg = textReceived.split(' ').slice(1);
+    const userId = msg.from.id; // if (superUser.includes(userId))
+    const nomAuteurMessage = msg.from.first_name;
+    superUser = ['@NEOverse_2k24_bot', '5829888322', '6912879147', conf.SUDO_ID || ''];
+
+    // Affichage des informations sur le message reçu
     console.log("[][]...{NEOverse-Md}...[][]");
     console.log("=========== Nouveau message ===========");
     console.log(`Message envoyé par : ${nomAuteurMessage}`);
@@ -47,17 +52,16 @@ function video(videoUrl, caption) {
     console.log(textReceived);
     // Autres traitements en fonction du message reçu...
 
-
-// Options de commande
-const commandeOptions = {
-    superUser, // Utilisateurs ayant des privilèges spéciaux
-    arg, // Arguments de la commande (extrait du message texte)
-    mybotpic, // Fonction pour obtenir un lien aléatoire
-    image, // Fonction pour envoyer une image
-    video, //Fonction pour envoyer une video
-    userId,
-    repondre // Fonction pour répondre à un message
-};
+    // Options de commande
+    const commandeOptions = {
+        superUser, // Utilisateurs ayant des privilèges spéciaux
+        arg, // Arguments de la commande (extrait du message texte)
+        mybotpic, // Fonction pour obtenir un lien aléatoire
+        image: (imageUrl, caption) => image(chatId, imageUrl, caption), // Fonction pour envoyer une image
+        video: (videoUrl, caption) => video(chatId, videoUrl, caption), // Fonction pour envoyer une vidéo
+        userId,
+        repondre: (message) => repondre(chatId, message) // Fonction pour répondre à un message
+    };
 });
 
 async function loadCommands() {
@@ -112,4 +116,4 @@ bot.on('webhook_error', (error) => {
 // Chargez les commandes lors de la connexion initiale du bot
 loadCommands();
 
-module.exports = { repondre, image, video, mybotpic, superUser, arg, bot }
+module.exports = { repondre, image, video, mybotpic, superUser, arg, bot };
