@@ -22,6 +22,10 @@ function repondre(message) {
 function image(imageUrl, caption) {
     bot.sendPhoto(chatId, imageUrl, { caption: caption });
 }
+// Fonction pour envoyer une video avec une légende
+function video(videoUrl, caption) {
+    bot.sendVideo(chatId, videoUrl, { caption: caption });
+}
 
 // Fonction pour obtenir un lien aléatoire
 function mybotpic() {
@@ -57,7 +61,7 @@ const commandeOptions = {
     arg, // Arguments de la commande (extrait du message texte)
     mybotpic, // Fonction pour obtenir un lien aléatoire
     image, // Fonction pour envoyer une image
-    bot, // Objet bot
+    video, //Fonction pour envoyer une video
     userId,
     repondre // Fonction pour répondre à un message
 };
