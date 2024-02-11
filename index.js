@@ -41,7 +41,7 @@ bot.on('message', (msg) => {
      chatId = msg.chat.id;
      textReceived = msg.text;
      userId = msg.from.id; // if (superUser.includes(userId))
-     nomAuteurMessage = msg.pushName;
+     nomAuteurMessage = msg.from.first_name;
 
     // Extraction des parties du message, en excluant le premier élément (la commande)
      arg = textReceived.split(' ').slice(1);
