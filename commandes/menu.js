@@ -1,4 +1,4 @@
-const { repondre, image, video, nomAuteurMessage, mybotpic } = require('../index');
+const { bot, repondre, image, video, nomAuteurMessage, mybotpic } = require('../index');
     
     //const conf = require('../set');
 const commands = { 
