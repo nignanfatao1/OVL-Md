@@ -1,4 +1,4 @@
-const {bot, repondre, image, video, mybotpic} = require('../index');
+const { bot, repondre, image, video, mybotpic } = require('../index');
 const conf = require('../set');
 const commands = {
     "Général": ["Info", "Menu", "Dev"],
