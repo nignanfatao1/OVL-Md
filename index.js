@@ -7,7 +7,7 @@ const path = require('path');
 const token = '6467806947:AAGL74S28MeTHz9qNwjA1cnb-f8sgUewPnM';
 const bot = new TelegramBot(token, { polling: true });
 const  superUser = ['@NEOverse_2k24_bot', '5829888322', '6912879147', conf.SUDO_ID || ''];
-let commandeOptions;
+let arg;
 
 // Fonction pour répondre à un message
 function repondre(chatId, message) {
@@ -37,7 +37,7 @@ bot.on('message', (msg) => {
     // Mise à jour des variables globales
     const chatId = msg.chat.id;
     const textReceived = msg.text;
-  const  arg = textReceived.split(' ').slice(1);
+  arg = textReceived.split(' ').slice(1);
     const userId = msg.from.id; // if (superUser.includes(userId))
     const nomAuteurMessage = msg.from.first_name;
   
