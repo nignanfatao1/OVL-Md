@@ -1,6 +1,5 @@
-const { bot, commandeOptions } = require('../index');
-    let { repondre } = commandeOptions;
-    bot.onText(/\/start/, (msg) => {
+const { bot, repondre } = require('../index');
+ bot.onText(/\/start/, (msg) => {
         const chatId = msg.chat.id;
         const nomAuteurMessage = msg.pushName;
         let nss = `${nomAuteurMessage} salut je suis votre bot telegram`;
