@@ -7,7 +7,7 @@ const commands = {
 };
 bot.onText(/*new RegExp(`${conf.PREFIXE}menu`)*//\/menu/, (msg) => {
         const chatId = msg.chat.id;
-        const nomAuteurMessage = msg.pushName;
+        const nomAuteurMessage = msg.from.first_name
         let infomsg = `╔═════ •✧✧• ════╗
 ┃   Préfixe : /
 ┃   Owner : Fatao
