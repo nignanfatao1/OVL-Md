@@ -11,7 +11,7 @@ const bot = new TelegramBot(token, { polling: true });
 const superUser = ['@NEOverse_2k24_bot', '5829888322', '6912879147', conf.SUDO_ID || ''];
 
 // Déclaration des variables globales
-let chatId, textReceived, userId, nomAuteurMessage;
+let chatId, textReceived, userId, nomAuteurMessage, arg;
 
 // Fonction pour répondre à un message
 function repondre(message) {
@@ -44,7 +44,7 @@ bot.on('message', (msg) => {
      nomAuteurMessage = msg.pushName;
 
     // Extraction des parties du message, en excluant le premier élément (la commande)
-    const arg = textReceived.split(' ').slice(1);
+     arg = textReceived.split(' ').slice(1);
 
     // Affichage des informations sur le message reçu
     console.log("[][]...{NEOverse-Md}...[][]");
