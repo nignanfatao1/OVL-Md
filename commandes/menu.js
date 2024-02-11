@@ -33,19 +33,19 @@ Voici la liste de mes commandes :\n`;
 
         if (lien.match(/\.(mp4|gif)$/i)) {
             try {
-                video(lien, infomsg);
+                video(chatId, lien, infomsg);
             } catch (e) {
                 console.log("🥵🥵 Menu erreur " + e);
-                repondre("🥵🥵 Menu erreur " + e);
+                repondre(chatId, "🥵🥵 Menu erreur " + e);
             }
         }
         // Vérification pour .jpeg ou .png
         else if (lien.match(/\.(jpeg|png|jpg)$/i)) {
             try {
-                image(lien, infomsg);
+                image(chatId, lien, infomsg);
             } catch (e) {
                 console.log("🥵🥵 Menu erreur " + e);
-                repondre("🥵🥵 Menu erreur " + e);
+                repondre(chatId, "🥵🥵 Menu erreur " + e);
             }
         }
     });
