@@ -2,14 +2,10 @@ const TelegramBot = require('node-telegram-bot-api');
 const conf = require('./set');
 const fs = require('fs');
 const path = require('path');
-
+async function main() {
 // Remplacez 'YOUR_TOKEN' par le token de votre bot
-const token = '6467806947:AAGL74S28MeTHz9qNwjA1cnb-f8sgUewPnM';
+const token = 'YOUR_BOT_TOKEN';
 const bot = new TelegramBot(token, { polling: true });
-
-// Variables globales pour superUser et arg
-let superUser = [];
-let arg = [];
 
 // Fonction pour répondre à un message
 function repondre(chatId, message) {
@@ -39,10 +35,10 @@ bot.on('message', (msg) => {
     // Mise à jour des variables globales
     const chatId = msg.chat.id;
     const textReceived = msg.text;
-    arg = textReceived.split(' ').slice(1);
+  const  arg = textReceived.split(' ').slice(1);
     const userId = msg.from.id; // if (superUser.includes(userId))
     const nomAuteurMessage = msg.from.first_name;
-    superUser = ['@NEOverse_2k24_bot', '5829888322', '6912879147', conf.SUDO_ID || ''];
+  const  superUser = ['@NEOverse_2k24_bot', '5829888322', '6912879147', conf.SUDO_ID || ''];
 
     // Affichage des informations sur le message reçu
     console.log("[][]...{NEOverse-Md}...[][]");
@@ -54,16 +50,16 @@ bot.on('message', (msg) => {
 
     // Options de commande
     const commandeOptions = {
-        superUser, // Utilisateurs ayant des privilèges spéciaux
-        arg, // Arguments de la commande (extrait du message texte)
-        mybotpic, // Fonction pour obtenir un lien aléatoire
-        image: (imageUrl, caption) => image(chatId, imageUrl, caption), // Fonction pour envoyer une image
-        video: (videoUrl, caption) => video(chatId, videoUrl, caption), // Fonction pour envoyer une vidéo
+        superUser,
+        arg,
+        mybotpic,
+        image,
         userId,
-        repondre: (message) => repondre(chatId, message) // Fonction pour répondre à un message
+        video,
+        repondre
     };
 });
-
+    
 async function loadCommands() {
     console.log("Chargement des commandes...");
     const commandsDir = path.join(__dirname, 'commandes');
@@ -82,8 +78,8 @@ async function loadCommands() {
     } catch (error) {
         console.error('Erreur lors du chargement des commandes:', error);
     }
+}; loadCommands();
 }
-
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -114,6 +110,4 @@ bot.on('webhook_error', (error) => {
 });
 
 // Chargez les commandes lors de la connexion initiale du bot
-loadCommands();
-
-module.exports = { repondre, image, video, mybotpic, superUser, arg, bot };
+main()
