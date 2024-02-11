@@ -6,7 +6,7 @@ const path = require('path');
 // Remplacez 'YOUR_TOKEN' par le token de votre bot
 const token = '6467806947:AAGL74S28MeTHz9qNwjA1cnb-f8sgUewPnM';
 const bot = new TelegramBot(token, { polling: true });
-
+let commandeOptions;
 async function main() {
 // Fonction pour répondre à un message
 function repondre(chatId, message) {
@@ -50,7 +50,7 @@ bot.on('message', (msg) => {
     // Autres traitements en fonction du message reçu...
 
     // Options de commande
-    const commandeOptions = {
+ commandeOptions = {
         superUser,
         arg,
         mybotpic,
