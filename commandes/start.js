@@ -1,4 +1,4 @@
-const { bot, repondre } = require('../index');
+const { bot, repondre } = require('../fonctions');
  bot.onText(/\/start/, (msg) => {
         const chatId = msg.chat.id;
         const nomAuteurMessage = msg.pushName;
