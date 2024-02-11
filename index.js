@@ -1,5 +1,5 @@
 const TelegramBot = require('node-telegram-bot-api');
-const conf = require('../set');
+const conf = require('./set');
 
 // Remplacez 'YOUR_TOKEN' par le token de votre bot
 const token = '6467806947:AAGL74S28MeTHz9qNwjA1cnb-f8sgUewPnM';
