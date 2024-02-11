@@ -2,11 +2,11 @@ const TelegramBot = require('node-telegram-bot-api');
 const conf = require('./set');
 const fs = require('fs');
 const path = require('path');
-async function main() {
+
 // Remplacez 'YOUR_TOKEN' par le token de votre bot
 const token = '6467806947:AAGL74S28MeTHz9qNwjA1cnb-f8sgUewPnM';
 const bot = new TelegramBot(token, { polling: true });
-
+async function main() {
 // Fonction pour répondre à un message
 function repondre(chatId, message) {
     bot.sendMessage(chatId, message);
