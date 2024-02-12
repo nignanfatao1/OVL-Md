@@ -23,8 +23,7 @@ function arg(msg) {
     }
 }
 
-function mybotpic() {
-    const liens = [
+const liens = [
         'https://telegra.ph/file/e4f27e467089eb3e31463.jpg', 
         'https://telegra.ph/file/00fd279ccd45bef04b52a.jpg', 
         'https://telegra.ph/file/d8a070a1d819297ed8b29.jpg', 
@@ -32,7 +31,5 @@ function mybotpic() {
     ];
     const indiceAleatoire = Math.floor(Math.random() * liens.length);
     const lienAleatoire = liens[indiceAleatoire];
-    return lienAleatoire;
-}
 
-module.exports = { bot, dev, repondre, image, video, arg, mybotpic };
+module.exports = { bot, dev, repondre, image, video, arg, lienAleatoire };
