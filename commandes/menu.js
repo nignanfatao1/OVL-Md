@@ -1,4 +1,4 @@
-const { bot,/* repondre, image, video, nomAuteurMessage,*/ mybotpic } = require('../fonctions');
+const { bot,/* repondre, image, video, nomAuteurMessage,mybotpic*/ lienAleatoire } = require('../fonctions');
     
     //const conf = require('../set');
 const commands = { 
@@ -21,15 +21,15 @@ Je suis NEOverse-Md, un bot développé par la Ns.
 Voici la liste de mes commandes :\n`;
 
         for (const cat in commands) {
-            infomsg += `*╔══✵* *${cat}*  *✵ ══╗*`;
+            infomsg += `╔══✵  ${cat}  ✵ ══╗`;
             for (const cmd of commands[cat]) {
                 infomsg += `
-*✗✪* ${cmd}`;
+✗✪ ${cmd}`;
             }
             infomsg += `╚════ ✵ ✵ ═══╝\n`;
         }
 
-        const lien = mybotpic();
+        const lien = lienAleatoire;
 
         if (lien.match(/\.(mp4|gif)$/i)) {
             try {
