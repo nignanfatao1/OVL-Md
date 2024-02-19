@@ -26,7 +26,7 @@ Voici la liste de mes commandes :\n`;
                 infomsg += `
 ✗✪ ${cmd}`;
             }
-            infomsg += `╚════ ✵ ✵ ═══╝\n`;
+            infomsg += `\n╚════ ✵ ✵ ═══╝\n`;
         }
 
         const lien = mybotpic()
