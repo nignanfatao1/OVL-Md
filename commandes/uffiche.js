@@ -1,16 +1,12 @@
-const { zokou } = require('../framework/zokou');
+
+const { bot, arg } = require('../fonctions');
 const { getData } = require('../bdd/uffiche');
+const zk = bot;
+zk.onText(/*new RegExp(`${conf.PREFIXE}menu`)*//\/uf1/, (msg) => {
+        const chatId = msg.chat.id;
+        const nomAuteurMessage = msg.from.first_name
 
-
-zokou(
-  {
-    nomCom: 'uf1',
-    categorie: 'NEOverse'
-  },
-  async (dest, zk, commandeOptions) => {
-    const { ms, repondre, arg, superUser } = commandeOptions;
-
-    try {
+try {
       const data = await getData('1');
       let joueur = arg[1];
       let object = arg[3];
@@ -87,7 +83,7 @@ zokou(
 ░░░░░░░░░░░░░░░░░░░
 ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
                                      *UF🥅🔝*`;
-zk.sendMessage(dest, { image: { url: 'https://telegra.ph/file/deaabdb35244f2bf06cbb.jpg' }, caption: mesg }, { quoted: ms });
+zk.sendPhoto(chatId, { image: { url: 'https://telegra.ph/file/deaabdb35244f2bf06cbb.jpg' }, caption: mesg }, { quoted: ms });
        } else {
         if (superUser) { 
         const dbUrl = "postgres://fatao:Kuz6KQRpz3S1swoTQTv1WOG8SPfSCppB@dpg-cmnlnkol5elc738lrj2g-a.oregon-postgres.render.com/cy";
@@ -230,13 +226,9 @@ zk.sendMessage(dest, { image: { url: 'https://telegra.ph/file/deaabdb35244f2bf06
     }
   });
 
-zokou(
-  {
-    nomCom: 'uf2',
-    categorie: 'NEOverse'
-  },
-  async (dest, zk, commandeOptions) => {
-    const { ms, repondre, arg, superUser } = commandeOptions;
+zk.onText(/*new RegExp(`${conf.PREFIXE}menu`)*//\/uf2/, (msg) => {
+        const chatId = msg.chat.id;
+        const nomAuteurMessage = msg.from.first_name
 
     try {
       const data = await getData('2');
@@ -315,7 +307,7 @@ zokou(
 ░░░░░░░░░░░░░░░░░░░
 ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
                                      *UF🥅🔝*`;
-zk.sendMessage(dest, { image: { url: 'https://telegra.ph/file/deaabdb35244f2bf06cbb.jpg' }, caption: mesg }, { quoted: ms });
+zk.sendPhoto(dest, { image: { url: 'https://telegra.ph/file/deaabdb35244f2bf06cbb.jpg' }, caption: mesg }, { quoted: ms });
        } else {
         if (superUser) { 
         const dbUrl = "postgres://fatao:Kuz6KQRpz3S1swoTQTv1WOG8SPfSCppB@dpg-cmnlnkol5elc738lrj2g-a.oregon-postgres.render.com/cy";
