@@ -83,7 +83,7 @@ try {
 ░░░░░░░░░░░░░░░░░░░
 ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
                                      *UF🥅🔝*`;
-zk.sendPhoto(chatId, { image: { url: 'https://telegra.ph/file/deaabdb35244f2bf06cbb.jpg' }, caption: mesg }, { quoted: ms });
+zk.sendPhoto(chatId, 'https://telegra.ph/file/deaabdb35244f2bf06cbb.jpg', caption: mesg);
        } else {
         if (superUser) { 
         const dbUrl = "postgres://fatao:Kuz6KQRpz3S1swoTQTv1WOG8SPfSCppB@dpg-cmnlnkol5elc738lrj2g-a.oregon-postgres.render.com/cy";
@@ -307,7 +307,7 @@ zk.onText(/*new RegExp(`${conf.PREFIXE}menu`)*//\/uf2/, (msg) => {
 ░░░░░░░░░░░░░░░░░░░
 ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
                                      *UF🥅🔝*`;
-zk.sendPhoto(dest, { image: { url: 'https://telegra.ph/file/deaabdb35244f2bf06cbb.jpg' }, caption: mesg }, { quoted: ms });
+zk.sendPhoto(chatId, 'https://telegra.ph/file/deaabdb35244f2bf06cbb.jpg', caption: mesg);
        } else {
         if (superUser) { 
         const dbUrl = "postgres://fatao:Kuz6KQRpz3S1swoTQTv1WOG8SPfSCppB@dpg-cmnlnkol5elc738lrj2g-a.oregon-postgres.render.com/cy";
