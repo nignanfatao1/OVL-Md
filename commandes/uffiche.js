@@ -2,6 +2,10 @@
 const { bot, arg } = require('../fonctions');
 const { getData } = require('../bdd/uffiche');
 const zk = bot;
+
+function repondre(chatId, message) {
+    bot.sendMessage(chatId, message);
+};
 zk.onText(/*new RegExp(`${conf.PREFIXE}menu`)*//\/uf1/, (msg) => {
         const chatId = msg.chat.id;
         const nomAuteurMessage = msg.from.first_name
@@ -184,7 +188,7 @@ zk.sendPhoto(chatId, 'https://telegra.ph/file/deaabdb35244f2bf06cbb.jpg', captio
               
             default:
       console.log("Nom de joueur non reconnu.");
-              repondre(`joueur: ${joueur} non reconnu`);
+              repondre(chatId, `joueur: ${joueur} non reconnu`);
               return; 
         }
           
@@ -196,7 +200,7 @@ zk.sendPhoto(chatId, 'https://telegra.ph/file/deaabdb35244f2bf06cbb.jpg', captio
             await client.query(query);
 
             console.log(`Données de l'utilisateur ${joueur} mises à jour`);
-           await repondre(`Données du joueur mises à jour\n👤 *JOUEUR*: ${joueur}\n⚙ *OBJECT*: ${object}\n💵 *VALEUR*: ${signe}${valeur}\n*NOUVEAU SOLDE*: ${solde}`);
+           await repondre(chatId, `Données du joueur mises à jour\n👤 *JOUEUR*: ${joueur}\n⚙ *OBJECT*: ${object}\n💵 *VALEUR*: ${signe}${valeur}\n*NOUVEAU SOLDE*: ${solde}`);
           } else if (colonneObjet && signe === '=') {
             const query = `
             UPDATE uffiche
@@ -207,16 +211,16 @@ zk.sendPhoto(chatId, 'https://telegra.ph/file/deaabdb35244f2bf06cbb.jpg', captio
             await client.query(query, [texte]);
 
             console.log(`données du joueur: ${joueur} mise à jour`);
-            await repondre(`Données du joueur mises à jour\n👤 *JOUEUR*: ${joueur}\n⚙ *OBJECT*: ${object}\n💵 *VALEUR*: ${texte} \n *Équipe/Division*: ${texte}`);
+            await repondre(chatId, `Données du joueur mises à jour\n👤 *JOUEUR*: ${joueur}\n⚙ *OBJECT*: ${object}\n💵 *VALEUR*: ${texte} \n *Équipe/Division*: ${texte}`);
           } else {
             console.log("Nom d'objet non reconnu ou signe invalide.");
-            repondre(`Une erreur est survenue. Veuillez entrer correctement les données.`);
+            repondre(chatId, `Une erreur est survenue. Veuillez entrer correctement les données.`);
           }
         } else {
           console.log("Le message ne correspond pas au format attendu.");
-          repondre(`Le format du message est incorrect.`);
+          repondre(chatId, `Le format du message est incorrect.`);
         } 
-        } else { repondre('Seul les Membres de la NS ont le droit de modifier cette fiche');}
+        } else { repondre(chatId, 'Seul les Membres de la NS ont le droit de modifier cette fiche');}
        
 
         client.release();
@@ -408,7 +412,7 @@ zk.sendPhoto(chatId, 'https://telegra.ph/file/deaabdb35244f2bf06cbb.jpg', captio
               
             default:
       console.log("Nom de joueur non reconnu.");
-              repondre(`joueur: ${joueur} non reconnu`);
+              repondre(chatId, `joueur: ${joueur} non reconnu`);
               return; 
         }
           
@@ -420,7 +424,7 @@ zk.sendPhoto(chatId, 'https://telegra.ph/file/deaabdb35244f2bf06cbb.jpg', captio
             await client.query(query);
 
             console.log(`Données de l'utilisateur ${joueur} mises à jour`);
-           await repondre(`Données du joueur mises à jour\n👤 *JOUEUR*: ${joueur}\n⚙ *OBJECT*: ${object}\n💵 *VALEUR*: ${signe}${valeur}\n*NOUVEAU SOLDE*: ${solde}`);
+           await repondre(chatId, `Données du joueur mises à jour\n👤 *JOUEUR*: ${joueur}\n⚙ *OBJECT*: ${object}\n💵 *VALEUR*: ${signe}${valeur}\n*NOUVEAU SOLDE*: ${solde}`);
           } else if (colonneObjet && signe === '=') {
             const query = `
             UPDATE uffiche
@@ -431,16 +435,16 @@ zk.sendPhoto(chatId, 'https://telegra.ph/file/deaabdb35244f2bf06cbb.jpg', captio
             await client.query(query, [texte]);
 
             console.log(`données du joueur: ${joueur} mise à jour`);
-            await repondre(`Données du joueur mises à jour\n👤 *JOUEUR*: ${joueur}\n⚙ *OBJECT*: ${object}\n💵 *VALEUR*: ${texte} \n *Équipe/Division*: ${texte}`);
+            await repondre(chatId, `Données du joueur mises à jour\n👤 *JOUEUR*: ${joueur}\n⚙ *OBJECT*: ${object}\n💵 *VALEUR*: ${texte} \n *Équipe/Division*: ${texte}`);
           } else {
             console.log("Nom d'objet non reconnu ou signe invalide.");
-            repondre(`Une erreur est survenue. Veuillez entrer correctement les données.`);
+            repondre(chatId, `Une erreur est survenue. Veuillez entrer correctement les données.`);
           }
         } else {
           console.log("Le message ne correspond pas au format attendu.");
-          repondre(`Le format du message est incorrect.`);
+          repondre(chatId, `Le format du message est incorrect.`);
         } 
-        } else { repondre('Seul les Membres de la NS ont le droit de modifier cette fiche');}
+        } else { repondre(chatId, 'Seul les Membres de la NS ont le droit de modifier cette fiche');}
        
 
         client.release();
