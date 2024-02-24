@@ -1,3 +1,4 @@
+const { bot} = require('../fonctions');
 // Fonction pour gérer la commande /url
 function handleUrlCommand(msg) {
     const chatId = msg.chat.id;
