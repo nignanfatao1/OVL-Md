@@ -24,3 +24,21 @@ function handleUrlCommand(msg) {
 
 // Gestion de la commande /url
 bot.onText(/^\/url/, handleUrlCommand);
+
+
+// Commande pour taguer tous les membres d'un groupe
+bot.onText(/^\/tagall/, (msg) => {
+    const chatId = msg.chat.id;
+    const groupId = msg.chat.type === 'group' ? chatId : null;
+    
+    // Récupérer la liste des membres du groupe
+    bot.getChatMembersCount(groupId).then((count) => {
+        // Taguer chaque membre du groupe
+        for (let i = 0; i < count; i++) {
+            bot.sendMessage(chatId, `@[${i}]`, { parse_mode: 'MarkdownV2' });
+        }
+    }).catch((error) => {
+        console.error('Erreur lors de la récupération des membres du groupe:', error);
+    });
+});
+
