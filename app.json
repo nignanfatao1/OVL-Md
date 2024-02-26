@@ -20,17 +20,17 @@
       "required":false
 
     } ,
-     "SUDO_ID" : {
-    
-      "description":"Ajouter les ID des sudo",
+	  
+     "LIENS_MENU" : {
+
+      "description":"Ajoutez un ou plusieurs lien(s) d'image ou de video pour votre bot ; exemple : lien1,lien2,lien3......",
       "value": "https://telegra.ph/file/0d81626ca4a81fe93303a.jpg",
       "required":false
-       
-     },
 
-     "TOKEN":
+},
+     "SESSION_ID":
     {
-      "description":"veuillez renseigner votre id du bot telegram",   
+      "description":"veuillez renseigner votre SESSION_ID recu sur whatsapp",   
       "value":"",
       "required":true
       
