@@ -10,6 +10,7 @@ const { toBuffer } = require("qrcode");
 const path = require('path');
 const fs = require("fs-extra");
 const session = conf.SESSION_ID || "";
+const prefixe = conf.PREFIXE || "";
 
 async function authentification() {
     try {
@@ -115,9 +116,113 @@ console.log("=========== Nouveau message ===========");
 function repondre(mes) {
                 ovl.sendMessage(origineMessage, { text: mes }, { quoted: ms });
             }
-            async function loadCommands() {
+
+            // connections
+            ovl.ev.on("connection.update", async (con) => {
+                const { lastDisconnect, connection , receivedPendingNotifications } = con;
+                if (connection === "connecting") {
+                    console.log("ℹ️ Connexion en cours...");
+                }
+                else if (connection === 'open') {
+
+    
+
+                    console.log("✅ connexion reussie! ☺️");
+                    console.log("--");
+                    await (0, baileys_1.delay)(200);
+                    console.log("------");
+                    await (0, baileys_1.delay)(300);
+                    console.log("------------------/-----");
+                    console.log("le bot est en ligne 🕸\n\n");
+                    //chargement des commandes 
+                    console.log("chargement des commandes ...\n");
+                    fs.readdirSync(__dirname + "/commandes").forEach((fichier) => {
+                        if (path.extname(fichier).toLowerCase() == (".js")) {
+                            try {
+                                require(__dirname + "/commandes/" + fichier);
+                                console.log(fichier + " installé ✔️");
+                            }
+                            catch (e) {
+                                console.log(`${fichier} n'a pas pu être chargé pour les raisons suivantes : ${e}`);
+                            } /* require(__dirname + "/commandes/" + fichier);
+                             console.log(fichier + " installé ✔️")*/
+                            (0, baileys_1.delay)(300);
+                        }
+                    });
+                    (0, baileys_1.delay)(700);
+
+                 /*   var md;
+                    if ((conf.MODE).toLowerCase() === "oui") {
+                        md = "public";
+                    }
+                    else if ((conf.MODE).toLowerCase() === "non") {
+                        md = "privé";
+                    }
+                    else {
+                        md = "indéfini";
+                    }*/
+                    console.log("chargement des commandes terminé ✅");
+
+                //    await activateCrons();
+                   
+           //      if((conf.DP).toLowerCase() === 'oui') {
+                    let cmsg = `╔════◇
+    ║ 『OVL-𝐌𝐃』
+    ║    Prefix : [ ${prefixe} ]
+    ║    Mode :
+    ║    Nombre total de Commandes : ${evt.cm.length}︎
+    ╚══════════════════╝
+    
+    ╔═════◇
+    ║『𝗯𝘆 Fatao』
+    ║ 
+    ╚══════════════════╝`;
+                   
+                    await ovl.sendMessage(ovl.user.id, { text: cmsg });
+                 }
+                }
+                else if (connection == "close") {
+                    let raisonDeconnexion = new boom_1.Boom(lastDisconnect?.error)?.output.statusCode;
+                    if (raisonDeconnexion === baileys_1.DisconnectReason.badSession) {
+                        console.log('Session id érronée veuillez rescanner le qr svp ...');
+                    }
+                    else if (raisonDeconnexion === baileys_1.DisconnectReason.connectionClosed) {
+                        console.log('!!! connexion fermée, reconnexion en cours ...');
+                        main();
+                    }
+                    else if (raisonDeconnexion === baileys_1.DisconnectReason.connectionLost) {
+                        console.log('connexion au serveur perdue 😞 ,,, reconnexion en cours ... ');
+                        main();
+                    }
+                    else if (raisonDeconnexion === baileys_1.DisconnectReason?.connectionReplaced) {
+                        console.log('connexion réplacée ,,, une sesssion est déjà ouverte veuillez la fermer svp !!!');
+                    }
+                    else if (raisonDeconnexion === baileys_1.DisconnectReason.loggedOut) {
+                        console.log('vous êtes déconnecté,,, veuillez rescanner le code qr svp');
+                    }
+                    else if (raisonDeconnexion === baileys_1.DisconnectReason.restartRequired) {
+                        console.log('redémarrage en cours ▶️');
+                        main();
+                    }
+                    else {
+
+                        console.log('redemarrage sur le coup de l\'erreur  ',raisonDeconnexion) ;         
+                        //repondre("* Redémarrage du bot en cour ...*");
+
+                                    const {exec}=require("child_process") ;
+
+                                    exec("pm2 restart all");            
+                    }
+                    // sleep(50000)
+                    console.log("hum " + connection);
+                    main(); //console.log(session)
+                }
+            });
+            //fin événement connexion
+            //événement authentification 
+            ovl.ev.on("creds.update", saveCreds);
     console.log("Chargement des commandes...");
-    const commandsDir = path.join(__dirname, 'commandes');
+ /*   const commandsDir = path.join(__dirname, 'commandes');
     try {
         const commandFiles = fs.readdirSync(commandsDir).filter(file => file.endsWith('.js'));
         for (const file of commandFiles) {
@@ -135,7 +240,7 @@ function repondre(mes) {
         console.error('Erreur lors du chargement des commandes:', error);
     }
 }
-
+*/
 // Fonction pour retarder l'exécution
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
