@@ -20,6 +20,7 @@ async function authentification() {
             await fs.writeFileSync(__dirname + "/auth_info_baileys/creds.json", atob(session), "utf8");
         }
     } catch (e) {
+        console.error(error);
         console.log("Session Invalide " + e);
         return;
     }
