@@ -414,7 +414,6 @@ async function main() {
     ╚══════════════════╝`;
                    
                     await ovl.sendMessage(ovl.user.id, { text: cmsg });
-                 }
             } else if (connection == "close") {
                     let raisonDeconnexion = new boom_1.Boom(lastDisconnect?.error)?.output.statusCode;
                     if (raisonDeconnexion === baileys_1.DisconnectReason.badSession) {
