@@ -145,7 +145,7 @@ function repondre(mes) {
                             catch (e) {
                                 console.log(`${fichier} n'a pas pu être chargé pour les raisons suivantes : ${e}`);
                             } /* require(__dirname + "/commandes/" + fichier);
-                             console.log(fichier + " installé ✔️")*/
+                             console.log(fichier + " installé ✔️")
                             (0, baileys_1.delay)(300);
                         }
                     });
@@ -160,7 +160,7 @@ function repondre(mes) {
                     }
                     else {
                         md = "indéfini";
-                    }*/
+                    }
                     console.log("chargement des commandes terminé ✅");
 
                 //    await activateCrons();
