@@ -28,7 +28,7 @@ async function authentification() {
 
 authentification();
 
-const store = baileys_1.makeInMemoryStore({
+/*const store = baileys_1.makeInMemoryStore({
     logger: pino().child({ level: "silent", stream: "store" }),
 });
 setTimeout(async () => {
