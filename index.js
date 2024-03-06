@@ -28,7 +28,7 @@ async function authentification() {
 
 authentification();
 
-/*const store = baileys_1.makeInMemoryStore({
+const store = baileys_1.makeInMemoryStore({
     logger: pino().child({ level: "silent", stream: "store" }),
 });
 setTimeout(async () => {
@@ -48,7 +48,7 @@ setTimeout(async () => {
             markOnlineOnConnect: false,
             keepAliveIntervalMs: 30_000,
             auth_info_baileys: {
-                creds: state.creds,
+                creds: auth_info_baileys/creds.json, //state.creds,
                 keys: baileys_1.makeCacheableSignalKeyStore(state.keys, logger),
             },
             getMessage: async (key) => {
@@ -145,4 +145,3 @@ function delay(ms) {
     }
         main()
 });
-*/
