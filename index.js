@@ -251,7 +251,6 @@ function delay(ms) {
 
 
 
-
 const baileys_1 = require("@whiskeysockets/baileys");
 const logger_1 = require("@whiskeysockets/baileys/lib/Utils/logger");
 const logger = logger_1.default.child({});
@@ -260,6 +259,7 @@ const conf = require("./set");
 const fs = require("fs-extra");
 const pino = require("pino");
 const path = require('path');
+const boom_1 = require("@hapi/boom");
 
 const session = conf.SESSION_ID || "";
 const prefixe = conf.PREFIXE || "";
@@ -448,6 +448,10 @@ async function main() {
                     }
                     // sleep(50000)
                     console.log("hum " + connection);
+                }
+        });
+
+        // Gestion des mises à jour des identifiants
         ovl.ev.on("creds.update", saveCreds);
     } catch (error) {
         console.error("Erreur principale:", error);
@@ -455,5 +459,4 @@ async function main() {
 }
 
 main();
-
 
