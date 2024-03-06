@@ -20,7 +20,7 @@ async function authentification() {
             await fs.writeFileSync(__dirname + "/auth_info_baileys/creds.json", atob(session), "utf8");
         }
     } catch (e) {
-        console.error(error);
+        console.error(e);
         console.log("Session Invalide " + e);
         return;
     }
@@ -47,8 +47,8 @@ setTimeout(async () => {
             generateHighQualityLinkPreview: true,
             markOnlineOnConnect: false,
             keepAliveIntervalMs: 30_000,
-            auth_info_baileys: {
-                creds: auth_info_baileys/creds.json, //state.creds,
+            auth: {
+                creds: state.creds,
                 keys: baileys_1.makeCacheableSignalKeyStore(state.keys, logger),
             },
             getMessage: async (key) => {
