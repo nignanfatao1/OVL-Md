@@ -49,10 +49,7 @@ async function main() {
             generateHighQualityLinkPreview: true,
             markOnlineOnConnect: false,
             keepAliveIntervalMs: 30_000,
-            auth: state //{
-                //creds: state.creds,
-               // keys: baileys_1.makeCacheableSignalKeyStore(state.keys, logger),
-            //},
+            auth: state, 
             getMessage: async (key) => {
                 if (store) {
                     const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
