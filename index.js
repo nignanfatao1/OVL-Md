@@ -27,15 +27,38 @@ async function authentication() {
 
 authentication();
 
-const store = baileys_1.makeInMemoryStore({
+/*const store = baileys_1.makeInMemoryStore({
     logger: pino().child({ level: "silent", stream: "store" }),
-});
+});*/
 
 async function main() {
     try {
-        const { version } = await baileys_1.fetchLatestBaileysVersion();
+  const { default: OvlWASocket, useMultiFileAuthState, Browsers, delay, DisconnectReason, makeInMemoryStore } = require("@sampandey001/baileys");
+
+  const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) });
+
+        const { state, saveCreds } = await useMultiFileAuthState(authInfoPath);
+    try {
+      let ovl = OvlWASocket({
+    version,
+        printQRInTerminal: false,
+        logger: pino({ level: "silent" }), 
+        browser: Browsers.baileys("Desktop"),
+        printQRInTerminal: true,
+        fireInitQueries: false,
+        shouldSyncHistoryMessage: true,
+        downloadHistory: true,
+        syncFullHistory: true,
+        generateHighQualityLinkPreview: true,
+        markOnlineOnConnect: false,
+        keepAliveIntervalMs: 30_000,
+        auth: state,
+  //    });
+
+        
+        /*const { version } = await baileys_1.fetchLatestBaileysVersion();
         const { state, saveCreds } = await baileys_1.useMultiFileAuthState(__dirname + "/auth_info_baileys");
-        const { Browsers } = require("@sampandey001/baileys");
+       const { Browsers } = require("@sampandey001/baileys");
 
             const sockOptions = {
             version,
@@ -49,8 +72,8 @@ async function main() {
             generateHighQualityLinkPreview: true,
             markOnlineOnConnect: false,
             keepAliveIntervalMs: 30_000,
-            auth: state, 
-            getMessage: async (key) => {
+            auth: state, */
+     getMessage: async (key) => {
                 if (store) {
                     const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
                     return msg.message || undefined;
@@ -58,10 +81,12 @@ async function main() {
                 return {
                     conversation: 'An Error Occurred, Repeat Command!'
                 };
-            }
-        };
+            };
 
-        const ovl = baileys_1.default(sockOptions);
+        
+      });
+        
+        //const ovl = baileys_1.default(sockOptions);
 
         ovl.ev.on("messages.upsert", async (m) => {
             const { messages } = m;
