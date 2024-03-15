@@ -85,7 +85,7 @@ async function main() {
                 return {
                     conversation: 'An Error Occurred, Repeat Command!'
                 };
-            };
+            }
 
         
       });
