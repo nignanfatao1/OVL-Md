@@ -27,23 +27,25 @@ async function authentication() {
 
 authentication();
 
-/*const store = baileys_1.makeInMemoryStore({
-    logger: pino().child({ level: "silent", stream: "store" }),
-});*/
-
 async function main() {
     try {
-  const { default: OvlWASocket, useMultiFileAuthState, Browsers, delay, DisconnectReason, makeInMemoryStore } = require("@sampandey001/baileys");
+  const {
+    default: makeWASocket,
+    useMultiFileAuthState,
+    delay,
+    makeCacheableSignalKeyStore,
+    makeInMemoryStore
+} = require("@whiskeysockets/baileys");
 
-  const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) });
+ const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) });
 
         const { state, saveCreds } = await useMultiFileAuthState(authInfoPath);
     try {
-      let ovl = OvlWASocket({
+      let ovl = makeWASocket({
     version,
         printQRInTerminal: false,
-        logger: pino({ level: "silent" }), 
-        browser: Browsers.baileys("Desktop"),
+        logger: pino({level: "silent"}).child({level: "silent"}), 
+        browser: [ "Ubuntu", "Chrome", "20.0.04" ],
         printQRInTerminal: true,
         fireInitQueries: false,
         shouldSyncHistoryMessage: true,
@@ -52,10 +54,12 @@ async function main() {
         generateHighQualityLinkPreview: true,
         markOnlineOnConnect: false,
         keepAliveIntervalMs: 30_000,
-        auth: state,
+        auth: {
+                    creds: state.creds,
+                    keys: makeCacheableSignalKeyStore(state.keys, pino({level: "silent"}).child({level: "silent"})),
+                },
   //    });
-
-        
+          
         /*const { version } = await baileys_1.fetchLatestBaileysVersion();
         const { state, saveCreds } = await baileys_1.useMultiFileAuthState(__dirname + "/auth_info_baileys");
        const { Browsers } = require("@sampandey001/baileys");
