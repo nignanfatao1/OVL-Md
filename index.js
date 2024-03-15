@@ -23,13 +23,11 @@ async function authentication() {
         console.log("Session invalide: " + error);
         return;
     }
-}
-
+    
 authentication();
 
 async function main() {
-    try {
-  const {
+ const {
     default: makeWASocket,
     useMultiFileAuthState,
     delay,
