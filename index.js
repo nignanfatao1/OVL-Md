@@ -1,5 +1,7 @@
 const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, makeInMemoryStore, fetchLatestBaileysVersion, DisconnectReason } = require("@whiskeysockets/baileys");
 const { jidDecode, getContentType } = require("@whiskeysockets/baileys");
+const baileys_1 = require("@whiskeysockets/baileys");
+const logger_1 = require("@whiskeysockets/baileys/lib/Utils/logger");
 const boom_1 = require("@hapi/boom");
 const fs = require("fs-extra");
 const pino = require("pino");
