@@ -1,12 +1,10 @@
-const baileys_1 = require("@whiskeysockets/baileys");
-const logger_1 = require("@whiskeysockets/baileys/lib/Utils/logger");
-const logger = logger_1.default.child({});
-logger.level = 'silent';
-const conf = require("./set");
+const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, makeInMemoryStore, fetchLatestBaileysVersion, DisconnectReason } = require("@whiskeysockets/baileys");
+const { jidDecode, getContentType } = require("@whiskeysockets/baileys");
+const boom_1 = require("@hapi/boom");
 const fs = require("fs-extra");
 const pino = require("pino");
 const path = require('path');
-const boom_1 = require("@hapi/boom");
+const conf = require("./set");
 
 const session = conf.SESSION_ID || "";
 const prefixe = conf.PREFIXE || "";
@@ -16,46 +14,37 @@ async function authentication() {
         const credsFilePath = __dirname + "/auth_info_baileys/creds.json";
         if (!fs.existsSync(credsFilePath) || (fs.existsSync(credsFilePath) && session !== "ovl")) {
             console.log("Connexion en cours...");
-            await fs.writeFileSync(credsFilePath, atob(session), "utf8");
+            await fs.writeFile(credsFilePath, atob(session), "utf8");
         }
     } catch (error) {
         console.error(error);
         console.log("Session invalide: " + error);
         return;
     }
-    
-authentication();
+}
 
 async function main() {
- const {
-    default: makeWASocket,
-    useMultiFileAuthState,
-    delay,
-    makeCacheableSignalKeyStore,
-    makeInMemoryStore
-} = require("@whiskeysockets/baileys");
-
- const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) });
+    try {
+        const authInfoPath = __dirname + "/auth_info_baileys"; // Définition de authInfoPath
 
         const { state, saveCreds } = await useMultiFileAuthState(authInfoPath);
-    try {
-      let ovl = makeWASocket({
-    version,
-        printQRInTerminal: false,
-        logger: pino({level: "silent"}).child({level: "silent"}), 
-        browser: [ "Ubuntu", "Chrome", "20.0.04" ],
-        printQRInTerminal: true,
-        fireInitQueries: false,
-        shouldSyncHistoryMessage: true,
-        downloadHistory: true,
-        syncFullHistory: true,
-        generateHighQualityLinkPreview: true,
-        markOnlineOnConnect: false,
-        keepAliveIntervalMs: 30_000,
-        auth: {
-                    creds: state.creds,
-                    keys: makeCacheableSignalKeyStore(state.keys, pino({level: "silent"}).child({level: "silent"})),
-                },
+
+        const ovl = makeWASocket({
+            version,
+            printQRInTerminal: false,
+            logger: pino({ level: "silent" }).child({ level: "silent" }),
+            browser: ["Ubuntu", "Chrome", "20.0.04"],
+            fireInitQueries: false,
+            shouldSyncHistoryMessage: true,
+            downloadHistory: true,
+            syncFullHistory: true,
+            generateHighQualityLinkPreview: true,
+            markOnlineOnConnect: false,
+            keepAliveIntervalMs: 30_000,
+            auth: {
+                creds: state.creds,
+                keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "silent" }).child({ level: "silent" })),
+            },
   //    });
           
         /*const { version } = await baileys_1.fetchLatestBaileysVersion();
