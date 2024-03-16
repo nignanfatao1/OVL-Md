@@ -30,7 +30,6 @@ async function main() {
         const { state, saveCreds } = await useMultiFileAuthState(authInfoPath);
 
         const ovl = makeWASocket({
-            version,
             printQRInTerminal: false,
             logger: pino({ level: "silent" }).child({ level: "silent" }),
             browser: ["Ubuntu", "Chrome", "20.0.04"],
