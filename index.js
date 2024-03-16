@@ -79,8 +79,13 @@ async function main() {
       });
         
         //const ovl = baileys_1.default(sockOptions);
+ovl.ev.on('messages.upsert', ({ messages }) => {
+    console.log('nouveau message:', messages);
+});
 
-        ovl.ev.on("messages.upsert", async (m) => {
+        
+
+       /* ovl.ev.on("messages.upsert", async (m) => {
             const { messages } = m;
             const ms = messages[0];
             if (!ms.message) return;
@@ -134,7 +139,7 @@ async function main() {
             function repondre(message) {
                 ovl.sendMessage(origineMessage, { text: message }, { quoted: ms });
             }
-        });
+        });*/
 
         // Gestion des événements de connexion
         ovl.ev.on("connection.update", async (con) => {
