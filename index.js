@@ -1,4 +1,3 @@
-const express = require('express');
 const fs = require('fs');
 const pino = require("pino");
 const {
@@ -18,7 +17,7 @@ const session = conf.SESSION_ID || "";
 
 async function ovlAuth() {
     try {
-        const credsFilePath = __dirname + "./auth/creds.json";
+        const credsFilePath = __dirname + "/auth/creds.json";
         if (!fs.existsSync(credsFilePath) || (fs.existsSync(credsFilePath) && session !== "ovl")) {
             console.log("Connexion en cours...");
             await fs.writeFile(credsFilePath, atob(session), "utf8");
