@@ -1,19 +1,24 @@
-const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, makeInMemoryStore, fetchLatestBaileysVersion, DisconnectReason } = require("@whiskeysockets/baileys");
+const express = require('express');
+const fs = require('fs');
+const pino = require("pino");
+const {
+    default: makeWASocket,
+    useMultiFileAuthState,
+    delay,
+    makeCacheableSignalKeyStore
+} = require("@whiskeysockets/baileys");
 const { jidDecode, getContentType } = require("@whiskeysockets/baileys");
 const baileys_1 = require("@whiskeysockets/baileys");
 const logger_1 = require("@whiskeysockets/baileys/lib/Utils/logger");
 const boom_1 = require("@hapi/boom");
-const fs = require("fs-extra");
-const pino = require("pino");
 const path = require('path');
 const conf = require("./set");
 
 const session = conf.SESSION_ID || "";
-const prefixe = conf.PREFIXE || "";
 
-async function authentication() {
+async function ovlAuth() {
     try {
-        const credsFilePath = __dirname + "/auth_info_baileys/creds.json";
+        const credsFilePath = __dirname + "./auth/creds.json";
         if (!fs.existsSync(credsFilePath) || (fs.existsSync(credsFilePath) && session !== "ovl")) {
             console.log("Connexion en cours...");
             await fs.writeFile(credsFilePath, atob(session), "utf8");
@@ -26,46 +31,27 @@ async function authentication() {
 }
 
 async function main() {
-    try {
-        const authInfoPath = __dirname + "/auth_info_baileys"; // Définition de authInfoPath
-
-        const { state, saveCreds } = await useMultiFileAuthState(authInfoPath);
-
-        const ovl = makeWASocket({
-            printQRInTerminal: false,
-            logger: pino({ level: "silent" }).child({ level: "silent" }),
-            browser: ["Ubuntu", "Chrome", "20.0.04"],
-            fireInitQueries: false,
-            shouldSyncHistoryMessage: true,
-            downloadHistory: true,
-            syncFullHistory: true,
-            generateHighQualityLinkPreview: true,
-            markOnlineOnConnect: false,
-            keepAliveIntervalMs: 30_000,
-            auth: {
-                creds: state.creds,
-                keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "silent" }).child({ level: "silent" })),
-            },
-  //    });
-          
-        /*const { version } = await baileys_1.fetchLatestBaileysVersion();
-        const { state, saveCreds } = await baileys_1.useMultiFileAuthState(__dirname + "/auth_info_baileys");
-       const { Browsers } = require("@sampandey001/baileys");
-
-            const sockOptions = {
-            version,
-            logger: pino({ level: "silent" }),
-            browser: Browsers.baileys("Desktop"),
-            printQRInTerminal: true,
-            fireInitQueries: false,
-            shouldSyncHistoryMessage: true,
-            downloadHistory: true,
-            syncFullHistory: true,
-            generateHighQualityLinkPreview: true,
-            markOnlineOnConnect: false,
-            keepAliveIntervalMs: 30_000,
-            auth: state, */
-     getMessage: async (key) => {
+        const {
+            state,
+            saveCreds
+  } = await useMultiFileAuthState(`./auth/creds.json`)
+     try {
+            let ovl = makeWASocket({
+                printQRInTerminal: false,
+                logger: pino({level: "fatal"}).child({level: "fatal"}),
+                browser: [ "Ubuntu", "Chrome", "20.0.04" ],
+                fireInitQueries: false,
+                shouldSyncHistoryMessage: true,
+                downloadHistory: true,
+                syncFullHistory: true,
+                generateHighQualityLinkPreview: true,
+                markOnlineOnConnect: false,
+                keepAliveIntervalMs: 20_000,
+                auth: {
+                    creds: state.creds,
+                    keys: makeCacheableSignalKeyStore(state.keys, pino({level: "fatal"}).child({level: "fatal"})),
+                },
+                getMessage: async (key) => {
                 if (store) {
                     const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
                     return msg.message || undefined;
@@ -75,17 +61,9 @@ async function main() {
                 };
             }
 
-        
-      });
-        
-        //const ovl = baileys_1.default(sockOptions);
-ovl.ev.on('messages.upsert', ({ messages }) => {
-    console.log('nouveau message:', messages);
-});
+             }); //fin ovl
 
-        
-
-       /* ovl.ev.on("messages.upsert", async (m) => {
+         ovl.ev.on("messages.upsert", async (m) => {
             const { messages } = m;
             const ms = messages[0];
             if (!ms.message) return;
@@ -139,10 +117,9 @@ ovl.ev.on('messages.upsert', ({ messages }) => {
             function repondre(message) {
                 ovl.sendMessage(origineMessage, { text: message }, { quoted: ms });
             }
-        });*/
+        }); //message.upstair
 
-        // Gestion des événements de connexion
-        ovl.ev.on("connection.update", async (con) => {
+         ovl.ev.on("connection.update", async (con) => {
             const { connection, lastDisconnect } = con;
             if (connection === "connecting") {
                 console.log("ℹ️ Connexion en cours...");
