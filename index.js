@@ -5,15 +5,16 @@ const { exec } = require("child_process");
 const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, jidDecode, getContentType, DisconnectReason } = require("@whiskeysockets/baileys");
 const boom = require("@hapi/boom");
 const conf = require("./set");
+const baileys_1 = require("@whiskeysockets/baileys");
 
 const session = conf.SESSION_ID || "";
 
 async function ovlAuth() {
     try {
-        const credsFilePath = path.join(__dirname + "/auth/creds.json");
+        const credsFilePath = path.join(__dirname, "auth/creds.json");
         if (!fs.existsSync(credsFilePath) || (fs.existsSync(credsFilePath) && session !== "ovl")) {
             console.log("Connexion en cours...");
-            await fs.writeFile(credsFilePath, Buffer.from(session, 'base64'), "utf8");
+            await fs.promises.writeFile(credsFilePath, Buffer.from(session, 'base64'), "utf8");
         }
     } catch (error) {
         console.error(error);
@@ -21,6 +22,7 @@ async function ovlAuth() {
         return;
     }
 }
+
 ovlAuth();
 
 async function main() {
