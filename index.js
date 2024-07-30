@@ -30,8 +30,8 @@ async function ovlAuth() {
 ovlAuth();
 
 async function main() {
-    const credsFilePath = '/auth/creds.json';
-    const { state, saveCreds } = await useMultiFileAuthState(credsFilePath);
+    //const credsFilePath = __dirname + "/auth";
+    const { state, saveCreds } = await useMultiFileAuthState(__dirname + "/auth");
     try {
         const store = makeInMemoryStore({ logger: pino().child({ level: "silent", stream: "store"
   })
