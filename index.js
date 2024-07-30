@@ -26,6 +26,9 @@ ovlAuth();
 async function main() {
     const { state, saveCreds } = await useMultiFileAuthState(`./auth`);
     try {
+        const store = (0, baileys_1.makeInMemoryStore)({
+        logger: pino().child({ level: "fatal", stream: "store" }),
+    });
         let ovl = makeWASocket({
             printQRInTerminal: false,
             logger: pino({ level: "fatal" }).child({ level: "fatal" }),
