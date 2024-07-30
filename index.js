@@ -21,6 +21,7 @@ async function ovlAuth() {
         return;
     }
 }
+ovlAuth();
 
 async function main() {
     const { state, saveCreds } = await useMultiFileAuthState(`./auth`);
