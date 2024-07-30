@@ -1,12 +1,14 @@
-const fs = require('fs');
+undefi = require('fs');
 const pino = require("pino");
 const path = require('path');
 const { exec } = require("child_process");
 const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, jidDecode, getContentType, DisconnectReason } = require("@whiskeysockets/baileys");
 const boom = require("@hapi/boom");
 const conf = require("./set");
+const { jidDecode, getContentType } = require("@whiskeysockets/baileys");
 const baileys_1 = require("@whiskeysockets/baileys");
-
+const logger_1 = require("@whiskeysockets/baileys/lib/Utils/logger");
+const boom_1 = require("@hapi/boom");
 const session = conf.SESSION_ID || "";
 
 
@@ -30,25 +32,25 @@ ovlAuth();
 async function main() {
     const { state, saveCreds } = await useMultiFileAuthState(`/auth`);
     try {
-        const store = (0, baileys_1.makeInMemoryStore)({
-        logger: pino().child({ level: "fatal", stream: "store" }),
-    });
+        const store = makeInMemoryStore({ logger: pino().child({ level: "silent", stream: "store"
+  })
+});
         let ovl = makeWASocket({
             printQRInTerminal: false,
             logger: pino({ level: "fatal" }).child({ level: "fatal" }),
             browser: ["Ubuntu", "Chrome", "20.0.04"],
-          /*  fireInitQueries: false,
+            fireInitQueries: false,
             shouldSyncHistoryMessage: true,
             downloadHistory: true,
             syncFullHistory: true,
             generateHighQualityLinkPreview: true,
             markOnlineOnConnect: false,
             keepAliveIntervalMs: 20000,
-           */ auth: {
+            auth: {
                 creds: state.creds,
                 keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
             },
-           /*getMessage: async (key) => {
+           getMessage: async (key) => {
                 if (store) {
                     const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
                     return msg.message || undefined;
@@ -56,9 +58,8 @@ async function main() {
                 return {
                     conversation: 'An Error Occurred, Repeat Command!'
                 };
-            }*/
+           }
         });
-
         ovl.ev.on("messages.upsert", async (m) => {
             const { messages } = m;
             const ms = messages[0];
