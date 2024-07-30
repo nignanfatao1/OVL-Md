@@ -20,7 +20,7 @@ async function ovlAuth() {
         if (!fs.existsSync(credsFilePath) || (fs.existsSync(credsFilePath) && session !== "ovl")) {
             console.log("Connexion en cours...");
             await fs.promises.writeFile(credsFilePath, sessionData, "utf8");
-            console.log('auth edité');
+            //console.log('auth edité');
 
             // Vérification après écriture
             const writtenData = await fs.promises.readFile(credsFilePath, "utf8");
@@ -49,7 +49,7 @@ async function main() {
 });
         let ovl = makeWASocket({
             version, 
-            printQRInTerminal: false,
+            printQRInTerminal: true,
             logger: pino({ level: "fatal" }).child({ level: "fatal" }),
             browser: ["Ubuntu", "Chrome", "20.0.04"],
             fireInitQueries: false,
@@ -73,7 +73,7 @@ async function main() {
                 };
            }
         });
-        ovl.ev.on("messages.upsert", async (m) => {
+        /*ovl.ev.on("messages.upsert", async (m) => {
             const { messages } = m;
             const ms = messages[0];
             if (!ms.message) return;
@@ -128,7 +128,7 @@ async function main() {
             function repondre(message) {
                 ovl.sendMessage(origineMessage, { text: message }, { quoted: ms });
             }
-        });
+        });*/
 
         ovl.ev.on("connection.update", async (con) => {
             const { connection, lastDisconnect } = con;
