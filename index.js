@@ -1,26 +1,19 @@
 const fs = require('fs');
 const pino = require("pino");
-const {
-    default: makeWASocket,
-    useMultiFileAuthState,
-    delay,
-    makeCacheableSignalKeyStore
-} = require("@whiskeysockets/baileys");
-const { jidDecode, getContentType } = require("@whiskeysockets/baileys");
-const baileys_1 = require("@whiskeysockets/baileys");
-const logger_1 = require("@whiskeysockets/baileys/lib/Utils/logger");
-const boom_1 = require("@hapi/boom");
 const path = require('path');
+const { exec } = require("child_process");
+const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, jidDecode, getContentType, DisconnectReason } = require("@whiskeysockets/baileys");
+const boom = require("@hapi/boom");
 const conf = require("./set");
 
 const session = conf.SESSION_ID || "";
 
 async function ovlAuth() {
     try {
-        const credsFilePath = __dirname + "/auth/creds.json";
+        const credsFilePath = path.join(__dirname, "auth", "creds.json");
         if (!fs.existsSync(credsFilePath) || (fs.existsSync(credsFilePath) && session !== "ovl")) {
             console.log("Connexion en cours...");
-            await fs.writeFile(credsFilePath, atob(session), "utf8");
+            await fs.writeFile(credsFilePath, Buffer.from(session, 'base64'), "utf8");
         }
     } catch (error) {
         console.error(error);
@@ -30,27 +23,24 @@ async function ovlAuth() {
 }
 
 async function main() {
-        const {
-            state,
-            saveCreds
-  } = await useMultiFileAuthState(`./auth/creds.json`)
-     try {
-            let ovl = makeWASocket({
-                printQRInTerminal: false,
-                logger: pino({level: "fatal"}).child({level: "fatal"}),
-                browser: [ "Ubuntu", "Chrome", "20.0.04" ],
-                fireInitQueries: false,
-                shouldSyncHistoryMessage: true,
-                downloadHistory: true,
-                syncFullHistory: true,
-                generateHighQualityLinkPreview: true,
-                markOnlineOnConnect: false,
-                keepAliveIntervalMs: 20_000,
-                auth: {
-                    creds: state.creds,
-                    keys: makeCacheableSignalKeyStore(state.keys, pino({level: "fatal"}).child({level: "fatal"})),
-                },
-                getMessage: async (key) => {
+    const { state, saveCreds } = await useMultiFileAuthState(`./auth`);
+    try {
+        let ovl = makeWASocket({
+            printQRInTerminal: false,
+            logger: pino({ level: "fatal" }).child({ level: "fatal" }),
+            browser: ["Ubuntu", "Chrome", "20.0.04"],
+            fireInitQueries: false,
+            shouldSyncHistoryMessage: true,
+            downloadHistory: true,
+            syncFullHistory: true,
+            generateHighQualityLinkPreview: true,
+            markOnlineOnConnect: false,
+            keepAliveIntervalMs: 20000,
+            auth: {
+                creds: state.creds,
+                keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
+            },
+            getMessage: async (key) => {
                 if (store) {
                     const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
                     return msg.message || undefined;
@@ -59,31 +49,31 @@ async function main() {
                     conversation: 'An Error Occurred, Repeat Command!'
                 };
             }
+        });
 
-             }); //fin ovl
-
-         ovl.ev.on("messages.upsert", async (m) => {
+        ovl.ev.on("messages.upsert", async (m) => {
             const { messages } = m;
             const ms = messages[0];
             if (!ms.message) return;
 
-            // Votre logique de gestion de message ici
-
             const decodeJid = (jid) => {
-                if (!jid)
-                    return jid;
+                if (!jid) return jid;
                 if (/:\d+@/gi.test(jid)) {
-                    let decode = (0, baileys_1.jidDecode)(jid) || {};
-                    return decode.user && decode.server && decode.user + '@' + decode.server || jid;
+                    let decode = jidDecode(jid) || {};
+                    return decode.user && decode.server && `${decode.user}@${decode.server}` || jid;
                 }
-                else
-                    return jid;
+                return jid;
             };
-            var mtype = (0, baileys_1.getContentType)(ms.message);
-            var texte = mtype == "conversation" ? ms.message.conversation : mtype == "imageMessage" ? ms.message.imageMessage?.caption : mtype == "videoMessage" ? ms.message.videoMessage?.caption : mtype == "extendedTextMessage" ? ms.message?.extendedTextMessage?.text : mtype == "buttonsResponseMessage" ?
-                ms?.message?.buttonsResponseMessage?.selectedButtonId : mtype == "listResponseMessage" ?
-                ms.message?.listResponseMessage?.singleSelectReply?.selectedRowId : mtype == "messageContextInfo" ?
-                (ms?.message?.buttonsResponseMessage?.selectedButtonId || ms.message?.listResponseMessage?.singleSelectReply?.selectedRowId || ms.text) : "";
+
+            var mtype = getContentType(ms.message);
+            var texte = mtype == "conversation" ? ms.message.conversation :
+                mtype == "imageMessage" ? ms.message.imageMessage?.caption :
+                mtype == "videoMessage" ? ms.message.videoMessage?.caption :
+                mtype == "extendedTextMessage" ? ms.message?.extendedTextMessage?.text :
+                mtype == "buttonsResponseMessage" ? ms?.message?.buttonsResponseMessage?.selectedButtonId :
+                mtype == "listResponseMessage" ? ms.message?.listResponseMessage?.singleSelectReply?.selectedRowId :
+                mtype == "messageContextInfo" ? (ms?.message?.buttonsResponseMessage?.selectedButtonId || ms.message?.listResponseMessage?.singleSelectReply?.selectedRowId || ms.text) : "";
+
             var origineMessage = ms.key.remoteJid;
             var idBot = decodeJid(ovl.user.id);
             var servBot = idBot.split('@')[0];
@@ -116,83 +106,68 @@ async function main() {
             function repondre(message) {
                 ovl.sendMessage(origineMessage, { text: message }, { quoted: ms });
             }
-        }); //message.upstair
+        });
 
-         ovl.ev.on("connection.update", async (con) => {
+        ovl.ev.on("connection.update", async (con) => {
             const { connection, lastDisconnect } = con;
             if (connection === "connecting") {
                 console.log("ℹ️ Connexion en cours...");
             } else if (connection === 'open') {
                 console.log("✅ Connexion réussie! ☺️");
                 console.log("--");
-                await (0, baileys_1.delay)(200);
+                await delay(200);
                 console.log("------");
-                await (0, baileys_1.delay)(300);
+                await delay(300);
                 console.log("------------------/-----");
                 console.log("Le bot est en ligne 🕸\n\n");
-                // Chargement des commandes 
                 console.log("Chargement des commandes ...\n");
-                fs.readdirSync(__dirname + "/commandes").forEach((fichier) => {
-                    if (path.extname(fichier).toLowerCase() == (".js")) {
+                fs.readdirSync(path.join(__dirname, "commandes")).forEach((fichier) => {
+                    if (path.extname(fichier).toLowerCase() == ".js") {
                         try {
-                            require(__dirname + "/commandes/" + fichier);
+                            require(path.join(__dirname, "commandes", fichier));
                             console.log(fichier + " installé ✔️");
-                        }
-                        catch (e) {
+                        } catch (e) {
                             console.log(`${fichier} n'a pas pu être chargé pour les raisons suivantes : ${e}`);
                         }
                     }
-                    (0, baileys_1.delay)(300);
+                    delay(300);
                 });
-                (0, baileys_1.delay)(700);
+                delay(700);
                 let cmsg = `╔════◇
-    ║ 『OVL-𝐌𝐃』
-    ║    Prefix : [ ${prefixe} ]
-    ║    Mode :
-    ║    Nombre total de Commandes :︎
-    ╚══════════════════╝
-    
-    ╔═════◇
-    ║『𝗯𝘆 Fatao』
-    ║ 
-    ╚══════════════════╝`;
-                   
-                    await ovl.sendMessage(ovl.user.id, { text: cmsg });
+║ 『OVL-𝐌𝐃』
+║    Prefix : [ ${prefixe} ]
+║    Mode :
+║    Nombre total de Commandes :︎
+╚══════════════════╝
+
+╔═════◇
+║『𝗯𝘆 Fatao』
+║ 
+╚══════════════════╝`;
+                await ovl.sendMessage(ovl.user.id, { text: cmsg });
             } else if (connection == "close") {
-                    let raisonDeconnexion = new boom_1.Boom(lastDisconnect?.error)?.output.statusCode;
-                    if (raisonDeconnexion === baileys_1.DisconnectReason.badSession) {
-                        console.log('Session id érronée veuillez rescanner le qr svp ...');
-                    }
-                    else if (raisonDeconnexion === baileys_1.DisconnectReason.connectionClosed) {
-                        console.log('!!! connexion fermée, reconnexion en cours ...');
-                        main();
-                    }
-                    else if (raisonDeconnexion === baileys_1.DisconnectReason.connectionLost) {
-                        console.log('connexion au serveur perdue 😞 ,,, reconnexion en cours ... ');
-                        main();
-                    }
-                    else if (raisonDeconnexion === baileys_1.DisconnectReason?.connectionReplaced) {
-                        console.log('connexion réplacée ,,, une sesssion est déjà ouverte veuillez la fermer svp !!!');
-                    }
-                    else if (raisonDeconnexion === baileys_1.DisconnectReason.loggedOut) {
-                        console.log('vous êtes déconnecté,,, veuillez rescanner le code qr svp');
-                    }
-                    else if (raisonDeconnexion === baileys_1.DisconnectReason.restartRequired) {
-                        console.log('redémarrage en cours ▶️');
-                        main();
-                    }
-                    else {
-
-                        console.log('redemarrage sur le coup de l\'erreur  ',raisonDeconnexion) ;         
-                        //repondre("* Redémarrage du bot en cour ...*");
-
-                                    const {exec}=require("child_process") ;
-
-                                    exec("pm2 restart all");            
-                    }
-                    // sleep(50000)
-                    console.log("hum " + connection);
+                let raisonDeconnexion = new boom.Boom(lastDisconnect?.error)?.output.statusCode;
+                if (raisonDeconnexion === DisconnectReason.badSession) {
+                    console.log('Session id érronée veuillez rescanner le qr svp ...');
+                } else if (raisonDeconnexion === DisconnectReason.connectionClosed) {
+                    console.log('!!! connexion fermée, reconnexion en cours ...');
+                    main();
+                } else if (raisonDeconnexion === DisconnectReason.connectionLost) {
+                    console.log('connexion au serveur perdue 😞 ,,, reconnexion en cours ... ');
+                    main();
+                } else if (raisonDeconnexion === DisconnectReason.connectionReplaced) {
+                    console.log('connexion réplacée ,,, une sesssion est déjà ouverte veuillez la fermer svp !!!');
+                } else if (raisonDeconnexion === DisconnectReason.loggedOut) {
+                    console.log('vous êtes déconnecté,,, veuillez rescanner le code qr svp');
+                } else if (raisonDeconnexion === DisconnectReason.restartRequired) {
+                    console.log('redémarrage en cours ▶️');
+                    main();
+                } else {
+                    console.log('redemarrage sur le coup de l\'erreur ', raisonDeconnexion);
+                    exec("pm2 restart all");
                 }
+                console.log("hum " + connection);
+            }
         });
 
         // Gestion des mises à jour des identifiants
