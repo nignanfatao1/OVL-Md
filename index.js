@@ -26,6 +26,7 @@ async function ovlAuth() {
             const writtenData = await fs.promises.readFile(credsFilePath, "utf8");
             if (writtenData === sessionData) {
                 console.log("Les informations de connexion ont été correctement écrites dans le fichier.");
+                console.log(writtenData);
             } else {
                 console.log("Erreur lors de l'écriture des informations de connexion dans le fichier.");
             }
