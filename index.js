@@ -1,11 +1,11 @@
-undefi = require('fs');
+const fs = require('fs');
 const pino = require("pino");
 const path = require('path');
 const { exec } = require("child_process");
 const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, jidDecode, getContentType, DisconnectReason } = require("@whiskeysockets/baileys");
 const boom = require("@hapi/boom");
 const conf = require("./set");
-const { jidDecode, getContentType } = require("@whiskeysockets/baileys");
+//const { jidDecode, getContentType } = require("@whiskeysockets/baileys");
 const baileys_1 = require("@whiskeysockets/baileys");
 const logger_1 = require("@whiskeysockets/baileys/lib/Utils/logger");
 const boom_1 = require("@hapi/boom");
