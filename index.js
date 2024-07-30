@@ -14,15 +14,15 @@ const session = conf.SESSION_ID || "";
 
 async function ovlAuth() {
     try {
-    if (!fs.existsSync(__dirname + "./auth/creds.json")) {
+    if (!fs.existsSync(__dirname + "/auth/creds.json")) {
                 console.log("connexion en cour ...");
-                await fs.writeFileSync(__dirname + "./auth/creds.json", atob(session), "utf8");
-       const sess = fs.readFileSync(__dirname + "./auth/creds.json", atob(session), "utf8");
+                await fs.writeFileSync(__dirname + "/auth/creds.json", atob(session), "utf8");
+       const sess = fs.readFileSync(__dirname + "/auth/creds.json", atob(session), "utf8");
                
                 console.log(sess)
             }
-            else if (fs.existsSync(__dirname + "./auth/creds.json") && session != "ovl") {
-                await fs.writeFileSync(__dirname + "./auth/creds.json", atob(session), "utf8");
+            else if (fs.existsSync(__dirname + "/auth/creds.json") && session != "ovl") {
+                await fs.writeFileSync(__dirname + "/auth/creds.json", atob(session), "utf8");
             }
         }
         catch (e) {
@@ -36,7 +36,7 @@ ovlAuth();
 
 async function main() {
     const { version, isLatest } = await fetchLatestBaileysVersion();
-    const { state, saveCreds } = await useMultiFileAuthState("./auth");
+    const { state, saveCreds } = await useMultiFileAuthState("/auth");
     try {
         const store = makeInMemoryStore({ logger: pino().child({ level: "silent", stream: "store"
   })
