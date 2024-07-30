@@ -11,23 +11,19 @@ const session = conf.SESSION_ID || "";
 
 
 async function ovlAuth() {
-        try {
-            
-            //console.log("le data "+data)
-            if (!fs.existsSync(__dirname + "/auth/creds.json")) {
-                console.log("connexion en cour ...");
-                await fs.writeFileSync(__dirname + "/auth/creds.json", atob(session), "utf8");
-                //console.log(session)
-            }
-            else if (fs.existsSync(__dirname + "/auth/creds.json") && session != "ovl") {
-                await fs.writeFileSync(__dirname + "/auth/creds.json", atob(session), "utf8");
-            }
+    try {
+        const credsFilePath = path.join(__dirname, "/auth/creds.json");
+        if (!fs.existsSync(credsFilePath) || (fs.existsSync(credsFilePath) && session !== "ovl")) {
+            console.log("Connexion en cours...");
+            await fs.promises.writeFile(credsFilePath, Buffer.from(session, 'base64'), "utf8");
         }
-        catch (e) {
-            console.log("Session Invalide " + e );
-            return;
-        }
+    } catch (error) {
+        console.error(error);
+        console.log("Session invalide: " + error);
+        return;
     }
+}
+
 
 ovlAuth();
 
