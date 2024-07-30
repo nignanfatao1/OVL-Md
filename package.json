@@ -49,7 +49,7 @@
     "node-id3": "^0.2.6",
     "node-telegram-bot-api": "^0.64.0",
     "pg": "^8.11.2",
-    "pino": "^8.15.0",
+    "pino": "^8.1.0",
     "qrcode": "latest",
     "readline": "^1.3.0",
     "sequelize": "^6.32.1",
