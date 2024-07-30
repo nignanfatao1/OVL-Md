@@ -14,40 +14,29 @@ const session = conf.SESSION_ID || "";
 
 async function ovlAuth() {
     try {
-        const credsFilePath = './auth/creds.json';
-        const sessionData = Buffer.from(session, 'base64').toString('utf8');
-
-        // Vérifiez si le fichier existe ou si la session n'est pas "ovl"
-        if (!fs.existsSync(credsFilePath) || (fs.existsSync(credsFilePath) && session !== "")) {
-            console.log("Connexion en cours...");
-
-            // Écriture des informations de session dans le fichier
-            await fs.promises.writeFile(credsFilePath, sessionData, "utf8");
-
-            // Vérification après écriture
-            const writtenData = await fs.promises.readFile(credsFilePath, "utf8");
-            if (writtenData === sessionData) {
-                console.log("Les informations de connexion ont été correctement écrites dans le fichier.");
-                console.log(sessionData);
-            } else {
-                console.log("Erreur lors de l'écriture des informations de connexion dans le fichier.");
+    if (!fs.existsSync(__dirname + "/auth/creds.json")) {
+                console.log("connexion en cour ...");
+                await fs.writeFileSync(__dirname + "/auth/creds.json", atob(session), "utf8");
+       const sess = fs.readFileSync(__dirname + "/auth/creds.json", atob(session), "utf8");
+               
+                console.log(sess)
             }
-        } else {
-            console.log("Les informations de session sont déjà présentes ou la session est égale à 'ovl'.");
+            else if (fs.existsSync(__dirname + "/auth/creds.json") && session != "") {
+                await fs.writeFileSync(__dirname + "/auth/creds.json", atob(session), "utf8");
+            }
         }
-    } catch (error) {
-        console.error("Erreur:", error);
-        console.log("Session invalide: " + error.message);
-        return;
+        catch (e) {
+            console.log("Session Invalide " + e );
+            return;
+        }
     }
-}
 
 
 ovlAuth();
 
 async function main() {
     const { version, isLatest } = await fetchLatestBaileysVersion();
-    const { state, saveCreds } = await useMultiFileAuthState("./auth");
+    const { state, saveCreds } = await useMultiFileAuthState("/auth");
     try {
         const store = makeInMemoryStore({ logger: pino().child({ level: "silent", stream: "store"
   })
