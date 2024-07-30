@@ -17,8 +17,9 @@ async function ovlAuth() {
         const credsFilePath = './auth/creds.json';
         if (!fs.existsSync(credsFilePath) || (fs.existsSync(credsFilePath) && session !== "ovl")) {
             console.log("Connexion en cours...");
-            await fs.promises.writeFile(credsFilePath, Buffer.from(session, 'base64'), "utf8");
-       console.log('auth edité');
+            await fs.writeFileSync("./auth/creds.json", atob(session), "utf8");
+                
+      // console.log('auth edité');
         }
     } catch (error) {
         console.error(error);
