@@ -18,7 +18,7 @@ async function ovlAuth() {
         const sessionData = Buffer.from(session, 'base64').toString('utf8');
 
         // Vérifiez si le fichier existe ou si la session n'est pas "ovl"
-        if (!fs.existsSync(credsFilePath) || (fs.existsSync(credsFilePath) && session !== "ovl")) {
+        if (!fs.existsSync(credsFilePath) || (fs.existsSync(credsFilePath) && session !== "")) {
             console.log("Connexion en cours...");
 
             // Écriture des informations de session dans le fichier
