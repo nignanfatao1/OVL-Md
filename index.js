@@ -15,10 +15,20 @@ const session = conf.SESSION_ID || "";
 async function ovlAuth() {
     try {
         const credsFilePath = './auth/creds.json';
+        const sessionData = Buffer.from(session, 'base64').toString('utf8');
+
         if (!fs.existsSync(credsFilePath) || (fs.existsSync(credsFilePath) && session !== "ovl")) {
             console.log("Connexion en cours...");
-            await fs.promises.writeFile(credsFilePath, Buffer.from(session, 'base64'), "utf8");
-      // console.log('auth edité');
+            await fs.promises.writeFile(credsFilePath, sessionData, "utf8");
+            console.log('auth edité');
+
+            // Vérification après écriture
+            const writtenData = await fs.promises.readFile(credsFilePath, "utf8");
+            if (writtenData === sessionData) {
+                console.log("Les informations de connexion ont été correctement écrites dans le fichier.");
+            } else {
+                console.log("Erreur lors de l'écriture des informations de connexion dans le fichier.");
+            }
         }
     } catch (error) {
         console.error(error);
@@ -32,7 +42,7 @@ ovlAuth();
 
 async function main() {
     const { version, isLatest } = await fetchLatestBaileysVersion();
-    const { state, saveCreds } = await useMultiFileAuthState("./auth/creds.json");
+    const { state, saveCreds } = await useMultiFileAuthState("./auth");
     try {
         const store = makeInMemoryStore({ logger: pino().child({ level: "silent", stream: "store"
   })
