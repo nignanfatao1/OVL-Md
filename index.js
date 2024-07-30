@@ -99,8 +99,7 @@ async function main() {
                 mtype == "extendedTextMessage" ? ms.message?.extendedTextMessage?.text :
                 mtype == "buttonsResponseMessage" ? ms?.message?.buttonsResponseMessage?.selectedButtonId :
                 mtype == "listResponseMessage" ? ms.message?.listResponseMessage?.singleSelectReply?.selectedRowId :
-                mtype == "message
-                ContextInfo" ? (ms?.message?.buttonsResponseMessage?.selectedButtonId || ms.message?.listResponseMessage?.singleSelectReply?.selectedRowId || ms.text) : "";
+                mtype == "messageContextInfo" ? (ms?.message?.buttonsResponseMessage?.selectedButtonId || ms.message?.listResponseMessage?.singleSelectReply?.selectedRowId || ms.text) : "";
 
             var origineMessage = ms.key.remoteJid;
             var idBot = decodeJid(ovl.user.id);
