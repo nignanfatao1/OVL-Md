@@ -17,10 +17,12 @@ async function ovlAuth() {
         const credsFilePath = './auth/creds.json';
         const sessionData = Buffer.from(session, 'base64').toString('utf8');
 
+        // Vérifiez si le fichier existe ou si la session n'est pas "ovl"
         if (!fs.existsSync(credsFilePath) || (fs.existsSync(credsFilePath) && session !== "ovl")) {
             console.log("Connexion en cours...");
+
+            // Écriture des informations de session dans le fichier
             await fs.promises.writeFile(credsFilePath, sessionData, "utf8");
-            //console.log('auth edité');
 
             // Vérification après écriture
             const writtenData = await fs.promises.readFile(credsFilePath, "utf8");
@@ -30,10 +32,12 @@ async function ovlAuth() {
             } else {
                 console.log("Erreur lors de l'écriture des informations de connexion dans le fichier.");
             }
+        } else {
+            console.log("Les informations de session sont déjà présentes ou la session est égale à 'ovl'.");
         }
     } catch (error) {
-        console.error(error);
-        console.log("Session invalide: " + error);
+        console.error("Erreur:", error);
+        console.log("Session invalide: " + error.message);
         return;
     }
 }
