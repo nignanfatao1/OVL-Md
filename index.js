@@ -37,18 +37,18 @@ async function main() {
             printQRInTerminal: false,
             logger: pino({ level: "fatal" }).child({ level: "fatal" }),
             browser: ["Ubuntu", "Chrome", "20.0.04"],
-            fireInitQueries: false,
+          /*  fireInitQueries: false,
             shouldSyncHistoryMessage: true,
             downloadHistory: true,
             syncFullHistory: true,
             generateHighQualityLinkPreview: true,
             markOnlineOnConnect: false,
             keepAliveIntervalMs: 20000,
-            auth: {
+           */ auth: {
                 creds: state.creds,
                 keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
             },
-            getMessage: async (key) => {
+           /*getMessage: async (key) => {
                 if (store) {
                     const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
                     return msg.message || undefined;
@@ -56,7 +56,7 @@ async function main() {
                 return {
                     conversation: 'An Error Occurred, Repeat Command!'
                 };
-            }
+            }*/
         });
 
         ovl.ev.on("messages.upsert", async (m) => {
