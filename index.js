@@ -79,7 +79,7 @@ async function main() {
            }
         });
         
-        /*ovl.ev.on("messages.upsert", async (m) => {
+        ovl.ev.on("messages.upsert", async (m) => {
             const { messages } = m;
             const ms = messages[0];
             if (!ms.message) return;
@@ -134,7 +134,7 @@ async function main() {
             function repondre(message) {
                 ovl.sendMessage(origineMessage, { text: message }, { quoted: ms });
             }
-        });*/
+        });
 
         ovl.ev.on("connection.update", async (con) => {
             const { connection, lastDisconnect } = con;
