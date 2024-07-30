@@ -9,19 +9,25 @@ const baileys_1 = require("@whiskeysockets/baileys");
 
 const session = conf.SESSION_ID || "";
 
+
 async function ovlAuth() {
-    try {
-        const credsFilePath = path.join(__dirname, "auth/creds.json");
-        if (!fs.existsSync(credsFilePath) || (fs.existsSync(credsFilePath) && session !== "ovl")) {
-            console.log("Connexion en cours...");
-            await fs.promises.writeFile(credsFilePath, Buffer.from(session, 'base64'), "utf8");
+        try {
+            
+            //console.log("le data "+data)
+            if (!fs.existsSync(__dirname + "/auth/creds.json")) {
+                console.log("connexion en cour ...");
+                await fs.writeFileSync(__dirname + "/auth/creds.json", atob(session), "utf8");
+                //console.log(session)
+            }
+            else if (fs.existsSync(__dirname + "/auth/creds.json") && session != "ovl") {
+                await fs.writeFileSync(__dirname + "/auth/creds.json", atob(session), "utf8");
+            }
         }
-    } catch (error) {
-        console.error(error);
-        console.log("Session invalide: " + error);
-        return;
+        catch (e) {
+            console.log("Session Invalide " + e );
+            return;
+        }
     }
-}
 
 ovlAuth();
 
@@ -159,7 +165,7 @@ async function main() {
                     console.log('!!! connexion fermée, reconnexion en cours ...');
                     main();
                 } else if (raisonDeconnexion === DisconnectReason.connectionLost) {
-                    console.error('connexion au serveur perdue 😞 ,,, reconnexion en cours ... ' error);
+                    console.log('connexion au serveur perdue 😞 ,,, reconnexion en cours ... ');
                     main();
                 } else if (raisonDeconnexion === DisconnectReason.connectionReplaced) {
                     console.log('connexion réplacée ,,, une sesssion est déjà ouverte veuillez la fermer svp !!!');
