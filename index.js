@@ -2,7 +2,7 @@ const fs = require('fs');
 const pino = require("pino");
 const path = require('path');
 const { exec } = require("child_process");
-const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, jidDecode, getContentType, makeInMemoryStore, DisconnectReason } = require("@whiskeysockets/baileys");
+const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, jidDecode, getContentType, makeInMemoryStore, fetchLatestBaileysVersion, DisconnectReason } = require("@whiskeysockets/baileys");
 const boom = require("@hapi/boom");
 const conf = require("./set");
 //const { jidDecode, getContentType } = require("@whiskeysockets/baileys");
@@ -18,6 +18,7 @@ async function ovlAuth() {
         if (!fs.existsSync(credsFilePath) || (fs.existsSync(credsFilePath) && session !== "ovl")) {
             console.log("Connexion en cours...");
             await fs.promises.writeFile(credsFilePath, Buffer.from(session, 'base64'), "utf8");
+       console.log('auth edité');
         }
     } catch (error) {
         console.error(error);
@@ -30,13 +31,14 @@ async function ovlAuth() {
 ovlAuth();
 
 async function main() {
-    
+    const { version, isLatest } = await fetchLatestBaileysVersion();
     const { state, saveCreds } = await useMultiFileAuthState("./auth");
     try {
         const store = makeInMemoryStore({ logger: pino().child({ level: "silent", stream: "store"
   })
 });
         let ovl = makeWASocket({
+            version, 
             printQRInTerminal: false,
             logger: pino({ level: "fatal" }).child({ level: "fatal" }),
             browser: ["Ubuntu", "Chrome", "20.0.04"],
