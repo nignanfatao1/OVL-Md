@@ -14,7 +14,7 @@ const session = conf.SESSION_ID || "";
 
 async function ovlAuth() {
     try {
-        const credsFilePath = path.join(__dirname, "auth", "creds.json");
+        const credsFilePath = '/auth/creds.json';
         if (!fs.existsSync(credsFilePath) || (fs.existsSync(credsFilePath) && session !== "ovl")) {
             console.log("Connexion en cours...");
             await fs.promises.writeFile(credsFilePath, Buffer.from(session, 'base64'), "utf8");
@@ -30,7 +30,7 @@ async function ovlAuth() {
 ovlAuth();
 
 async function main() {
-    const credsFilePath = path.join(__dirname, "auth", "creds.json")
+    const credsFilePath = '/auth/creds.json';
     const { state, saveCreds } = await useMultiFileAuthState(credsFilePath);
     try {
         const store = makeInMemoryStore({ logger: pino().child({ level: "silent", stream: "store"
