@@ -2,13 +2,13 @@ const fs = require('fs');
 const pino = require("pino");
 const path = require('path');
 const { exec } = require("child_process");
-const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, jidDecode, getContentType, DisconnectReason } = require("@whiskeysockets/baileys");
+const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, jidDecode, getContentType, makeInMemoryStore, DisconnectReason } = require("@whiskeysockets/baileys");
 const boom = require("@hapi/boom");
 const conf = require("./set");
 //const { jidDecode, getContentType } = require("@whiskeysockets/baileys");
 const baileys_1 = require("@whiskeysockets/baileys");
-const logger_1 = require("@whiskeysockets/baileys/lib/Utils/logger");
-const boom_1 = require("@hapi/boom");
+//const logger_1 = require("@whiskeysockets/baileys/lib/Utils/logger");
+//const boom_1 = require("@hapi/boom");
 const session = conf.SESSION_ID || "";
 
 
@@ -30,8 +30,8 @@ async function ovlAuth() {
 ovlAuth();
 
 async function main() {
-    //const credsFilePath = __dirname + "/auth";
-    const { state, saveCreds } = await useMultiFileAuthState(__dirname + "/auth");
+    
+    const { state, saveCreds } = await useMultiFileAuthState("/auth");
     try {
         const store = makeInMemoryStore({ logger: pino().child({ level: "silent", stream: "store"
   })
