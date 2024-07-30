@@ -50,7 +50,7 @@ async function main() {
         let ovl = makeWASocket({
             version, 
             printQRInTerminal: true,
-            logger: pino({ level: "fatal" }).child({ level: "fatal" }),
+            logger: pino({ level: "silent" }),
             browser: ["Ubuntu", "Chrome", "20.0.04"],
             fireInitQueries: false,
             shouldSyncHistoryMessage: true,
@@ -60,9 +60,9 @@ async function main() {
             markOnlineOnConnect: false,
             keepAliveIntervalMs: 20000,
             auth: {
-                creds: state.creds,
-                keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
-            },
+            creds: state.creds,
+            keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" }))
+        },
            getMessage: async (key) => {
                 if (store) {
                     const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
@@ -73,11 +73,11 @@ async function main() {
                 };
            }
         });
+        
         /*ovl.ev.on("messages.upsert", async (m) => {
             const { messages } = m;
             const ms = messages[0];
             if (!ms.message) return;
-
             const decodeJid = (jid) => {
                 if (!jid) return jid;
                 if (/:\d+@/gi.test(jid)) {
@@ -94,7 +94,8 @@ async function main() {
                 mtype == "extendedTextMessage" ? ms.message?.extendedTextMessage?.text :
                 mtype == "buttonsResponseMessage" ? ms?.message?.buttonsResponseMessage?.selectedButtonId :
                 mtype == "listResponseMessage" ? ms.message?.listResponseMessage?.singleSelectReply?.selectedRowId :
-                mtype == "messageContextInfo" ? (ms?.message?.buttonsResponseMessage?.selectedButtonId || ms.message?.listResponseMessage?.singleSelectReply?.selectedRowId || ms.text) : "";
+                mtype == "message
+                ContextInfo" ? (ms?.message?.buttonsResponseMessage?.selectedButtonId || ms.message?.listResponseMessage?.singleSelectReply?.selectedRowId || ms.text) : "";
 
             var origineMessage = ms.key.remoteJid;
             var idBot = decodeJid(ovl.user.id);
@@ -134,7 +135,7 @@ async function main() {
             const { connection, lastDisconnect } = con;
             if (connection === "connecting") {
                 console.log("ℹ️ Connexion en cours...");
-            } else if (connection === 'open') {
+            } else if (connection === 'open')  {
                 console.log("✅ Connexion réussie! ☺️");
                 console.log("--");
                 await delay(200);
