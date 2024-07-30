@@ -159,7 +159,7 @@ async function main() {
                     console.log('!!! connexion fermée, reconnexion en cours ...');
                     main();
                 } else if (raisonDeconnexion === DisconnectReason.connectionLost) {
-                    console.log('connexion au serveur perdue 😞 ,,, reconnexion en cours ... ');
+                    console.error('connexion au serveur perdue 😞 ,,, reconnexion en cours ... ' error);
                     main();
                 } else if (raisonDeconnexion === DisconnectReason.connectionReplaced) {
                     console.log('connexion réplacée ,,, une sesssion est déjà ouverte veuillez la fermer svp !!!');
