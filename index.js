@@ -49,7 +49,7 @@ async function main() {
         const store = makeInMemoryStore({ logger: pino().child({ level: "silent", stream: "store"
   })
 });
-        let ovl = makeWASocket({
+        const ovl = makeWASocket({
             version, 
             printQRInTerminal: true,
             logger: pino({ level: "silent" }),
