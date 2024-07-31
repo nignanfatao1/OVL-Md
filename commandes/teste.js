@@ -36,15 +36,14 @@ ovlcmd(
                 return;
             }
 
-            let mess = arg && arg.trim() !== '' ? arg.join(' ') : 'Aucun Message';
+            let mess = '';
             let membresGroupe = verifGroupe ? await infosGroupe.participants : "";
             let tag = `╔═════════════════╗
 ║ 🄾🅅🄻-🄼🄳 🅃🄰🄶🄰🄻🄻
 ║👤 Auteur : *${nomAuteurMessage}* 
-║💬 Message : *${mess}*
-╚═════════════════╝\n\n`;
+║💬 Message : *${mess}*\n\n`;
 
-            tag += `╔═════════════════╗\n`;
+           // tag += `╔═════════════════╗\n`;
             let emoji = ['🔅', '💤', '🔷', '❌', '✔️', '🥱', '⚙️', '🀄', '🎊', '🏀', '🙏', '🎧', '⛔️', '🔋','🏮','🎐','🦦'];
             let random = Math.floor(Math.random() * emoji.length);
 
