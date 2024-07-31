@@ -127,6 +127,13 @@ async function main() {
                     }
                     // else{admin= false;}
                     return admin;
+            };
+            function mybotpic() {
+      // Générer un indice aléatoire entre 0 (inclus) et la longueur du tableau (exclus)
+      const indiceAleatoire = Math.floor(Math.random() * liens.length);
+      // Récupérer le lien correspondant à l'indice aléatoire
+      const lienAleatoire = liens[indiceAleatoire];
+      return lienAleatoire;
             }
             const mbre = verifGroupe ? await infosGroupe.participants : '';
             let admins = verifGroupe ? groupeAdmin(mbre) : '';
