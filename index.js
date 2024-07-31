@@ -115,9 +115,38 @@ async function main() {
 
             var membreGroupe = verifGroupe ? ms.key.participant : '';
             const nomAuteurMessage = ms.pushName;
+            const arg = texte ? texte.trim().split(/ +/).slice(1) : null;
             const verifCom = texte ? texte.startsWith(prefixe) : false;
             const com = verifCom ? texte.slice(1).trim().split(/ +/).shift().toLowerCase() : false;
-            console.log("⏬『OVL-MD LOG-MESSAGES』⏬");
+            const mbre = verifGroupe ? await infosGroupe.participants : '';
+            let admins = verifGroupe ? groupeAdmin(mbre) : '';
+            const verifAdmin = verifGroupe ? admins.includes(auteurMessage) : false;
+            var verifOvlAdmin = verifGroupe ? admins.includes(idBot) : false;
+
+            var commandeOptions = {
+                    verifGroupe,
+                    mbre,
+                    membreGroupe,
+                    verifAdmin,
+                    infosGroupe,
+                    nomGroupe,
+                    auteurMessage,
+                    nomAuteurMessage,
+                    idBot,
+                    verifOvlAdmin,
+                    prefixe,
+                    arg,
+                    repondre,
+                    groupeAdmin,
+                    msgRepondu,
+                    auteurMsgRepondu,
+                    ms, 
+                    origineMessage, 
+                    mybotpic
+                
+                };
+               
+                console.log("⏬『OVL-MD LOG-MESSAGES』⏬");
             if (verifGroupe) {
                 console.log("Message provenant du groupe : " + nomGroupe);
             }
