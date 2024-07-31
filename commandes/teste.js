@@ -12,21 +12,23 @@ ovl({ nomCom: "tagall",
   } ;
   let membresGroupe = verifGroupe ? await infosGroupe.participants : ""
   var tag = ""; 
-  tag += `╔══════════════╗
+  tag += `╔═════════════════╗
+║ 🄾🅅🄻-🄼🄳 🅃🄰🄶🄰🄻🄻
 ║👤 Auteur : *${nomAuteurMessage}* 
 ║💬 Message : *${mess}*
-╚══════════════╝\n
+╚═════════════════╝\n
 \n
 
 ` ;
+     tag += `╔═════════════════╗\n`
  let emoji = ['🔅', '💤', '🔷', '❌', '✔️', '🥱', '⚙️', '🀄', '🎊', '🏀', '🙏🎧', '⛔️', '🔋','🏮','🎐','🦦']
   let random = Math.floor(Math.random() * (emoji.length - 1))
 
 
   for (const membre of membresGroupe) {
-    tag += `${emoji[random]}      @${membre.id.split("@")[0]}\n`
+    tag += `║${emoji[random]} @${membre.id.split("@")[0]}\n`
   }
-
+tag += `╚═════════════════╝\n`
  
  if (verifAdmin) {
 
