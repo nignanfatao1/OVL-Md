@@ -155,7 +155,7 @@ async function main() {
                 console.log("🌐connexion à whatsapp");
             } else if (connection === 'open')  {
                 console.log("✅connexion etablit; Le bot est en ligne 🌐\n\n");
-                Delay(300) ;
+                delay(300) ;
                 console.log("Chargement des commandes ...\n");
                 fs.readdirSync(path.join(__dirname, "commandes")).forEach((fichier) => {
                     if (path.extname(fichier).toLowerCase() == ".js") {
