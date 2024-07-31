@@ -5,11 +5,8 @@ const { exec } = require("child_process");
 const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, jidDecode, getContentType, makeInMemoryStore, fetchLatestBaileysVersion, DisconnectReason } = require("@whiskeysockets/baileys");
 const boom = require("@hapi/boom");
 const conf = require("./set");
-//const { jidDecode, getContentType } = require("@whiskeysockets/baileys");
-const baileys_1 = require("@whiskeysockets/baileys");
-//const logger_1 = require("@whiskeysockets/baileys/lib/Utils/logger");
-//const boom_1 = require("@hapi/boom");
 const session = conf.SESSION_ID || "";
+let evt = require(__dirname + "/framework/ovl");
 const prefixe = "/" ;
 
 
@@ -23,7 +20,7 @@ async function ovlAuth(session) {
 
         // Vérifie si le fichier creds.json n'existe pas
         if (!fs.existsSync(filePath)) {
-            console.log("Connexion en cours...");
+            console.log("connexion au bot en cours");
 
             // Décode la session et écrit dans creds.json
             const decodedSession = decodeBase64(session);
@@ -92,7 +89,7 @@ async function main() {
                 return jid;
             };
 
-            var mtype = getContentType(ms.message);
+suivan    var mtype = getContentType(ms.message);
             var texte = mtype == "conversation" ? ms.message.conversation :
                 mtype == "imageMessage" ? ms.message.imageMessage?.caption :
                 mtype == "videoMessage" ? ms.message.videoMessage?.caption :
@@ -120,77 +117,87 @@ async function main() {
             const nomAuteurMessage = ms.pushName;
             const verifCom = texte ? texte.startsWith(prefixe) : false;
             const com = verifCom ? texte.slice(1).trim().split(/ +/).shift().toLowerCase() : false;
-            console.log("=========== Nouveau message ===========");
+            console.log("⏬『𝛩𝛻𝐿-𝛭𝐷 𝐿𝛩𝐺-𝛭𝛯𝑆𝑆𝛥𝐺𝛯𝑆』⏬");
             if (verifGroupe) {
                 console.log("Message provenant du groupe : " + nomGroupe);
             }
             console.log("Message envoyé par : " + "[" + nomAuteurMessage + " : " + auteurMessage.split("@s.whatsapp.net")[0] + " ]");
-            console.log("Type de message : " + mtype);
-            console.log("------ Contenu du message ------");
+            //console.log("Type de message : " + mtype);
+            console.log("contenu du message.....⤵️");
             console.log(texte);
 
             // Fonction pour répondre à un message
             function repondre(message) {
                 ovl.sendMessage(origineMessage, { text: message }, { quoted: ms });
             }
-        });
+        }); //fin log message
+
+            //auth avec le préfixe
+
+            if (verifCom) {
+
+                    //await await zk.readMessages(ms.key);
+                    const cd = evt.cm.find((ovl) => ovl.nomCom === (com));
+                  /*  if (cd) {
+
+                        if (conf.MODE != 'oui' && !superUser) {
+                            return;
+                        }
+
+                        if (!dev && origineMessage == "120363158701337904@g.us") {
+                            return;
+                        }*/
+                        
 
         ovl.ev.on("connection.update", async (con) => {
             const { connection, lastDisconnect } = con;
             if (connection === "connecting") {
-                console.log("ℹ️ Connexion en cours...");
+                console.log("🌐connexion à whatsapp");
             } else if (connection === 'open')  {
-                console.log("✅ Connexion réussie! ☺️");
-                console.log("--");
-                await delay(200);
-                console.log("------");
-                await delay(300);
-                console.log("------------------/-----");
-                console.log("Le bot est en ligne 🕸\n\n");
+                console.log("✅connexion etablit; Le bot est en ligne 🌐\n\n");
+                Delay(300) ;
                 console.log("Chargement des commandes ...\n");
                 fs.readdirSync(path.join(__dirname, "commandes")).forEach((fichier) => {
                     if (path.extname(fichier).toLowerCase() == ".js") {
                         try {
                             require(path.join(__dirname, "commandes", fichier));
-                            console.log(fichier + " installé ✔️");
+                            console.log(fichier + " installé avec succès");
                         } catch (e) {
-                            console.log(`${fichier} n'a pas pu être chargé pour les raisons suivantes : ${e}`);
+                            console.log(` une erreur est survenu lors du chargement du fichier ${fichier} : ${e}`);
                         }
                     }
                     delay(300);
                 });
                 delay(700);
-                let cmsg = `╔════◇
-║ 『OVL-𝐌𝐃』
-║    Prefix : [ ${prefixe} ]
+                let cmsg = `╔════◇◇◇◇◇◇◇◇═════╗
+║           『🄾🅅🄻-🄼🄳』 
+║            
+║    Prefixe : [ ${prefixe} ]
 ║    Mode :
-║    Nombre total de Commandes :︎
-╚══════════════════╝
-
-╔═════◇
-║『𝗯𝘆 Fatao』
-║ 
-╚══════════════════╝`;
+║    Nombre de commandes:︎
+║
+║             *『𝐵𝑌 Fatao』*
+╚═════════════════╝`;
                 await ovl.sendMessage(ovl.user.id, { text: cmsg });
             } else if (connection == "close") {
                 let raisonDeconnexion = new boom.Boom(lastDisconnect?.error)?.output.statusCode;
                 if (raisonDeconnexion === DisconnectReason.badSession) {
-                    console.log('Session id érronée veuillez rescanner le qr svp ...');
+                    console.log('Session id érronée veuiller obtenir une nouvelle session_id via Qr-code/Pairing-code svp ...');
                 } else if (raisonDeconnexion === DisconnectReason.connectionClosed) {
                     console.log('!!! connexion fermée, reconnexion en cours ...');
                     main();
                 } else if (raisonDeconnexion === DisconnectReason.connectionLost) {
-                    console.log('connexion au serveur perdue 😞 ,,, reconnexion en cours ... ');
+                    console.log('connexion au serveur perdue😞 ,,, reconnexion en cours ...♻️');
                     main();
                 } else if (raisonDeconnexion === DisconnectReason.connectionReplaced) {
                     console.log('connexion réplacée ,,, une sesssion est déjà ouverte veuillez la fermer svp !!!');
                 } else if (raisonDeconnexion === DisconnectReason.loggedOut) {
-                    console.log('vous êtes déconnecté,,, veuillez rescanner le code qr svp');
+                    console.log('veuillez obtenir une nouvelle session_id via Qr-code/Pairing-code svp');
                 } else if (raisonDeconnexion === DisconnectReason.restartRequired) {
-                    console.log('redémarrage en cours ▶️');
+                    console.log('redémarrage du bot en cours ♻️');
                     main();
                 } else {
-                    console.log('redemarrage sur le coup de l\'erreur ', raisonDeconnexion);
+                    console.log('une erreur est survenu:', raisonDeconnexion);
                     exec("pm2 restart all");
                 }
                 console.log("hum " + connection);
