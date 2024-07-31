@@ -61,7 +61,7 @@ async function main() {
             syncFullHistory: true,
             generateHighQualityLinkPreview: true,
             markOnlineOnConnect: false,
-            keepAliveIntervalMs: 10000,
+            keepAliveIntervalMs: 30000,
             auth: {
             creds: state.creds,
             keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" }))
