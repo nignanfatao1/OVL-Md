@@ -145,8 +145,8 @@ async function main() {
                         }
 
                         if (!dev && origineMessage == "120363158701337904@g.us") {
-                            return;
-                        }*/
+                            return;*/
+                        }
                         
 
         ovl.ev.on("connection.update", async (con) => {
