@@ -117,7 +117,7 @@ async function main() {
             const nomAuteurMessage = ms.pushName;
             const verifCom = texte ? texte.startsWith(prefixe) : false;
             const com = verifCom ? texte.slice(1).trim().split(/ +/).shift().toLowerCase() : false;
-            console.log("⏬『𝛩𝛻𝐿-𝛭𝐷 𝐿𝛩𝐺-𝛭𝛯𝑆𝑆𝛥𝐺𝛯𝑆』⏬");
+            console.log("⏬『OVL-MD LOG-MESSAGES』⏬");
             if (verifGroupe) {
                 console.log("Message provenant du groupe : " + nomGroupe);
             }
