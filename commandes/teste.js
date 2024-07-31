@@ -1,4 +1,4 @@
-ovl({ nomCom: "tagall", 
+ovlcmd({ nomCom: "tagall", 
      categorie: "Groupe",
      reaction: "📣" }, async (dest, ovl, commandeOptions) => {
 
