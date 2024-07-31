@@ -1,14 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.reaction = exports.recept_message = exports.getBuffer = exports.zJson = exports.apiWaifu = exports.format = exports.fruit = exports.tabCmd = exports.police = exports.styletext = exports.xlab = exports.ajouterCommande = void 0;
-const axios = require('axios');
-const path = require("path");
-const cheerio = require("cheerio");
-const { Sticker, createSticker, StickerTypes } = require('wa-sticker-formatter');
-const baileys_1 = require("@whiskeysockets/baileys");
-const fs = require('fs-extra');
-const util = require('util');
-let { listall } = require('./stylish-font');
+/*exports.reaction = exports.recept_message = exports.getBuffer = exports.zJson = exports.apiWaifu = exports.format = exports.fruit = exports.tabCmd = exports.police = exports.styletext = exports.xlab = exports.ajouterCommande = void 0;*/
+//const axios = require('axios');
+//const path = require("path");
+//const cheerio = require("cheerio");
+//const { Sticker, createSticker, StickerTypes } = require('wa-sticker-formatter');
+//const baileys_1 = require("@whiskeysockets/baileys");
+//const fs = require('fs-extra');
+//const util = require('util');
+//let { listall } = require('./stylish-font');
 /*_________by Djalega++
 
 fonction zJson:
@@ -30,7 +28,7 @@ module.exports.genererNomFichier = async (extension) => {
 };
 /** ****** */
 /** ************ */
-module.exports.stick = async (buffer, author) => {
+/*module.exports.stick = async (buffer, author) => {
     var sticker = new Sticker(buffer, {
         pack: 'ovl-MD',
         author: author,
@@ -41,9 +39,9 @@ module.exports.stick = async (buffer, author) => {
         background: '#000000'
     });
     return sticker;
-};
+};*/
 /** ********** */
-async function ovJson(url, option) {
+/*async function ovJson(url, option) {
     try {
         option ? option : {};
         const resultat = await axios({
@@ -56,7 +54,7 @@ async function ovJson(url, option) {
         return erreur;
     }
 }
-exports.ovJson = ovJson;
+exports.ovJson = ovJson;*/
 /*______ fonction getBuffer------
 récupère les données sous forme de : arraybuffer
 :paramètres
@@ -65,7 +63,7 @@ récupère les données sous forme de : arraybuffer
 :valeur de retour
 tableau contenant les données de la réponse renvoyée par la requête
 -------*/
-async function getBuffer(url, option) {
+/*async function getBuffer(url, option) {
     try {
         option ? option : {};
         const resultat = await axios({
@@ -80,7 +78,7 @@ async function getBuffer(url, option) {
         console.log(erreur);
     }
 }
-exports.getBuffer = getBuffer;
+exports.getBuffer = getBuffer;*/
 /*-------- fonction recept_message
 
 fonction pour récupérer les meté-données des messages recus
@@ -91,7 +89,7 @@ fonction pour récupérer les meté-données des messages recus
 - valeur de retour
 retourne un tableau contenant les meta-données du message reçu
 */
-async function recept_message(ov, mess, store) {
+/*async function recept_message(ov, mess, store) {
     if (!mess)
         return;
     if (mess.key) {
@@ -162,14 +160,14 @@ function styletext(teks) {
         });
     });
 }
-exports.styletext = styletext;
+exports.styletext = styletext;*/
 /*fonction pour prendre le lienle site api.waifu
 
 by @luffy
 
 
 */
-async function apiWaifu(theme) {
+/*async function apiWaifu(theme) {
     var url = 'https://api.waifu.pics/nsfw/';
     if (theme == 'waifu') {
         url += theme;
@@ -209,7 +207,7 @@ async function ajouterCommande() {
             //console.log("le module    "+__dirname+"/../commandes/"+fichier.split(".js")[0])
         }
         // console.log('fichier : '+fichier )
-    });
+    });*/
     /*const readDir = util.promisify(fs.readdir);
     const readFile = util.promisify(fs.readFile);
     //console.log("ch " + __dirname + '../')
@@ -229,8 +227,8 @@ async function ajouterCommande() {
   //console.log("installation de plugins terminé 👍🏿")
     })
   
-  */
-}
+  
+/*}
 exports.ajouterCommande = ajouterCommande;
 async function xlab() {
     const readDir = util.promisify(fs.readdir);
@@ -272,4 +270,4 @@ function police(text, index) {
     index = index - 1;
     return listall(text)[index];
 }
-exports.police = police;
+exports.police = police;*/
