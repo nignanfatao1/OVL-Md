@@ -10,6 +10,7 @@ const baileys_1 = require("@whiskeysockets/baileys");
 //const logger_1 = require("@whiskeysockets/baileys/lib/Utils/logger");
 //const boom_1 = require("@hapi/boom");
 const session = conf.SESSION_ID || "";
+const prefixe = "/" ;
 
 
 function decodeBase64(base64String) {
