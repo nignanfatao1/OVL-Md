@@ -6,7 +6,7 @@ const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignal
 const boom = require("@hapi/boom");
 const conf = require("./set");
 const session = conf.SESSION_ID || "";
-let evt = require(__dirname, "framework/ovl");
+let evt = require(__dirname, "framework/ovlcmd");
 const prefixe = "/" ;
 
 
@@ -165,7 +165,7 @@ async function main() {
             if (verifCom) {
 
                     //await await zk.readMessages(ms.key);
-                    const cd = evt.cm.find((ovl) => ovl.nomCom === (com));
+                    const cd = evt.cm.find((ovlcmd) => ovlcmd.nomCom === (com));
                   /*  if (cd) {
 
                         if (conf.MODE != 'oui' && !superUser) {
