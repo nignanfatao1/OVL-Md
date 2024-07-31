@@ -6,7 +6,7 @@ const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignal
 const boom = require("@hapi/boom");
 const conf = require("./set");
 const session = conf.SESSION_ID || "";
-let evt = require(__dirname + "/framework/ovl");
+let evt = require(__dirname, "framework/ovl");
 const prefixe = "/" ;
 
 
