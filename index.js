@@ -118,6 +118,16 @@ async function main() {
             const arg = texte ? texte.trim().split(/ +/).slice(1) : null;
             const verifCom = texte ? texte.startsWith(prefixe) : false;
             const com = verifCom ? texte.slice(1).trim().split(/ +/).shift().toLowerCase() : false;
+            function groupeAdmin(membreGroupe) {
+                    let admin = [];
+                    for (m of membreGroupe) {
+                        if (m.admin == null)
+                            continue;
+                        admin.push(m.id);
+                    }
+                    // else{admin= false;}
+                    return admin;
+            }
             const mbre = verifGroupe ? await infosGroupe.participants : '';
             let admins = verifGroupe ? groupeAdmin(mbre) : '';
             const verifAdmin = verifGroupe ? admins.includes(auteurMessage) : false;
