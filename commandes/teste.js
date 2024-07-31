@@ -11,9 +11,7 @@ ovlcmd(
     },
     async (dest, ovl, commandeOptions) => {
         try {
-            let z = 'Salut👋 je me nomme *OVL-MD* \n\n ' + 'je suis un bot Whatsapp Multi-device';
-            let d = ' developpé par *Fatao*';
-            let varmess = z + d;
+            let varmess = 'Salut👋 je me nomme *OVL-MD* \nje suis un bot Whatsapp Multi-device developpé par *Fatao*\n';
             var img = 'https://telegra.ph/file/8173c870f9de5570db8c3.jpg';
             await ovl.sendMessage(dest, { image: { url: img }, caption: varmess });
             //console.log("montest")
@@ -75,82 +73,111 @@ ovlcmd(
     {
         nomCom: "annonce",
         reaction: "💬",
-    },
+        },
     async (dest, ovl, commandeOptions) => {
-        const { repondre, msgRepondu, verifGroupe, arg, verifAdmin, superUser } = commandeOptions;
 
-        if (!verifGroupe) {
-            repondre('Veuillez l\'utiliser dans un groupe');
-            return;
+ const {repondre,msgRepondu,verifGroupe,arg ,verifAdmin , superUser}=commandeOptions;
+
+  if(!verifGroupe)  { repondre('veuillez l\'utiliser dans un groupe')} ;
+  if (verifAdmin || superUser) { 
+
+  let metadata = await ovl.groupMetadata(dest) ;
+
+  //console.log(metadata.participants)
+ let tag = [] ;
+  for (const participant of metadata.participants ) {
+
+      tag.push(participant.id) ;
+  }
+  //console.log(tag)
+
+    if(msgRepondu) {
+      console.log(msgRepondu)
+      let msg ;
+
+      if (msgRepondu.imageMessage) {
+
+        
+
+     let media  = await ovl.downloadAndSaveMediaMessage(msgRepondu.imageMessage) ;
+     // console.log(msgRepondu) ;
+     msg = {
+
+       image : { url : media } ,
+       caption : msgRepondu.imageMessage.caption,
+       mentions :  tag
+       
+     }
+    
+
+      } else if (msgRepondu.videoMessage) {
+
+        let media  = await ovl.downloadAndSaveMediaMessage(msgRepondu.videoMessage) ;
+
+        msg = {
+
+          video : { url : media } ,
+          caption : msgRepondu.videoMessage.caption,
+          mentions :  tag
+          
         }
 
-        if (verifAdmin || superUser) {
-            let metadata = await ovl.groupMetadata(dest);
+      } else if (msgRepondu.audioMessage) {
+    
+        let media  = await ovl.downloadAndSaveMediaMessage(msgRepondu.audioMessage) ;
+       
+        msg = {
+   
+          audio : { url : media } ,
+          mimetype:'audio/mp4',
+          mentions :  tag
+           }     
+        
+      } else if (msgRepondu.stickerMessage) {
 
-            let tag = [];
-            for (const participant of metadata.participants) {
-                tag.push(participant.id);
-            }
+    
+        let media  = await ovl.downloadAndSaveMediaMessage(msgRepondu.stickerMessage)
 
-            let msg;
+        let stickerMess = new Sticker(media, {
+          pack: 'OVL hidtag message',
+          type: StickerTypes.CROPPED,
+          categories: ["🤩", "🎉"],
+          id: "12345",
+          quality: 70,
+          background: "transparent",
+        });
+        const stickerBuffer2 = await stickerMess.toBuffer();
+       
+        msg = { sticker: stickerBuffer2 , mentions : tag}
 
-            if (msgRepondu) {
-                console.log(msgRepondu);
 
-                if (msgRepondu.imageMessage) {
-                    let media = await ovl.downloadAndSaveMediaMessage(msgRepondu.imageMessage);
-                    msg = {
-                        image: { url: media },
-                        caption: msgRepondu.imageMessage.caption,
-                        mentions: tag
-                    };
-                } else if (msgRepondu.videoMessage) {
-                    let media = await ovl.downloadAndSaveMediaMessage(msgRepondu.videoMessage);
-                    msg = {
-                        video: { url: media },
-                        caption: msgRepondu.videoMessage.caption,
-                        mentions: tag
-                    };
-                } else if (msgRepondu.audioMessage) {
-                    let media = await ovl.downloadAndSaveMediaMessage(msgRepondu.audioMessage);
-                    msg = {
-                        audio: { url: media },
-                        mimetype: 'audio/mp4',
-                        mentions: tag
-                    };
-                } else if (msgRepondu.stickerMessage) {
-                    let media = await ovl.downloadAndSaveMediaMessage(msgRepondu.stickerMessage);
-                    let stickerMess = new Sticker(media, {
-                        pack: 'OVL hidtag message',
-                        type: StickerTypes.CROPPED,
-                        categories: ["🤩", "🎉"],
-                        id: "12345",
-                        quality: 70,
-                        background: "transparent",
-                    });
-                    const stickerBuffer2 = await stickerMess.toBuffer();
-                    msg = { sticker: stickerBuffer2, mentions: tag };
-                } else {
-                    msg = {
-                        text: msgRepondu.conversation,
-                        mentions: tag
-                    };
-                }
+      }  else {
+          msg = {
+             text : msgRepondu.conversation,
+             mentions : tag
+          }
+      }
 
-                await ovl.sendMessage(dest, msg);
-            } else {
-                if (!arg || !arg[0]) {
-                    repondre('Entrez ou taguez le message à annoncer');
-                    return;
-                }
+    ovl.sendMessage(dest,msg)
 
-                await ovl.sendMessage(dest, {
-                    text: arg.join(' '),
-                    mentions: tag
-                });
-            }
-        } else {
-            repondre('Commande réservée aux admins');
-        }
+    } else {
+
+        if(!arg || !arg[0]) { repondre('entrer ou taguer le message à annoncer') ; return} ;
+
+   ovl.sendMessage(
+         dest,
+         {
+          text : arg.join(' ') ,
+          mentions : tag
+         }     
+      )
+    }
+
+} else {
+  repondre('Commande reservée au admins')
+}
+});
+        
     }
 );
+
