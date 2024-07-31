@@ -89,7 +89,7 @@ async function main() {
                 return jid;
             };
 
-suivan    var mtype = getContentType(ms.message);
+            var mtype = getContentType(ms.message);
             var texte = mtype == "conversation" ? ms.message.conversation :
                 mtype == "imageMessage" ? ms.message.imageMessage?.caption :
                 mtype == "videoMessage" ? ms.message.videoMessage?.caption :
