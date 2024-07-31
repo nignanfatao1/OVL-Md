@@ -71,7 +71,7 @@ ovlcmd(
 
 ovlcmd(
     {
-        nomCom: "annonce",
+        nomCom: "hidtag",
         reaction: "💬",
         },
     async (dest, ovl, commandeOptions) => {
@@ -177,7 +177,4 @@ ovlcmd(
   repondre('Commande reservée au admins')
 }
 });
-        
-    }
-);
 
