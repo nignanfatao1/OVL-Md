@@ -1,6 +1,6 @@
 var tabCmds = [];
 let cm = [];
-function cmd(obj, fonctions) {
+function ovlcmd(obj, fonctions) {
     let infoComs = obj;
     if (!obj.categorie) {
         infoComs.categorie = "Général";
@@ -13,4 +13,4 @@ function cmd(obj, fonctions) {
     // console.log('chargement...')
     return infoComs;
 }
-module.exports = { cmd, Module: cmd, cm };
+module.exports = { ovlcmd, Module: ovlcmd, cm };
