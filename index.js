@@ -7,6 +7,7 @@ const boom = require("@hapi/boom");
 const conf = require("./set");
 const session = conf.SESSION_ID || "";
 let evt = require(__dirname, "framework/ovlcmd");
+let { reagir } = require(__dirname, "framework/app");
 const prefixe = "/" ;
 
 
@@ -183,15 +184,17 @@ async function main() {
 
                     //await await zk.readMessages(ms.key);
                     const cd = evt.cm.find((ovlcmd) => ovlcmd.nomCom === (com));
-                  /*  if (cd) {
-
-                        if (conf.MODE != 'oui' && !superUser) {
-                            return;
+                    if (cd) {
+                        
+                        try {
+                            reagir(origineMessage, ovl, ms, cd.reaction);
+                            cd.fonction(origineMessage, ovl, commandeOptions);
                         }
-
-                        if (!dev && origineMessage == "120363158701337904@g.us") {
-                            return;*/
+                        catch (e) {
+                            console.log("😡😡 " + e);
+                            ovl.sendMessage(origineMessage, { text: "😡😡 " + e }, { quoted: ms });
                         }
+                        }};
 
             }); //fin evenement message
 
@@ -216,13 +219,13 @@ async function main() {
                 });
                 delay(700);
                 let cmsg = `╔════◇◇◇◇◇◇◇◇═════╗
-║           『🄾🅅🄻-🄼🄳』 
+║         『🄾🅅🄻-🄼🄳』 
 ║            
 ║    Prefixe : [ ${prefixe} ]
 ║    Mode :
-║    Nombre de commandes:︎
+║    Commandes:︎${evt.cm.length}︎
 ║
-║             *『𝐵𝑌 Fatao』*
+║          *『𝐵𝑌 Fatao』*
 ╚═════════════════╝`;
                 await ovl.sendMessage(ovl.user.id, { text: cmsg });
             } else if (connection == "close") {
