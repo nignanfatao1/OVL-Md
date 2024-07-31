@@ -2,12 +2,13 @@ const fs = require('fs');
 const pino = require("pino");
 const path = require('path');
 const { exec } = require("child_process");
-const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, jidDecode, getContentType, makeInMemoryStore, fetchLatestBaileysVersion, DisconnectReason } = require("@whiskeysockets/baileys");
+const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, jidDecode, getContentType, downloadContentFromMessage, makeInMemoryStore, fetchLatestBaileysVersion, DisconnectReason } = require("@whiskeysockets/baileys");
 const boom = require("@hapi/boom");
 const conf = require("./set");
 const session = conf.SESSION_ID || "";
 let evt = require(__dirname + "/framework/ovlcmd");
 let { reagir } = require(__dirname + "/framework/app");
+const FileType = require('file-type')
 const prefixe = "/" ;
 
 
@@ -258,20 +259,37 @@ async function main() {
 
             //autre fonction de ovl
             ovl.downloadAndSaveMediaMessage = async (message, filename = '', attachExtension = true) => {
-                let quoted = message.msg ? message.msg : message;
-                let mime = (message.msg || message).mimetype || '';
-                let messageType = message.mtype ? message.mtype.replace(/Message/gi, '') : mime.split('/')[0];
-                const stream = await (0, baileys_1.downloadContentFromMessage)(quoted, messageType);
-                let buffer = Buffer.from([]);
-                for await (const chunk of stream) {
-                    buffer = Buffer.concat([buffer, chunk]);
-                }
-                let type = await FileType.fromBuffer(buffer);
-                let trueFileName = './' + filename + '.' + type.ext;
-                // save to file
-                await fs.writeFileSync(trueFileName, buffer);
-                return trueFileName;
-            };
+    try {
+        let quoted = message.msg ? message.msg : message;
+        let mime = (message.msg || message).mimetype || '';
+        let messageType = message.mtype ? message.mtype.replace(/Message/gi, '') : mime.split('/')[0];
+        
+        console.log(`Téléchargement du message de type: ${messageType}`);
+
+        const stream = await downloadContentFromMessage(quoted, messageType);
+        let buffer = Buffer.from([]);
+
+        for await (const chunk of stream) {
+            buffer = Buffer.concat([buffer, chunk]);
+        }
+
+        let type = await FileType.fromBuffer(buffer);
+        if (!type) {
+            throw new Error("Type de fichier non reconnu");
+        }
+
+        let trueFileName = attachExtension ? `${filename}.${type.ext}` : filename;
+        let filePath = path.resolve('./', trueFileName);
+
+        await fs.promises.writeFile(filePath, buffer);
+        console.log(`Fichier sauvegardé à: ${filePath}`);
+
+        return filePath;
+    } catch (error) {
+        console.error('Erreur lors du téléchargement et de la sauvegarde du fichier:', error);
+        throw error; // Rethrow pour que l'appelant puisse gérer l'erreur s'il le souhaite
+    }
+};
             //fin autre fonction ovl
     } catch (error) {
         console.error("Erreur principale:", error);
