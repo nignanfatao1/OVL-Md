@@ -1,7 +1,8 @@
 const { ovlcmd } = require("../framework/ovlcmd");
+
 ovlcmd({ nomCom: "test",
-        reaction: "🔅", 
-        nomFichier: __filename },
+         reaction: "🔅", 
+         nomFichier: __filename },
        async (dest, ovl, commandeOptions) => {
    // console.log("Commande saisie !!!s");
     let z = 'Salut👋 je me nomme *OVL-MD* \n\n ' + 'je suis un bot Whatsapp Multi-device';
@@ -15,8 +16,9 @@ ovlcmd({ nomCom: "test",
 
 
 ovlcmd({ nomCom: "tagall", 
-     categorie: "Groupe",
-     reaction: "📣" }, async (dest, ovl, commandeOptions) => {
+         categorie: "Groupe",
+         reaction: "📣" },
+       async (dest, ovl, commandeOptions) => {
 
   const { ms, repondre, arg, verifGroupe, nomGroupe, infosGroupe, nomAuteurMessage, verifAdmin, superUser } = commandeOptions
 
