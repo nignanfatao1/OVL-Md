@@ -1,4 +1,4 @@
-ovl({ nomCom: "appel", 
+ovl({ nomCom: "tagall", 
      categorie: "Groupe",
      reaction: "📣" }, async (dest, ovl, commandeOptions) => {
 
@@ -30,7 +30,7 @@ ovl({ nomCom: "appel",
  
  if (verifAdmin) {
 
-  zk.sendMessage(dest, { text: tag, mentions: membresGroupe.map((i) => i.id) }, { quoted: ms })
+  ovl.sendMessage(dest, { text: tag, mentions: membresGroupe.map((i) => i.id) }, { quoted: ms })
 
    } else { repondre('commande utilisable seulement par les admins du group')}
 
