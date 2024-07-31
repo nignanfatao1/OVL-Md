@@ -223,7 +223,7 @@ async function main() {
 ║            
 ║    Prefixe : [ ${prefixe} ]
 ║    Mode :
-║    Commandes:︎ ${evt.cm}︎
+║    Commandes:︎ ${evt.cm.length}︎
 ║
 ║          *『𝐵𝑌 Fatao』*
 ╚═════════════════╝`;
