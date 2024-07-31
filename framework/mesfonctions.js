@@ -25,7 +25,7 @@ données contenues dans la reponse de la requête
 /** ********* */
 module.exports.genererNomFichier = async (extension) => {
     var randomNbre = Math.floor(Math.random() * 2000);
-    var nomFichier = `Zok${randomNbre}.${extension}`;
+    var nomFichier = `ovlbot${randomNbre}.${extension}`;
     return nomFichier;
 };
 /** ****** */
@@ -43,7 +43,7 @@ module.exports.stick = async (buffer, author) => {
     return sticker;
 };
 /** ********** */
-async function zJson(url, option) {
+async function ovJson(url, option) {
     try {
         option ? option : {};
         const resultat = await axios({
@@ -56,7 +56,7 @@ async function zJson(url, option) {
         return erreur;
     }
 }
-exports.zJson = zJson;
+exports.ovJson = ovJson;
 /*______ fonction getBuffer------
 récupère les données sous forme de : arraybuffer
 :paramètres
@@ -91,7 +91,7 @@ fonction pour récupérer les meté-données des messages recus
 - valeur de retour
 retourne un tableau contenant les meta-données du message reçu
 */
-async function recept_message(zok, mess, store) {
+async function recept_message(ov, mess, store) {
     if (!mess)
         return;
     if (mess.key) {
