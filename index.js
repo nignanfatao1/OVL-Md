@@ -130,7 +130,6 @@ async function main() {
             function repondre(message) {
                 ovl.sendMessage(origineMessage, { text: message }, { quoted: ms });
             }
-        }); //fin log message
 
             //auth avec le préfixe
 
@@ -147,7 +146,8 @@ async function main() {
                         if (!dev && origineMessage == "120363158701337904@g.us") {
                             return;*/
                         }
-                        
+
+            }); //fin evenement message
 
         ovl.ev.on("connection.update", async (con) => {
             const { connection, lastDisconnect } = con;
