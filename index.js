@@ -255,6 +255,24 @@ async function main() {
 
         // Gestion des mises à jour des identifiants
         ovl.ev.on("creds.update", saveCreds);
+
+            //autre fonction de ovl
+            ovl.downloadAndSaveMediaMessage = async (message, filename = '', attachExtension = true) => {
+                let quoted = message.msg ? message.msg : message;
+                let mime = (message.msg || message).mimetype || '';
+                let messageType = message.mtype ? message.mtype.replace(/Message/gi, '') : mime.split('/')[0];
+                const stream = await (0, baileys_1.downloadContentFromMessage)(quoted, messageType);
+                let buffer = Buffer.from([]);
+                for await (const chunk of stream) {
+                    buffer = Buffer.concat([buffer, chunk]);
+                }
+                let type = await FileType.fromBuffer(buffer);
+                let trueFileName = './' + filename + '.' + type.ext;
+                // save to file
+                await fs.writeFileSync(trueFileName, buffer);
+                return trueFileName;
+            };
+            //fin autre fonction ovl
     } catch (error) {
         console.error("Erreur principale:", error);
     }
