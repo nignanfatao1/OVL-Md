@@ -10,16 +10,21 @@ const session = config.SESSION_ID || "";
 let evt = require(__dirname + "/framework/ovlcmd");
 const FileType = require('file-type')
 const prefixe = config.PREFIXE;
- 
-async function ovlAuth(session) {
+
+ async function ovlAuth(session) {
     let sessionId;
     try {
         if (session.startsWith("Ovl-MD_") && session.endsWith("_SESSION-ID")) {
             sessionId = session.slice(7, -11);
         }
         console.log(sessionId);
+
         const response = await axios.get('https://pastebin.com/raw/' + sessionId);
-        const data = response.data;
+        
+        // Convertir `data` en chaîne si nécessaire
+        console.log(response.data);
+        const data = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
+     console.log(data);
         const filePath = path.join(__dirname, 'auth', 'creds.json');
 
         // Vérifie si le fichier creds.json n'existe pas
@@ -34,9 +39,9 @@ async function ovlAuth(session) {
             await fs.writeFileSync(filePath, data, 'utf8');
         }
     } catch (e) {
-        console.log("Session invalide: " + e);
+        console.log("Session invalide: " + e.message || e);
     }
-}
+ }
 // Appelez la fonction avec votre variable session
 ovlAuth(session);
 
