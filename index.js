@@ -15,7 +15,7 @@ async function ovlAuth(session) {
     let sessionId;
     try {
         if (session.startsWith("Ovl-MD_") && session.endsWith("_SESSION-ID")) {
-            sessionId = session.slice(8, -12);
+            sessionId = session.slice(7, -11);
         }
         console.log(sessionId);
         const response = await axios.get('https://pastebin.com/raw/' + sessionId);
