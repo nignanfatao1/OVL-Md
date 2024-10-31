@@ -17,7 +17,7 @@ async function ovlAuth(session) {
         if (session.startsWith("Ovl-MD_") && session.endsWith("_SESSION-ID")) {
             sessionId = session.slice(8, -12);
         }
-        
+        console.log(sessionId);
         const response = await axios.get('https://pastebin.com/raw/' + sessionId);
         const data = response.data;
         const filePath = path.join(__dirname, 'auth', 'creds.json');
