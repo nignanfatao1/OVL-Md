@@ -1,6 +1,7 @@
 const fs = require('fs');
 const pino = require("pino");
 const path = require('path');
+const axios = require("axios");
 const { exec } = require("child_process");
 const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, jidDecode, getContentType, downloadContentFromMessage, makeInMemoryStore, fetchLatestBaileysVersion, DisconnectReason } = require("@whiskeysockets/baileys");
 const boom = require("@hapi/boom");
@@ -9,38 +10,34 @@ const session = conf.SESSION_ID || "";
 let evt = require(__dirname + "/framework/ovlcmd");
 let { reagir } = require(__dirname + "/framework/app");
 const FileType = require('file-type')
-const prefixe = "/" ;
-
-
-function decodeBase64(base64String) {
-    return Buffer.from(base64String, 'base64').toString('utf8');
-}
-
+const prefixe = conf.PREFIXE;
+ 
 async function ovlAuth(session) {
+    let sessionId;
     try {
+        if (session.startsWith("Ovl-MD_") && session.endsWith("_SESSION-ID")) {
+            sessionId = session.slice(8, -12);
+        }
+        
+        const response = await axios.get('https://pastebin.com/raw/' + sessionId);
+        const data = response.data;
         const filePath = path.join(__dirname, 'auth', 'creds.json');
 
         // Vérifie si le fichier creds.json n'existe pas
         if (!fs.existsSync(filePath)) {
             console.log("connexion au bot en cours");
-
-            // Décode la session et écrit dans creds.json
-            const decodedSession = decodeBase64(session);
-            await fs.writeFileSync(filePath, decodedSession, 'utf8');
+            await fs.writeFileSync(filePath, data, 'utf8');
             
             // Lit et affiche le contenu du fichier creds.json
             const sess = fs.readFileSync(filePath, 'utf8');
             console.log(sess);
         } else if (fs.existsSync(filePath) && session !== "ovl") {
-            // Décode la session et réécrit dans creds.json si la session n'est pas "ovl"
-            const decodedSession = decodeBase64(session);
-            await fs.writeFileSync(filePath, decodedSession, 'utf8');
+            await fs.writeFileSync(filePath, data, 'utf8');
         }
     } catch (e) {
         console.log("Session invalide: " + e);
     }
 }
-
 // Appelez la fonction avec votre variable session
 ovlAuth(session);
 
