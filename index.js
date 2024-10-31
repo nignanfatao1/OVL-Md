@@ -5,12 +5,11 @@ const axios = require("axios");
 const { exec } = require("child_process");
 const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, jidDecode, getContentType, downloadContentFromMessage, makeInMemoryStore, fetchLatestBaileysVersion, DisconnectReason } = require("@whiskeysockets/baileys");
 const boom = require("@hapi/boom");
-const conf = require("./set");
-const session = conf.SESSION_ID || "";
+const config = require("./set");
+const session = config.SESSION_ID || "";
 let evt = require(__dirname + "/framework/ovlcmd");
-let { reagir } = require(__dirname + "/framework/app");
 const FileType = require('file-type')
-const prefixe = conf.PREFIXE;
+const prefixe = config.PREFIXE;
  
 async function ovlAuth(session) {
     let sessionId;
@@ -74,217 +73,227 @@ async function main() {
                 };
            }
         });
+
+         ovl.ev.on("messages.upsert", async (m) => {
+    const { messages } = m;
+    const ms = messages[0];
+    if (!ms.message) return;
+    
+    const decodeJid = (jid) => {
+        if (!jid) return jid;
+        if (/:\d+@/gi.test(jid)) {
+            let decode = jidDecode(jid) || {};
+            return (decode.user && decode.server && `${decode.user}@${decode.server}`) || jid;
+        }
+        return jid;
+    };
+
+    var mtype = getContentType(ms.message);
+    var texte = mtype === "conversation" ? ms.message.conversation :
+        mtype === "imageMessage" ? ms.message.imageMessage?.caption :
+        mtype === "videoMessage" ? ms.message.videoMessage?.caption :
+        mtype === "extendedTextMessage" ? ms.message.extendedTextMessage?.text :
+        mtype === "buttonsResponseMessage" ? ms.message.buttonsResponseMessage?.selectedButtonId :
+        mtype === "listResponseMessage" ? ms.message.listResponseMessage?.singleSelectReply?.selectedRowId :
+        mtype === "messageContextInfo" ? (ms.message.buttonsResponseMessage?.selectedButtonId || ms.message.listResponseMessage?.singleSelectReply?.selectedRowId || ms.text) : "";
+
+    var ms_org = ms.key.remoteJid;
+    var id_Bot = decodeJid(ovl.user.id);
+    const verif_Groupe = ms_org?.endsWith("@g.us");
+    var infos_Groupe = verif_Groupe ? await ovl.groupMetadata(ms_org) : "";
+    var nom_Groupe = verif_Groupe ? infos_Groupe.subject : "";
+    var msg_Repondu = ms.message.extendedTextMessage?.contextInfo?.quotedMessage;
+    var auteur_Msg_Repondu = decodeJid(ms.message.extendedTextMessage?.contextInfo?.participant);
+    var mr = ms.message.extendedTextMessage?.contextInfo?.mentionedJid;
+    var user = mr || msg_Repondu ? auteur_Msg_Repondu : "";
+    var auteur_Message = verif_Groupe ? ms.key.participant || ms.participant : ms_org;
+    if (ms.key.fromMe) {
+        auteur_Message = id_Bot;
+    }
+
+    var membre_Groupe = verif_Groupe ? ms.key.participant : '';
+    const nom_Auteur_Message = ms.pushName;
+    const arg = texte ? texte.trim().split(/ +/).slice(1) : null;
+    const verif_Cmd = texte ? texte.startsWith(prefixe) : false;
+    const cmds = verif_Cmd ? texte.slice(1).trim().split(/ +/).shift().toLowerCase() : false;
+
+    function groupe_Admin(membre_Groupe) {
+        let admin = [];
+        for (let m of membre_Groupe) {
+            if (m.admin != null) admin.push(m.id);
+        }
+        return admin;
+    }
+
+    function bot_pic() {
+        const indiceAleatoire = Math.floor(Math.random() * liens.length);
+        return liens[indiceAleatoire];
+    }
+
+    const mbre_membre = verif_Groupe ? await infos_Groupe.participants : '';
+    let admins = verif_Groupe ? groupe_Admin(mbre_membre) : '';
+    const verif_Admin = verif_Groupe ? admins.includes(auteur_Message) : false;
+    const verif_Ovl_Admin = verif_Groupe ? admins.includes(id_Bot) : false;
+
+    const cmd_options = {
+        verif_Groupe,
+        mbre_membre,
+        membre_Groupe,
+        verif_Admin,
+        infos_Groupe,
+        nom_Groupe,
+        auteur_Message,
+        nom_Auteur_Message,
+        id_Bot,
+        verif_Ovl_Admin,
+        prefixe,
+        arg,
+        repondre,
+        groupe_Admin,
+        msg_Repondu,
+        auteur_Msg_Repondu,
+        ms, 
+        ms_org, 
+        bot_pic
+    };
+
+    console.log("{}=={} OVL-MD LOG-MESSAGES {}=={}");
+    if (verif_Groupe) {
+        console.log("Groupe: " + nom_Groupe);
+    }
+    console.log("Auteur message: " + `[${nom_Auteur_Message} : ${auteur_Message.split("@s.whatsapp.net")[0]}]`);
+    console.log("Message:");
+    console.log(texte);
+
+    function repondre(message) {
+        ovl.sendMessage(ms_org, { text: message }, { quoted: ms });
+    }
+
+    if (verif_Cmd) { 
+        const cd = evt.cmd.find((ovlcmd) => ovlcmd.nom_cmd === cmds || (ovlcmd.alias && ovlcmd.alias.includes(cmds)));
         
-        ovl.ev.on("messages.upsert", async (m) => {
-            const { messages } = m;
-            const ms = messages[0];
-            if (!ms.message) return;
-            const decodeJid = (jid) => {
-                if (!jid) return jid;
-                if (/:\d+@/gi.test(jid)) {
-                    let decode = jidDecode(jid) || {};
-                    return decode.user && decode.server && `${decode.user}@${decode.server}` || jid;
-                }
-                return jid;
-            };
-
-            var mtype = getContentType(ms.message);
-            var texte = mtype == "conversation" ? ms.message.conversation :
-                mtype == "imageMessage" ? ms.message.imageMessage?.caption :
-                mtype == "videoMessage" ? ms.message.videoMessage?.caption :
-                mtype == "extendedTextMessage" ? ms.message?.extendedTextMessage?.text :
-                mtype == "buttonsResponseMessage" ? ms?.message?.buttonsResponseMessage?.selectedButtonId :
-                mtype == "listResponseMessage" ? ms.message?.listResponseMessage?.singleSelectReply?.selectedRowId :
-                mtype == "messageContextInfo" ? (ms?.message?.buttonsResponseMessage?.selectedButtonId || ms.message?.listResponseMessage?.singleSelectReply?.selectedRowId || ms.text) : "";
-
-            var origineMessage = ms.key.remoteJid;
-            var idBot = decodeJid(ovl.user.id);
-            var servBot = idBot.split('@')[0];
-            const verifGroupe = origineMessage?.endsWith("@g.us");
-            var infosGroupe = verifGroupe ? await ovl.groupMetadata(origineMessage) : "";
-            var nomGroupe = verifGroupe ? infosGroupe.subject : "";
-            var msgRepondu = ms.message.extendedTextMessage?.contextInfo?.quotedMessage;
-            var auteurMsgRepondu = decodeJid(ms.message?.extendedTextMessage?.contextInfo?.participant);
-            var mr = ms.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-            var utilisateur = mr ? mr : msgRepondu ? auteurMsgRepondu : "";
-            var auteurMessage = verifGroupe ? (ms.key.participant ? ms.key.participant : ms.participant) : origineMessage;
-            if (ms.key.fromMe) {
-                auteurMessage = idBot;
+        if (cd) {
+            try { 
+                await ovl.sendMessage(ms_org, { react: { text: cd.reaction, key: ms.key } });
+                cd.fonction(ms_org, ovl, cmd_options);
+            } catch (e) {
+                console.log("Erreur: " + e);
+                ovl.sendMessage(ms_org, { text: "Erreur: " + e }, { quoted: ms });
             }
+        }
+    }
+}); //fin événement message 
 
-            var membreGroupe = verifGroupe ? ms.key.participant : '';
-            const nomAuteurMessage = ms.pushName;
-            const arg = texte ? texte.trim().split(/ +/).slice(1) : null;
-            const verifCom = texte ? texte.startsWith(prefixe) : false;
-            const com = verifCom ? texte.slice(1).trim().split(/ +/).shift().toLowerCase() : false;
-            function groupeAdmin(membreGroupe) {
-                    let admin = [];
-                    for (m of membreGroupe) {
-                        if (m.admin == null)
-                            continue;
-                        admin.push(m.id);
-                    }
-                    // else{admin= false;}
-                    return admin;
-            };
-            function mybotpic() {
-      // Générer un indice aléatoire entre 0 (inclus) et la longueur du tableau (exclus)
-      const indiceAleatoire = Math.floor(Math.random() * liens.length);
-      // Récupérer le lien correspondant à l'indice aléatoire
-      const lienAleatoire = liens[indiceAleatoire];
-      return lienAleatoire;
+        const Disconnection = (raisonDeconnexion) => {
+    switch (raisonDeconnexion) {
+        case DisconnectReason.badSession:
+            console.log('Session ID incorrecte, veuillez obtenir une nouvelle session via QR-code/Pairing.');
+            break;
+        case DisconnectReason.connectionClosed:
+            console.log('Connexion fermée, tentative de reconnexion...');
+            main();
+            break;
+        case DisconnectReason.connectionLost:
+            console.log('Connexion au serveur perdue. Reconnexion en cours...');
+            main();
+            break;
+        case DisconnectReason.connectionReplaced:
+            console.log('Connexion remplacée. Une autre session est déjà active.');
+            break;
+        case DisconnectReason.loggedOut:
+            console.log('Déconnecté. Veuillez obtenir une nouvelle session via QR-code/Pairing.');
+            break;
+        case DisconnectReason.restartRequired:
+            console.log('Redémarrage requis. Redémarrage du bot...');
+            main();
+            break;
+        default:
+            console.log('Erreur inconnue:', raisonDeconnexion);
+            exec("pm2 restart all");
+    }
+};
+
+ovl.ev.on("connection.update", async (con) => {
+    const { connection, lastDisconnect } = con;
+
+    if (connection === "connecting") {
+        console.log("🌐 Connexion à WhatsApp en cours...");
+    } else if (connection === 'open') {
+        console.log("✅ Connexion établie ; Le bot est en ligne 🌐\n\n");
+        
+        console.log("Chargement des commandes...\n");
+        const commandes = fs.readdirSync(path.join(__dirname, "commandes")).filter(fichier => path.extname(fichier).toLowerCase() === ".js");
+        
+        for (const fichier of commandes) {
+            try {
+                require(path.join(__dirname, "commandes", fichier));
+                console.log(`${fichier} installé avec succès`);
+                await  delay(300); // Pause de 300 ms
+            } catch (e) {
+                console.log(`Erreur lors du chargement de ${fichier} :    ${e}`);
             }
-            const mbre = verifGroupe ? await infosGroupe.participants : '';
-            let admins = verifGroupe ? groupeAdmin(mbre) : '';
-            const verifAdmin = verifGroupe ? admins.includes(auteurMessage) : false;
-            var verifOvlAdmin = verifGroupe ? admins.includes(idBot) : false;
+        }
+        delay(700);
+     let start_msg = `╭────《 OVL-MD 》─────⊷
+⫸  *Préfixe*       : ${prefixe}
+⫸  *Mode*          : Public
+⫸  *Commandes*     : ${evt.cmd.length}
 
-            var commandeOptions = {
-                    verifGroupe,
-                    mbre,
-                    membreGroupe,
-                    verifAdmin,
-                    infosGroupe,
-                    nomGroupe,
-                    auteurMessage,
-                    nomAuteurMessage,
-                    idBot,
-                    verifOvlAdmin,
-                    prefixe,
-                    arg,
-                    repondre,
-                    groupeAdmin,
-                    msgRepondu,
-                    auteurMsgRepondu,
-                    ms, 
-                    origineMessage, 
-                    mybotpic
-                
-                };
-               
-                console.log("⏬『OVL-MD LOG-MESSAGES』⏬");
-            if (verifGroupe) {
-                console.log("Message provenant du groupe : " + nomGroupe);
-            }
-            console.log("Message envoyé par : " + "[" + nomAuteurMessage + " : " + auteurMessage.split("@s.whatsapp.net")[0] + " ]");
-            //console.log("Type de message : " + mtype);
-            console.log("contenu du message.....⤵️");
-            console.log(texte);
+         𝙈𝙖𝙙𝙚 𝙗𝙮 Ainz`;
+        await ovl.sendMessage(ovl.user.id, { text: start_msg });
+        
+    } else if (connection === "close") {
+        const raisonDeconnexion = new boom.Boom(lastDisconnect?.error)?.output.statusCode;
+        Disconnection(raisonDeconnexion);
+        console.log("Statut de la connexion : " + connection);
+    }
+});
 
-            // Fonction pour répondre à un message
-            function repondre(message) {
-                ovl.sendMessage(origineMessage, { text: message }, { quoted: ms });
-            }
-
-            //auth avec le préfixe
-
-            if (verifCom) {
-
-                    //await await zk.readMessages(ms.key);
-                    const cd = evt.cm.find((ovlcmd) => ovlcmd.nomCom === (com));
-                    if (cd) {
-                        
-                        try {
-                            reagir(origineMessage, ovl, ms, cd.reaction);
-                            cd.fonction(origineMessage, ovl, commandeOptions);
-                        }
-                        catch (e) {
-                            console.log("😡😡 " + e);
-                            ovl.sendMessage(origineMessage, { text: "😡😡 " + e }, { quoted: ms });
-                        }
-                        }};
-
-            }); //fin evenement message
-
-        ovl.ev.on("connection.update", async (con) => {
-            const { connection, lastDisconnect } = con;
-            if (connection === "connecting") {
-                console.log("🌐connexion à whatsapp");
-            } else if (connection === 'open')  {
-                console.log("✅connexion etablit; Le bot est en ligne 🌐\n\n");
-                delay(300) ;
-                console.log("Chargement des commandes ...\n");
-                fs.readdirSync(path.join(__dirname, "commandes")).forEach((fichier) => {
-                    if (path.extname(fichier).toLowerCase() == ".js") {
-                        try {
-                            require(path.join(__dirname, "commandes", fichier));
-                            console.log(fichier + " installé avec succès");
-                        } catch (e) {
-                            console.log(` une erreur est survenu lors du chargement du fichier ${fichier} : ${e}`);
-                        }
-                    }
-                    delay(300);
-                });
-                delay(700);
-                let cmsg = `╔════◇◇◇◇◇◇◇◇═════╗
-║         『🄾🅅🄻-🄼🄳』 
-║            
-║    Prefixe : [ ${prefixe} ]
-║    Mode :
-║    Commandes:︎ ${evt.cm.length}︎
-║
-║          *『𝐵𝑌 Fatao』*
-╚═════════════════╝`;
-                await ovl.sendMessage(ovl.user.id, { text: cmsg });
-            } else if (connection == "close") {
-                let raisonDeconnexion = new boom.Boom(lastDisconnect?.error)?.output.statusCode;
-                if (raisonDeconnexion === DisconnectReason.badSession) {
-                    console.log('Session id érronée veuiller obtenir une nouvelle session_id via Qr-code/Pairing-code svp ...');
-                } else if (raisonDeconnexion === DisconnectReason.connectionClosed) {
-                    console.log('!!! connexion fermée, reconnexion en cours ...');
-                    main();
-                } else if (raisonDeconnexion === DisconnectReason.connectionLost) {
-                    console.log('connexion au serveur perdue😞 ,,, reconnexion en cours ...♻️');
-                    main();
-                } else if (raisonDeconnexion === DisconnectReason.connectionReplaced) {
-                    console.log('connexion réplacée ,,, une sesssion est déjà ouverte veuillez la fermer svp !!!');
-                } else if (raisonDeconnexion === DisconnectReason.loggedOut) {
-                    console.log('veuillez obtenir une nouvelle session_id via Qr-code/Pairing-code svp');
-                } else if (raisonDeconnexion === DisconnectReason.restartRequired) {
-                    console.log('redémarrage du bot en cours ♻️');
-                    main();
-                } else {
-                    console.log('une erreur est survenu:', raisonDeconnexion);
-                    exec("pm2 restart all");
-                }
-                console.log("hum " + connection);
-            }
-        });
-
+        
         // Gestion des mises à jour des identifiants
         ovl.ev.on("creds.update", saveCreds);
 
             //autre fonction de ovl
-            ovl.downloadAndSaveMediaMessage = async (message, filename = '', attachExtension = true) => {
+            ovl.dl_save_media_ms = async (message, filename = '', attachExtension = true, directory = './downloads') => {
     try {
-        let quoted = message.msg ? message.msg : message;
-        let mime = (message.msg || message).mimetype || '';
-        let messageType = message.mtype ? message.mtype.replace(/Message/gi, '') : mime.split('/')[0];
+        const quoted = message.msg || message;
+        const mime = quoted.mimetype || '';
+        const messageType = message.mtype ? message.mtype.replace(/Message/gi, '') : mime.split('/')[0];
         
         console.log(`Téléchargement du message de type: ${messageType}`);
-
-        const stream = await downloadContentFromMessage(quoted, messageType);
-        let buffer = Buffer.from([]);
-
-        for await (const chunk of stream) {
-            buffer = Buffer.concat([buffer, chunk]);
+        
+        if (!mime) {
+            throw new Error("Type MIME non spécifié ou non pris en charge.");
         }
 
-        let type = await FileType.fromBuffer(buffer);
+        const stream = await downloadContentFromMessage(quoted, messageType);
+        const bufferChunks = [];
+        for await (const chunk of stream) {
+            bufferChunks.push(chunk);
+        }
+        
+        const buffer = Buffer.concat(bufferChunks);
+        const type = await FileType.fromBuffer(buffer);
         if (!type) {
             throw new Error("Type de fichier non reconnu");
         }
 
-        let trueFileName = attachExtension ? `${filename}.${type.ext}` : filename;
-        let filePath = path.resolve('./', trueFileName);
+        // Création du chemin du répertoire
+        if (!fs.existsSync(directory)) {
+            fs.mkdirSync(directory, { recursive: true });
+        }
+        
+        const trueFileName = attachExtension ? `${filename}.${type.ext}` : filename;
+        const filePath = path.resolve(directory, trueFileName);
 
+        // Écriture directe dans un fichier via un flux de création
         await fs.promises.writeFile(filePath, buffer);
         console.log(`Fichier sauvegardé à: ${filePath}`);
-
+        
         return filePath;
     } catch (error) {
         console.error('Erreur lors du téléchargement et de la sauvegarde du fichier:', error);
-        throw error; // Rethrow pour que l'appelant puisse gérer l'erreur s'il le souhaite
+        throw error;
     }
 };
             //fin autre fonction ovl
@@ -301,40 +310,72 @@ const app = express();
 const port = process.env.PORT || 3000; // Assurez-vous d'ajouter cette ligne pour définir le port
 
 app.get('/', (req, res) => {
-  res.send(`
-<!DOCTYPE html>
-    <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>ovl-bot web page</title>
-        <style>
-            /* Styles pour centrer le texte */
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                margin: 0;
-                font-family: Arial, sans-serif;
-                background-color: #f0f0f0;
-            }
-            .content {
-                text-align: center;
-                padding: 20px;
-                background-color: #fff;
-                border-radius: 8px;
-                box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            }
-        </style>
-    </head>
-    <body>
-        <div class="content">
-            <h1>OVL-MD Web-page</h1>
-        </div>
-    </body>
-    </html>
-      `);
+  res.send(`<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Page d'accueil pour OVL-MD Bot">
+    <title>OVL-Bot Web Page</title>
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        /* Content box styling */
+        .content {
+            text-align: center;
+            padding: 30px;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Content hover effect */
+        .content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(255, 255, 255, 0.15);
+        }
+
+        /* Heading styling */
+        h1 {
+            font-size: 2em;
+            color: #f0f0f0;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        /* Text paragraph styling */
+        p {
+            font-size: 1.1em;
+            color: #d3d3d3;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Bienvenue sur OVL-MD</h1>
+        <p>Votre assistant WhatsApp</p>
+    </div>
+</body>
+</html>`);
 });
 
 app.listen(port, () => {
