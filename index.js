@@ -17,24 +17,12 @@ const prefixe = config.PREFIXE;
         if (session.startsWith("Ovl-MD_") && session.endsWith("_SESSION-ID")) {
             sessionId = session.slice(7, -11);
         }
-        console.log(sessionId);
-
         const response = await axios.get('https://pastebin.com/raw/' + sessionId);
-        
-        // Convertir `data` en chaîne si nécessaire
-        console.log(response.data);
         const data = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
-     console.log(data);
         const filePath = path.join(__dirname, 'auth', 'creds.json');
-
-        // Vérifie si le fichier creds.json n'existe pas
         if (!fs.existsSync(filePath)) {
             console.log("connexion au bot en cours");
-            await fs.writeFileSync(filePath, data, 'utf8');
-            
-            // Lit et affiche le contenu du fichier creds.json
-            const sess = fs.readFileSync(filePath, 'utf8');
-            console.log(sess);
+            await fs.writeFileSync(filePath, data, 'utf8'); 
         } else if (fs.existsSync(filePath) && session !== "ovl") {
             await fs.writeFileSync(filePath, data, 'utf8');
         }
@@ -166,7 +154,8 @@ async function main() {
     if (verif_Groupe) {
         console.log("Groupe: " + nom_Groupe);
     }
-    console.log("Auteur message: " + `[${nom_Auteur_Message} : ${auteur_Message.split("@s.whatsapp.net")[0]}]`);
+    console.log("Auteur message: " + `${nom_Auteur_Message}\nNumero: ${auteur_Message.split("@s.whatsapp.net")[0]}]`);
+    console.log("Type: " + mtype);
     console.log("Message:");
     console.log(texte);
 
@@ -244,7 +233,7 @@ ovl.ev.on("connection.update", async (con) => {
 ⫸  *Mode*          : Public
 ⫸  *Commandes*     : ${evt.cmd.length}
 
-         𝙈𝙖𝙙𝙚 𝙗𝙮 Ainz`;
+             𝙈𝙖𝙙𝙚 𝙗𝙮 Ainz`;
         await ovl.sendMessage(ovl.user.id, { text: start_msg });
         
     } else if (connection === "close") {
