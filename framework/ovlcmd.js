@@ -1,16 +1,24 @@
-var tabCmds = [];
-let cm = [];
+let cmd = [];
+
 function ovlcmd(obj, fonctions) {
-    let infoComs = obj;
-    if (!obj.categorie) {
-        infoComs.categorie = "Général";
+    let cmd_info = obj; 
+
+    if (!cmd_info.classe) {
+        cmd_info.classe = "Autres"; 
     }
-    if (!obj.reaction) {
-        infoComs.reaction = "♻️";
+    if (!cmd_info.react) {
+        cmd_info.react = "♻️"; 
     }
-    infoComs.fonction = fonctions;
-    cm.push(infoComs);
-    // console.log('chargement...')
-    return infoComs;
-}
-module.exports = { ovlcmd, Module: ovlcmd, cm };
+    if (!cmd_info.desc) {
+        cmd_info.desc = "Aucune description"; 
+    }
+    if (!cmd_info.alias) {
+        cmd_info.alias = []; 
+    }
+
+    cmd_info.fonction = fonctions; 
+    cmd.push(cmd_info); 
+    return cmd_info; 
+} 
+
+module.exports = { ovlcmd, Module: ovlcmd, cmd };
