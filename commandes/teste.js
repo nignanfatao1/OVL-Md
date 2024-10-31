@@ -1,25 +1,9 @@
-const { ovlcmd } = require("../framework/ovlcmd");
+/*const { ovlcmd } = require("../framework/ovlcmd");
 const { Sticker, StickerTypes } = require('wa-sticker-formatter');
 const fs = require('fs');
 const path = require('path');
 
-ovlcmd(
-    {
-        nomCom: "test",
-        reaction: "🔅",
-        nomFichier: __filename
-    },
-    async (dest, ovl, commandeOptions) => {
-        try {
-            let varmess = 'Salut👋 je me nomme *OVL-MD* \nje suis un bot Whatsapp Multi-device developpé par *Fatao*\n';
-            var img = 'https://telegra.ph/file/8173c870f9de5570db8c3.jpg';
-            await ovl.sendMessage(dest, { image: { url: img }, caption: varmess });
-            //console.log("montest")
-        } catch (error) {
-            console.error("Erreur lors de l'envoi du message :", error);
-        }
-    }
-);
+
 //console.log("mon test");
 
 ovlcmd(
@@ -176,5 +160,5 @@ ovlcmd(
 } else {
   repondre('Commande reservée au admins')
 }
-});
+});*/
 
