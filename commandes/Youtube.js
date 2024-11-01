@@ -1,6 +1,6 @@
 const { ovlcmd } = require("../framework/ovlcmd");
-const ytdl = require("ytdl-core");
-const ytsr = require("ytsr");
+const ytdl = require("@distube/ytdl-core");
+const ytsr = require("@distube/ytsr");
 const fs = require("fs");
 const path = require("path");
 
