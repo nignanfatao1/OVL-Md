@@ -4,7 +4,7 @@ const ytsr = require("@distube/ytsr");
 const fs = require("fs");
 const path = require("path");
 
-const agent = ytdl.createProxyAgent({ uri: "http://186.123.26.79:8080" });
+const agent = ytdl.createProxyAgent({ uri: "http://190.239.221.66:999" });
 
 ovlcmd(
     {
