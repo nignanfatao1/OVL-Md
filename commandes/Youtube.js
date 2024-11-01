@@ -1,28 +1,11 @@
 const { ovlcmd } = require("../framework/ovlcmd");
+const ytdl = require("@distube/ytdl-core");
 const ytsr = require("@distube/ytsr");
-const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 
-// Fonction pour télécharger via une API externe
-async function downloadMedia(url, type = "audio") {
-    try {
-        const apiEndpoint = type === "audio" 
-            ? `https://Ironman.koyeb.app/Ironman/dl/ytdl2?url=${url}`
-            : `https://Ironman.koyeb.app/Ironman/dl/ytdl2?url=${url}`;
-        
-        const { data } = await axios.get(apiEndpoint);
-        return {
-            status: !!data[type],
-            ...data
-        };
-    } catch (error) {
-        console.error(error);
-        return { status: false, message: error.message };
-    }
-}
+const agent = ytdl.createProxyAgent({ uri: "http://186.123.26.79:8080" });
 
-// Commande pour télécharger une chanson par recherche YouTube
 ovlcmd(
     {
         nom_cmd: "song",
@@ -32,134 +15,211 @@ ovlcmd(
         alias: ["aud"],
     },
     async (ms_org, ovl, cmd_options) => {
-        const { arg } = cmd_options;
-        const query = arg.join(" ");
-        if (!query) return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un titre de chanson." });
+        const { repondre, arg } = cmd_options;
+        try {
+            const query = arg.join(" ");
+            if (!query) {
+                return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un titre de chanson." });
+            }
 
-        const searchResults = await ytsr(query, { limit: 1 });
-        const song = searchResults.items[0];
+            const searchResults = await ytsr(query, { limit: 1 });
+            const song = searchResults.items[0];
 
-        if (!song || !song.url) return await ovl.sendMessage(ms_org, { text: "Aucun résultat trouvé." });
+            if (!song || !song.url) {
+                return await ovl.sendMessage(ms_org, { text: "Aucun résultat trouvé pour la recherche." });
+            }
 
-        const audioData = await downloadMedia(song.url, "audio");
-        if (!audioData.status) return await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement." });
+            const name = song.name;
+            const url = song.url;
+            const duration = song.duration;
+            const lien = song.thumbnail;
+            const filePath = path.join(__dirname, `${name}.mp3`);
 
-        await ovl.sendMessage(ms_org, {
-            image: { url: audioData.thumbnail },
-            caption: `OVL-MD SONG_DOWNLOAD\n\n> Titre : ${audioData.title}\nDurée : ${audioData.duration}\nLien : ${audioData.url}`
-        });
+            await ovl.sendMessage(ms_org, {
+                image: { url: lien },
+                caption: `OVL-MD SONG_DOWNLOAD\n\n> Titre : ${name}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n`,
+            });
 
-        const filePath = path.join(__dirname, `${audioData.title}.mp3`);
-        const fileStream = fs.createWriteStream(filePath);
-        const response = await axios.get(audioData.audio, { responseType: 'stream' });
-        response.data.pipe(fileStream);
+            const stream = ytdl(url, { filter: "audioonly", agent });
+            const fileStream = fs.createWriteStream(filePath);
 
-        fileStream.on("finish", async () => {
-            await ovl.sendMessage(ms_org, { audio: { url: filePath }, caption: `${audioData.title}` });
-            fs.unlinkSync(filePath);
-        });
+            stream.pipe(fileStream);
+
+            fileStream.on("finish", async () => {
+                await ovl.sendMessage(ms_org, {
+                    audio: { url: filePath },
+                    caption: `${name}`,
+                });
+                fs.unlinkSync(filePath);
+            });
+
+            fileStream.on("error", (error) => {
+                console.error("Erreur lors de l'écriture du fichier :", error.message);
+            });
+
+        } catch (error) {
+            console.error("Erreur lors du téléchargement de la chanson :", error.message || error);
+            await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la chanson." });
+        }
     }
 );
 
-// Commande pour télécharger une vidéo par recherche YouTube
 ovlcmd(
     {
         nom_cmd: "video",
         classe: "Téléchargement",
-        react: "🎥",
+        react: "🎵",
         desc: "Télécharge une vidéo depuis YouTube avec un terme de recherche",
         alias: ["vid"],
     },
     async (ms_org, ovl, cmd_options) => {
-        const { arg } = cmd_options;
-        const query = arg.join(" ");
-        if (!query) return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un titre de vidéo." });
+        const { repondre, arg } = cmd_options;
+        try {
+            const query = arg.join(" ");
+            if (!query) {
+                return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un titre de vidéo." });
+            }
 
-        const searchResults = await ytsr(query, { limit: 1 });
-        const video = searchResults.items[0];
+            const searchResults = await ytsr(query, { limit: 1 });
+            const video = searchResults.items[0];
 
-        if (!video || !video.url) return await ovl.sendMessage(ms_org, { text: "Aucun résultat trouvé." });
+            if (!video || !video.url) {
+                return await ovl.sendMessage(ms_org, { text: "Aucun résultat trouvé pour la recherche." });
+            }
 
-        const videoData = await downloadMedia(video.url, "video");
-        if (!videoData.status) return await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement." });
+            const name = video.name;
+            const url = video.url;
+            const duration = video.duration;
+            const lien = video.thumbnail;
+            const filePath = path.join(__dirname, `${name}.mp4`);
 
-        await ovl.sendMessage(ms_org, {
-            image: { url: videoData.thumbnail },
-            caption: `OVL-MD VIDEO_DOWNLOAD\n\n> Titre : ${videoData.title}\nDurée : ${videoData.duration}\nLien : ${videoData.url}`
-        });
+            await ovl.sendMessage(ms_org, {
+                image: { url: lien },
+                caption: `OVL-MD VIDEO_DOWNLOAD\n\n> Titre : ${name}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n`,
+            });
 
-        const filePath = path.join(__dirname, `${videoData.title}.mp4`);
-        const fileStream = fs.createWriteStream(filePath);
-        const response = await axios.get(videoData.video, { responseType: 'stream' });
-        response.data.pipe(fileStream);
+            const stream = ytdl(url, { filter: "videoandaudio", agent });
+            const fileStream = fs.createWriteStream(filePath);
 
-        fileStream.on("finish", async () => {
-            await ovl.sendMessage(ms_org, { video: { url: filePath }, caption: `${videoData.title}` });
-            fs.unlinkSync(filePath);
-        });
+            stream.pipe(fileStream);
+
+            fileStream.on("finish", async () => {
+                await ovl.sendMessage(ms_org, {
+                    video: { url: filePath },
+                    caption: `${name}`,
+                });
+                fs.unlinkSync(filePath);
+            });
+
+            fileStream.on("error", (error) => {
+                console.error("Erreur lors de l'écriture du fichier :", error.message);
+            });
+
+        } catch (error) {
+            console.error("Erreur lors du téléchargement de la vidéo :", error.message || error);
+            await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la vidéo." });
+        }
     }
 );
 
-// Commande pour télécharger l'audio d'une URL YouTube
 ovlcmd(
     {
-        nom_cmd: "audio",
-        classe: "Téléchargement",
-        react: "🎶",
-        desc: "Télécharge l'audio depuis une URL YouTube",
-        alias: ["mp3"],
-    },
-    async (ms_org, ovl, cmd_options) => {
-        const { arg } = cmd_options;
-        const url = arg[0];
-        const audioData = await downloadMedia(url, "audio");
-        if (!audioData.status) return await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement." });
-
-        await ovl.sendMessage(ms_org, {
-            image: { url: audioData.thumbnail },
-            caption: `OVL-MD AUDIO_DOWNLOAD\n\n> Titre : ${audioData.title}\nDurée : ${audioData.duration}\nLien : ${audioData.url}`
-        });
-
-        const filePath = path.join(__dirname, `${audioData.title}.mp3`);
-        const fileStream = fs.createWriteStream(filePath);
-        const response = await axios.get(audioData.audio, { responseType: 'stream' });
-        response.data.pipe(fileStream);
-
-        fileStream.on("finish", async () => {
-            await ovl.sendMessage(ms_org, { audio: { url: filePath }, caption: `${audioData.title}` });
-            fs.unlinkSync(filePath);
-        });
-    }
-);
-
-// Commande pour télécharger la vidéo d'une URL YouTube
-ovlcmd(
-    {
-        nom_cmd: "dl",
+        nom_cmd: "yt_vid",
         classe: "Téléchargement",
         react: "📹",
-        desc: "Télécharge la vidéo depuis une URL YouTube",
-        alias: ["mp4"],
+        desc: "Télécharge une vidéo depuis YouTube avec un lien",
+        alias: ["vid_dl"],
     },
     async (ms_org, ovl, cmd_options) => {
-        const { arg } = cmd_options;
-        const url = arg[0];
-        const videoData = await downloadMedia(url, "video");
-        if (!videoData.status) return await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement." });
+        const { repondre, arg } = cmd_options;
+        try {
+            const url = arg.join(" ");
+            if (!ytdl.validateURL(url)) {
+                return await ovl.sendMessage(ms_org, { text: "Lien YouTube invalide." });
+            }
 
-        await ovl.sendMessage(ms_org, {
-            image: { url: videoData.thumbnail },
-            caption: `OVL-MD VIDEO_DOWNLOAD\n\n> Titre : ${videoData.title}\nLien : ${url}`
-        });
+            const videoInfo = await ytdl.getInfo(url, { agent });
+            const name = videoInfo.videoDetails.title;
+            const lien = videoInfo.videoDetails.thumbnails[0].url;
+            const duration = videoInfo.videoDetails.lengthSeconds;
+            const filePath = path.join(__dirname, `${name}.mp4`);
 
-        const filePath = path.join(__dirname, `${videoData.title}.mp4`);
-        const fileStream = fs.createWriteStream(filePath);
-        const response = await axios.get(videoData.video, { responseType: 'stream' });
-        response.data.pipe(fileStream);
+            await ovl.sendMessage(ms_org, {
+                image: { url: lien },
+                caption: `OVL-MD VIDEO_DOWNLOAD\n\n> Titre : ${name}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n`,
+            });
 
-        fileStream.on("finish", async () => {
-            await ovl.sendMessage(ms_org, { video: { url: filePath }, caption: `${videoData.title}` });
-            fs.unlinkSync(filePath);
-        });
+            const stream = ytdl(url, { filter: "videoandaudio", agent });
+            const fileStream = fs.createWriteStream(filePath);
+
+            stream.pipe(fileStream);
+
+            fileStream.on("finish", async () => {
+                await ovl.sendMessage(ms_org, {
+                    video: { url: filePath },
+                    caption: `${name}`,
+                });
+                fs.unlinkSync(filePath);
+            });
+
+            fileStream.on("error", (error) => {
+                console.error("Erreur lors de l'écriture du fichier :", error.message);
+            });
+
+        } catch (error) {
+            console.error("Erreur lors du téléchargement de la vidéo :", error.message || error);
+            await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la vidéo." });
+        }
+    }
+);
+
+ovlcmd(
+    {
+        nom_cmd: "yt_song",
+        classe: "Téléchargement",
+        react: "🎥",
+        desc: "Télécharge une chanson depuis YouTube avec un lien",
+        alias: ["song_dl"],
+    },
+    async (ms_org, ovl, cmd_options) => {
+        const { repondre, arg } = cmd_options;
+        try {
+            const url = arg.join(" ");
+            if (!ytdl.validateURL(url)) {
+                return await ovl.sendMessage(ms_org, { text: "Lien YouTube invalide." });
+            }
+
+            const videoInfo = await ytdl.getInfo(url, { agent });
+            const name = videoInfo.videoDetails.title;
+            const lien = videoInfo.videoDetails.thumbnails[0].url;
+            const duration = videoInfo.videoDetails.lengthSeconds;
+            const filePath = path.join(__dirname, `${name}.mp3`);
+
+            await ovl.sendMessage(ms_org, {
+                image: { url: lien },
+                caption: `OVL-MD SONG_DOWNLOAD\n\n> Titre : ${name}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n`,
+            });
+
+            const stream = ytdl(url, { filter: "audioonly", agent });
+            const fileStream = fs.createWriteStream(filePath);
+
+            stream.pipe(fileStream);
+
+            fileStream.on("finish", async () => {
+                await ovl.sendMessage(ms_org, {
+                    audio: { url: filePath },
+                    caption: `${name}`,
+                });
+                fs.unlinkSync(filePath);
+            });
+
+            fileStream.on("error", (error) => {
+                console.error("Erreur lors de l'écriture du fichier :", error.message);
+            });
+
+        } catch (error) {
+            console.error("Erreur lors du téléchargement de la chanson :", error.message || error);
+            await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la chanson." });
+        }
     }
 );
