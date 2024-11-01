@@ -27,12 +27,14 @@ ovlcmd(
                 return await ovl.sendMessage(ms_org, { text: "Aucun résultat trouvé pour la recherche." });
             }
 
-            const title = song.title;
+            const name = song.name;
             const url = song.url;
             const duration = song.duration;
-            const filePath = path.join(__dirname, `${title}.mp3`);
+            const lien = song.thumbnail;
+            const filePath = path.join(__dirname, `${name}.mp3`);
 
-            await ovl.sendMessage(ms_org, { text: `OVL-MD SONG_DOWNLOAD\n\n> Titre : ${title}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n` });
+            await ovl.sendMessage(ms_org, { image: { url: lien }, 
+                caption: `OVL-MD SONG_DOWNLOAD\n\n> Titre : ${name}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n`});
             const stream = ytdl(url, { filter: "audioonly" });
             const fileStream = fs.createWriteStream(filePath);
             stream.pipe(fileStream);
@@ -40,7 +42,7 @@ ovlcmd(
             fileStream.on("finish", async () => {
                 await ovl.sendMessage(ms_org, {
                     audio: { url: filePath },
-                    caption: `${title}`,
+                    caption: `${name}`,
                 });
                 fs.unlinkSync(filePath);
             });
@@ -75,12 +77,14 @@ ovlcmd(
                 return await ovl.sendMessage(ms_org, { text: "Aucun résultat trouvé pour la recherche." });
             }
 
-            const title = video.title;
+            const name = video.name;
             const url = video.url;
             const duration = video.duration;
-            const filePath = path.join(__dirname, `${title}.mp4`);
+            const lien = song.thumbnail;
+            const filePath = path.join(__dirname, `${name}.mp4`);
 
-            await ovl.sendMessage(ms_org, { text: `OVL-MD VIDEO_DOWNLOAD\n\n> Titre : ${title}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n` });
+            await ovl.sendMessage(ms_org, { image: { url: lien }, 
+                caption: `OVL-MD VIDEO_DOWNLOAD\n\n> Titre : ${name}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n`});
             const stream = ytdl(url, { filter: "videoandaudio" });
             const fileStream = fs.createWriteStream(filePath);
             stream.pipe(fileStream);
@@ -88,7 +92,7 @@ ovlcmd(
             fileStream.on("finish", async () => {
                 await ovl.sendMessage(ms_org, {
                     video: { url: filePath },
-                    caption: `${title}`,
+                    caption: `${name}`,
                 });
                 fs.unlinkSync(filePath);
             });
@@ -117,11 +121,13 @@ ovlcmd(
             }
 
             const videoInfo = await ytdl.getInfo(url);
-            const title = videoInfo.videoDetails.title;
+            const name = videoInfo.videoDetails.name;
+            const lien = song.thumbnail;
             const duration = videoInfo.videoDetails.lengthSeconds;
-            const filePath = path.join(__dirname, `${title}.mp4`);
+            const filePath = path.join(__dirname, `${name}.mp4`);
 
-            await ovl.sendMessage(ms_org, { text: `OVL-MD VIDEO_DOWNLOAD\n\n> Titre : ${title}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n` });
+            await ovl.sendMessage(ms_org, { image: { url: lien }, 
+                caption: `OVL-MD VIDEO_DOWNLOAD\n\n> Titre : ${name}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n`});
             const stream = ytdl(url, { filter: "videoandaudio" });
             const fileStream = fs.createWriteStream(filePath);
             stream.pipe(fileStream);
@@ -129,7 +135,7 @@ ovlcmd(
             fileStream.on("finish", async () => {
                 await ovl.sendMessage(ms_org, {
                     video: { url: filePath },
-                    caption: `${title}`,
+                    caption: `${name}`,
                 });
                 fs.unlinkSync(filePath);
             });
@@ -158,11 +164,13 @@ ovlcmd(
             }
 
             const videoInfo = await ytdl.getInfo(url);
-            const title = videoInfo.videoDetails.title;
+            const name = videoInfo.videoDetails.name;
+            const lien = song.thumbnail;
             const duration = videoInfo.videoDetails.lengthSeconds;
-            const filePath = path.join(__dirname, `${title}.mp3`);
+            const filePath = path.join(__dirname, `${name}.mp3`);
 
-            await ovl.sendMessage(ms_org, { text: `OVL-MD SONG_DOWNLOAD\n\n> Titre : ${title}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n` });
+            await ovl.sendMessage(ms_org, { image: { url: lien }, 
+                caption: `OVL-MD SONG_DOWNLOAD\n\n> Titre : ${name}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n`});
             const stream = ytdl(url, { filter: "audioonly" });
             const fileStream = fs.createWriteStream(filePath);
             stream.pipe(fileStream);
@@ -170,7 +178,7 @@ ovlcmd(
             fileStream.on("finish", async () => {
                 await ovl.sendMessage(ms_org, {
                     audio: { url: filePath },
-                    caption: `${title}`,
+                    caption: `${name}`,
                 });
                 fs.unlinkSync(filePath);
             });
