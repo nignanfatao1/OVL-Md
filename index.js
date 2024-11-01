@@ -168,7 +168,7 @@ async function main() {
         
         if (cd) {
             try { 
-                await ovl.sendMessage(ms_org, { react: { text: cd.reaction, key: ms.key } });
+                await ovl.sendMessage(ms_org, { react: { text: cd.react, key: ms.key } });
                 cd.fonction(ms_org, ovl, cmd_options);
             } catch (e) {
                 console.log("Erreur: " + e);
