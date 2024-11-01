@@ -30,13 +30,15 @@ ovlcmd(
             const name = song.name;
             const url = song.url;
             const duration = song.duration;
-            const lien = song.thumbnail;
+            const lien = song.thumbnail; // Use song.thumbnail here
             const filePath = path.join(__dirname, `${name}.mp3`);
 
             await ovl.sendMessage(ms_org, { image: { url: lien }, 
-                caption: `OVL-MD SONG_DOWNLOAD\n\n> Titre : ${name}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n`});
+                caption: `OVL-MD SONG_DOWNLOAD\n\n> Titre : ${name}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n` });
+
             const stream = ytdl(url, { filter: "audioonly" });
             const fileStream = fs.createWriteStream(filePath);
+
             stream.pipe(fileStream);
 
             fileStream.on("finish", async () => {
@@ -45,6 +47,10 @@ ovlcmd(
                     caption: `${name}`,
                 });
                 fs.unlinkSync(filePath);
+            });
+
+            fileStream.on("error", (error) => {
+                console.error("Erreur lors de l'écriture du fichier :", error.message);
             });
 
         } catch (error) {
@@ -80,13 +86,15 @@ ovlcmd(
             const name = video.name;
             const url = video.url;
             const duration = video.duration;
-            const lien = song.thumbnail;
+            const lien = video.thumbnail; // Corrected to use video.thumbnail
             const filePath = path.join(__dirname, `${name}.mp4`);
 
             await ovl.sendMessage(ms_org, { image: { url: lien }, 
-                caption: `OVL-MD VIDEO_DOWNLOAD\n\n> Titre : ${name}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n`});
+                caption: `OVL-MD VIDEO_DOWNLOAD\n\n> Titre : ${name}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n` });
+
             const stream = ytdl(url, { filter: "videoandaudio" });
             const fileStream = fs.createWriteStream(filePath);
+
             stream.pipe(fileStream);
 
             fileStream.on("finish", async () => {
@@ -95,6 +103,10 @@ ovlcmd(
                     caption: `${name}`,
                 });
                 fs.unlinkSync(filePath);
+            });
+
+            fileStream.on("error", (error) => {
+                console.error("Erreur lors de l'écriture du fichier :", error.message);
             });
 
         } catch (error) {
@@ -121,15 +133,17 @@ ovlcmd(
             }
 
             const videoInfo = await ytdl.getInfo(url);
-            const name = videoInfo.videoDetails.name;
-            const lien = song.thumbnail;
+            const name = videoInfo.videoDetails.title; // Corrected to use title
+            const lien = videoInfo.videoDetails.thumbnails[0].url; // Get the thumbnail correctly
             const duration = videoInfo.videoDetails.lengthSeconds;
             const filePath = path.join(__dirname, `${name}.mp4`);
 
             await ovl.sendMessage(ms_org, { image: { url: lien }, 
-                caption: `OVL-MD VIDEO_DOWNLOAD\n\n> Titre : ${name}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n`});
+                caption: `OVL-MD VIDEO_DOWNLOAD\n\n> Titre : ${name}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n` });
+
             const stream = ytdl(url, { filter: "videoandaudio" });
             const fileStream = fs.createWriteStream(filePath);
+
             stream.pipe(fileStream);
 
             fileStream.on("finish", async () => {
@@ -138,6 +152,10 @@ ovlcmd(
                     caption: `${name}`,
                 });
                 fs.unlinkSync(filePath);
+            });
+
+            fileStream.on("error", (error) => {
+                console.error("Erreur lors de l'écriture du fichier :", error.message);
             });
 
         } catch (error) {
@@ -158,21 +176,23 @@ ovlcmd(
     async (ms_org, ovl, cmd_options) => {
         const { repondre, arg } = cmd_options;
         try {
-            const url = arg.join("");
+            const url = arg.join(" "); // Changed to join with space
             if (!ytdl.validateURL(url)) {
                 return await ovl.sendMessage(ms_org, { text: "Lien YouTube invalide." });
             }
 
             const videoInfo = await ytdl.getInfo(url);
-            const name = videoInfo.videoDetails.name;
-            const lien = song.thumbnail;
+            const name = videoInfo.videoDetails.title; // Corrected to use title
+            const lien = videoInfo.videoDetails.thumbnails[0].url; // Get the thumbnail correctly
             const duration = videoInfo.videoDetails.lengthSeconds;
             const filePath = path.join(__dirname, `${name}.mp3`);
 
             await ovl.sendMessage(ms_org, { image: { url: lien }, 
-                caption: `OVL-MD SONG_DOWNLOAD\n\n> Titre : ${name}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n`});
+                caption: `OVL-MD SONG_DOWNLOAD\n\n> Titre : ${name}\n\n> Durée : ${duration}\n\n> Lien : ${url}\n` });
+
             const stream = ytdl(url, { filter: "audioonly" });
             const fileStream = fs.createWriteStream(filePath);
+
             stream.pipe(fileStream);
 
             fileStream.on("finish", async () => {
@@ -181,6 +201,10 @@ ovlcmd(
                     caption: `${name}`,
                 });
                 fs.unlinkSync(filePath);
+            });
+
+            fileStream.on("error", (error) => {
+                console.error("Erreur lors de l'écriture du fichier :", error.message);
             });
 
         } catch (error) {
