@@ -4,33 +4,34 @@
 
 ## 🌟 Description
 
-OVL-MD est un bot interactif conçu pour enrichir vos conversations sur WhatsApp. Avec une interface intuitive et une multitude de fonctionnalités, ce bot vous permet de télécharger facilement de la musique et des vidéos depuis YouTube, tout en offrant d'autres commandes ludiques et pratiques. Que vous soyez un passionné de musique ou un utilisateur occasionnel, OVL-MD est là pour vous simplifier la vie !
+Bienvenue sur OVL-MD, votre compagnon numérique idéal pour WhatsApp ! Ce bot polyvalent a été conçu pour rendre votre expérience de chat plus agréable et interactive. Que vous souhaitiez écouter de la musique, télécharger vos vidéos préférées, ou simplement vous amuser avec des fonctionnalités innovantes, OVL-MD est là pour répondre à tous vos besoins.
 
 ## 🎉 Fonctionnalités
 
-Voici un aperçu de tout ce que OVL-MD peut faire :
+Découvrez tout ce que OVL-MD peut vous offrir :
 
-- **Téléchargement de chansons** 🎵 : 
-  - Recherchez et téléchargez vos chansons préférées directement depuis YouTube en utilisant des termes de recherche ou des liens.
+- **Téléchargement de Musique** 🎵 :
+  - Recherchez et obtenez vos titres préférés directement depuis YouTube, sans tracas.
 
-- **Téléchargement de vidéos** 🎥 : 
-  - Téléchargez des vidéos depuis YouTube, que ce soit par le biais d'une recherche ou d'un lien direct.
+- **Téléchargement de Vidéos** 🎥 :
+  - Téléchargez des vidéos à partir de YouTube en utilisant simplement un lien ou en effectuant une recherche.
 
-- **Commandes interactives** 🛠️ : 
-  - Profitez d'une variété de commandes pour interagir avec le bot et obtenir des réponses personnalisées.
+- **Commandes Interactives** 🛠️ :
+  - Interagissez facilement avec le bot à travers des commandes simples et intuitives.
 
-- **Support de proxy** 🌐 : 
-  - Configurez facilement un proxy pour accéder à YouTube si nécessaire.
+- **Support de Proxy** 🌐 :
+  - Utilisez un proxy pour accéder à YouTube si nécessaire, sans complications.
 
 ## 🚀 Déploiement
 
-Pour déployer OVL-MD, nous recommandons d'utiliser [Render](https://render.com). Voici le lien pour le scan de la session : [Scan de session](<VOTRE_LIEN_DE_SCAN>).
+Pour héberger OVL-MD, nous recommandons **Render**. Vous pouvez également consulter le scan de la session ci-dessous :
+
+[![Scan de session](https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Barcode_scanner_icon.svg/1024px-Barcode_scanner_icon.svg.png)](<VOTRE_LIEN_DE_SCAN>) [![Render](https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Render_logo.png/1024px-Render_logo.png)](https://render.com)
 
 ## 🤝 Contributions
 
-Les contributions sont les bienvenues ! Si vous souhaitez ajouter des fonctionnalités ou corriger des bogues, n'hésitez pas à soumettre une demande de tirage (pull request).
+Les contributions sont les bienvenues ! Si vous avez des idées pour améliorer le bot ou si vous souhaitez corriger des bogues, n'hésitez pas à soumettre une demande de tirage (pull request).
 
 ## 📄 License
 
 Ce projet est sous la licence MIT. Consultez le fichier LICENSE pour plus de détails.
-
