@@ -23,6 +23,8 @@
     "form-data": "^4.0.0",
     "fs-extra": "^11.1.1",
     "node-fetch": "^3.3.2",
+    "ytdl-mp3": "3.4.0",
+    "@blackamda/song_video_dl": "1.1.0",
     "path": "^0.12.7",
     "pm2": "^5.4.2",
     "pino": "^8.1.0",
