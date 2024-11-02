@@ -1,4 +1,4 @@
-const axios = require('axios');
+import fetch from 'node-fetch'
 
 function parseDuration(s) {
   const h = Math.floor(s / 3600);
@@ -8,51 +8,80 @@ function parseDuration(s) {
 }
 
 async function youtubedl(link) {
-  const { data } = await axios.post("https://www.yt1s.com/api/ajaxSearch/index", new URLSearchParams({
-    q: link,
-    vt: "home"
-  }), {
+  const response = await fetch("https://www.yt1s.com/api/ajaxSearch/index", {
+    method: "POST",
     headers: {
-        "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
-        "Cookie": "_ga=GA1.1.896277803.1730544317; _ga_SHGNTSN7T4=GS1.1.1730544316.1.1.1730545336.0.0.0"
-    }
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/116.0",
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Referer": "https://www.yt1s.com/",  // Menambahkan referer
+      "Origin": "https://www.yt1s.com",    // Menambahkan origin
+    },
+    body: new URLSearchParams({
+      q: link,
+      vt: "home"
+    })
   });
+
+  if (!response.ok) {
+    console.error(`Error: Received status ${response.status}`);
+    const text = await response.text();
+    console.error(text);
+    return;
+  }
+
+  const contentType = response.headers.get('content-type');
+  if (!contentType || !contentType.includes('application/json')) {
+    console.error('Error: Expected JSON response but received', contentType);
+    const text = await response.text();
+    console.error(text);
+    return;
+  }
+
+  const data = await response.json();
+
   const result = {
     title: data.title,
     duration: parseDuration(data.t),
     author: data.a
   };
-  
+
   const resultUrl = {
     video: Object.values(data.links.mp4),
     audio: Object.values(data.links.mp3)
   };
 
-for(const i in resultUrl)
-  resultUrl[i] = resultUrl[i].map(v => ({
+  for (const i in resultUrl) {
+    resultUrl[i] = resultUrl[i].map(v => ({
       size: v.size,
       format: v.f,
       quality: v.q,
       download: download.bind({}, data.vid, v.k)
-  })).sort((a, b) => (a.quality.slice(0, -1)*1) - (b.quality.slice(0, -1)*1));
+    })).sort((a, b) => (a.quality.slice(0, -1) * 1) - (b.quality.slice(0, -1) * 1));
+  }
 
+  // Kembalikan hasilnya
   return {
-    result, 
+    result,
     resultUrl
   };
 }
 
 async function download(id, k) {
-  const { data } = await axios.post("https://www.yt1s.com/api/ajaxConvert/convert", new URLSearchParams({
-    vid: id,
-    k
-  }), {
+  const response = await fetch("https://www.yt1s.com/api/ajaxConvert/convert", {
+    method: "POST",
     headers: {
-        "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
-        "Cookie": "_ga=GA1.1.896277803.1730544317; _ga_SHGNTSN7T4=GS1.1.1730553149.3.0.1730553149.0.0.0"
-    }
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/116.0",
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Referer": "https://www.yt1s.com/",  // Menambahkan referer
+      "Origin": "https://www.yt1s.com",    // Menambahkan origin
+    },
+    body: new URLSearchParams({
+      vid: id,
+      k
+    })
   });
 
+  const data = await response.json();
   return data.dlink;
 }
 
