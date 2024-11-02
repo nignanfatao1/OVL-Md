@@ -1,6 +1,7 @@
 const { ovlcmd } = require("../framework/ovlcmd"); 
 const { youtubedl } = require("../framework/youtube");
 const ytsr = require("@distube/ytsr");
+const svdl = require("@blackamda/song_video_dl")
 
 ovlcmd(
     {
@@ -40,10 +41,14 @@ ovlcmd(
                 caption: caption,
             });
 
-            const yt = await youtubedl(url);
-            const link = await yt.resultUrl.audio[0].download();
-            let doc = {
-                audio: { url: link },
+            const config = {
+    type: 'audio', // audio or video
+    quality: 360, // Quality of the video or audio (kbps or p)
+    server: 'en68' // This is optional ('en136', 'id4', 'en60', 'en61', 'en68')
+            }
+const result = await svdl.download(url, config)
+let doc = {
+                audio: { url: result.link},
                 mimetype: 'audio/mp4',
                 fileName: `${name}.mp3`,
             };
