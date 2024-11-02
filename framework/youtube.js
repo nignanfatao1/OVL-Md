@@ -24,8 +24,8 @@ async function youtubedl(link) {
   };
   
   const resultUrl = {
-    video: Object.values(data.links.mp4) : [],
-    audio: Object.values(data.links.mp3) : []
+    video: Object.values(data.links.mp4)
+    audio: Object.values(data.links.mp3)
   };
 
 for(const i in resultUrl)
