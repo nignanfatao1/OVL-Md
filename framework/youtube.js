@@ -1,4 +1,4 @@
-import fetch from 'node-fetch'
+const fetch = require('node-fetch');
 
 function parseDuration(s) {
   const h = Math.floor(s / 3600);
