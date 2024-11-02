@@ -24,23 +24,36 @@ async function youtubedl(link) {
   };
   
   const resultUrl = {
-    video: data.links?.mp4 ? Object.values(data.links.mp4) : [],
-    audio: data.links?.mp3 ? Object.values(data.links.mp3) : []
+    video: Object.values(data.links.mp4) : [],
+    audio: Object.values(data.links.mp3) : []
   };
 
-  for (const i in resultUrl) {
-    resultUrl[i] = resultUrl[i].map(v => ({
+for(const i in resultUrl)
+  resultUrl[i] = resultUrl[i].map(v => ({
       size: v.size,
       format: v.f,
       quality: v.q,
-      download: () => `https://www.yt1s.com/download/${data.vid}/${v.k}`
-    })).sort((a, b) => parseInt(a.quality) - parseInt(b.quality));
-  }
-  
+      download: download.bind({}, data.vid, v.k)
+  })).sort((a, b) => (a.quality.slice(0, -1)*1) - (b.quality.slice(0, -1)*1));
+
   return {
     result, 
     resultUrl
   };
+}
+
+async function download(id, k) {
+  const { data } = await axios.post("https://www.yt1s.com/api/ajaxConvert/convert", new URLSearchParams({
+    vid: id,
+    k
+  }), {
+    headers: {
+        "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
+        "Cookie": "_ga=GA1.1.896277803.1730544317; _ga_SHGNTSN7T4=GS1.1.1730544316.1.1.1730545336.0.0.0"
+    }
+  });
+
+  return data.dlink;
 }
 
 module.exports = { youtubedl };
