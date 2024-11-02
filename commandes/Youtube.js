@@ -1,6 +1,5 @@
-const { ovlcmd } = require("../framework/ovlcmd");
-const { youtubedl } = await import('../framework/youtube.mjs');
-//const { youtubedl } = require("../framework/youtube");
+const { ovlcmd } = require("../framework/ovlcmd"); 
+const { youtubedl } = require("../framework/youtube");
 const ytsr = require("@distube/ytsr");
 
 ovlcmd(
