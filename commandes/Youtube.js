@@ -46,7 +46,9 @@ ovlcmd(
     quality: 360, // Quality of the video or audio (kbps or p)
     server: 'en68' // This is optional ('en136', 'id4', 'en60', 'en61', 'en68')
             }
-const result = await svdl.download(url, config)
+const result = await svdl.download(url, config);
+console.log("Résultat du téléchargement :", result); // Log du résultat pour le débogage
+
 let doc = {
                 audio: { url: result.link},
                 mimetype: 'audio/mp4',
