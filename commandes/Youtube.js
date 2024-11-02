@@ -49,12 +49,12 @@ ovlcmd(
 const result = await svdl.download(url, config);
 console.log("Résultat du téléchargement :", result); // Log du résultat pour le débogage
 
-let doc = {
+/*let doc = {
                 audio: { url: result.link},
                 mimetype: 'audio/mp4',
                 fileName: `${name}.mp3`,
             };
-            ovl.sendMessage(ms_org, doc, { quoted: ms });
+            ovl.sendMessage(ms_org, doc, { quoted: ms });*/
         } catch (error) {
             console.error("Erreur lors du téléchargement de la chanson :", error.message || error);
             await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la chanson." });
