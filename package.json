@@ -4,13 +4,14 @@
   "version": "1.0.0",
   "description": "Bot WhatsApp devellopé par Ainz",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "Ovl": "pm2 start index.js --attach --name ovl"
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "start": "node index.js",
+  "Ovl": "pm2 start index.js --attach --name ovl"
   },
   "keywords": ["Ainz", "Ovl-Md", "Bailey"],
-  "author": "Fatao",
+  "author": "Ainz",
   "license": "MIT",
 "dependencies": {
     "@whiskeysockets/baileys": "^6.5.0",
