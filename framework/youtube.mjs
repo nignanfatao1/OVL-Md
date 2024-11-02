@@ -1,4 +1,4 @@
-import fetch from 'node-fetch'
+import fetch from 'node-fetch';
 
 function parseDuration(s) {
   const h = Math.floor(s / 3600);
@@ -85,4 +85,4 @@ async function download(id, k) {
   return data.dlink;
 }
 
-module.exports = { youtubedl };
+export { youtubedl };
