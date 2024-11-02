@@ -1,7 +1,7 @@
 const { ovlcmd } = require("../framework/ovlcmd"); 
 const { youtubedl } = require("../framework/youtube");
 const ytsr = require("@distube/ytsr");
-const svdl = require("@blackamda/song_video_dl")
+const { Downloader } = require('ytdl-mp3');
 
 ovlcmd(
     {
@@ -41,20 +41,17 @@ ovlcmd(
                 caption: caption,
             });
 
-            const config = {
-    type: 'audio', // audio or video
-    quality: 360, // Quality of the video or audio (kbps or p)
-    server: 'en68' // This is optional ('en136', 'id4', 'en60', 'en61', 'en68')
-            }
-const result = await svdl.download(url, config);
-console.log("Résultat du téléchargement :", result); // Log du résultat pour le débogage
-
-/*let doc = {
-                audio: { url: result.link},
+            const downloader = new Downloader({
+    getTags: true
+  });
+  const link = await downloader.downloadSong(url);
+ 
+let doc = {
+                audio: { url: link},
                 mimetype: 'audio/mp4',
                 fileName: `${name}.mp3`,
             };
-            ovl.sendMessage(ms_org, doc, { quoted: ms });*/
+            ovl.sendMessage(ms_org, doc, { quoted: ms });
         } catch (error) {
             console.error("Erreur lors du téléchargement de la chanson :", error.message || error);
             await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la chanson." });
