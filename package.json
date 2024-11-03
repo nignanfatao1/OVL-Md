@@ -13,6 +13,7 @@
   "author": "Ainz",
   "license": "MIT",
 "dependencies": {
+    "@bochilteam/scraper": "^4.2.4",
     "@whiskeysockets/baileys": "^6.5.0",
     "@hapi/boom": "^10.0.1",
     "axios": "^1.4.0",
