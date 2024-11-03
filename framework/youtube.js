@@ -14,13 +14,13 @@ async function youtubedl(link) {
       vt: "home"
     }), {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/116.0",
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Referer": "https://www.yt1s.com/",  // Ajouter le referer
-        "Origin": "https://www.yt1s.com"     // Ajouter l'origine
+        "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
+        "Cookie": "_ga=GA1.1.896277803.1730544317; _ga_SHGNTSN7T4=GS1.1.1730612568.5.0.1730612568.0.0.0",
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "Referer": "https://www.yt1s.com",
+        "Origin": "https://www.yt1s.com/en2aef"
       }
     });
-
     const data = response.data;
 
     const result = {
@@ -54,7 +54,7 @@ async function youtubedl(link) {
     if (error.response) {
       console.error(await error.response.data);
     }
-    return;
+    return { error: `Error: ${error.response ? error.response.status : error.message}` };
   }
 }
 
@@ -65,13 +65,14 @@ async function download(id, k) {
       k
     }), {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/116.0",
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Referer": "https://www.yt1s.com/",  // Ajouter le referer
-        "Origin": "https://www.yt1s.com"     // Ajouter l'origine
+        "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
+        "Cookie": "_ga=GA1.1.896277803.1730544317; _ga_SHGNTSN7T4=GS1.1.1730612887.0.0.0",
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "Referer": "https://www.yt1s.com/",
+        "Origin": "https://www.yt1s.com"
       }
     });
-
+    
     const data = response.data;
     return data.dlink;
   } catch (error) {
