@@ -44,12 +44,12 @@ ovlcmd(
             const link = await yt.resultUrl.video[0].download();
            // const link = await yt.resultUrl.video[0];
             console.log(link);
-          /*  let doc = {
+            let doc = {
                 video: { url: link },
                 mimetype: 'audio/mp4',
                 fileName: `${name}.mp3`,
             };
-            ovl.sendMessage(ms_org, doc, { quoted: ms });*/
+            ovl.sendMessage(ms_org, doc, { quoted: ms });
         } catch (error) {
             console.error("Erreur lors du téléchargement de la chanson :", error.message || error);
             await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la chanson." });
