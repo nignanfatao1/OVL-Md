@@ -53,7 +53,7 @@ ovlcmd(
 
             // Télécharger l'audio
             await downloadAudio(audioUrl, audioPath);
-            console.log('audio dl succes');*/
+            console.log('audio dl succes');
 
             // Envoyer le fichier audio
             let doc = {
