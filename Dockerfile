@@ -6,6 +6,7 @@ WORKDIR /root/ovl_bot
 
 COPY package.json .
 RUN npm i
+RUN npm install --legacy-peer-deps
 COPY . .
 
 EXPOSE 8000
