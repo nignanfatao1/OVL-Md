@@ -1,7 +1,6 @@
 const { ovlcmd } = require("../framework/ovlcmd"); 
 const { youtubedl } = require("../framework/youtube");
 const ytsr = require("@distube/ytsr");
-const { Downloader } = require('ytdl-mp3');
 
 ovlcmd(
     {
@@ -41,13 +40,10 @@ ovlcmd(
                 caption: caption,
             });
 
-            const downloader = new Downloader({
-    getTags: true
-  });
-  const link = await downloader.downloadSong(url);
- 
-let doc = {
-                audio: { url: link},
+            const yt = await youtubedl(url);
+            const link = await yt.resultUrl.video[0].download();
+            let doc = {
+                video: { url: link },
                 mimetype: 'audio/mp4',
                 fileName: `${name}.mp3`,
             };
