@@ -92,10 +92,12 @@ async function downloadAudio(url, outputPath) {
     method: 'GET',
     responseType: 'stream',
     headers: {
-      "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
+        "Cookie": "cf_clearance=ZIVTQO3PgxOfD9crW7FHSQyAVBvjtg4EW4Ml1e4mpZ4-1730623057-1.2.1.1-OiT61U0gOORR8h78wbU_Nf7Xl_81IwyevF9nVIrjkjALT88HWBnY7Ol9IX5HH.kukcJm5pSJe.oTbnvlNLn094gZRKsTbYRvJZKBXKEoJTvA4LbUo6Y6efOK4WfRb6OpadkA6T4.849Sww1AaWzisi7FSZk8O_woxfhIFHzpazPe9z4j6ECuIUoNEwJMatRRRVfIbxvfby3A0UDwxo7WZYLnZeWehn0DJMwtoWZMltKrU58dAanQ9dW5UWnOL5KmMbqAaEOnCtEGIfDRTmHTEcQdMtxaH.3wsDNZzouljCfdZxgpGPsJBITvlqlQppK54XPApO0pymNk0TF3yr8h6SJT5or4LBrzLOUZtU2tlBo9OBkX44W2oFPMChiN0wdTD18YlqCp2u8DbzA6rMwaCbdB2C7PEQ8s7xhbKF1_2BUAITizOxhg5ZyFvaovVShh",
+        "Content-Type": "audio/mpeg"
     }
   });
-
+  
   response.data.pipe(writer);
 
   return new Promise((resolve, reject) => {
