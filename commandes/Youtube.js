@@ -81,7 +81,7 @@ ovlcmd(
                     });
                 });
 
-                writer.on('error', (error) => {
+                writer.on('error', async (error) => {
                     console.error("Erreur lors du téléchargement de l'audio :", error);
                     await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de l'audio." });
                 });
