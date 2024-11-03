@@ -45,11 +45,11 @@ ovlcmd(
             // Obtenir l'URL de l'audio
             const yt = await youtubedl(url);
             console.log(yt);
-            const audioUrl = await yt.resultUrl.audio[0].download(); 
-            console.log(audioUrl);
-
+           /* const audioUrl = await yt.resultUrl.audio[0].download(); 
+            console.log(audioUrl);*/
+            const audioUrl = 'https://dl196.filemate13.shop/?file=M3R4SUNiN3JsOHJ6WWQ3aTdPRFA4NW1rRVJIOG1PVWhpdGsxMVJSb0xydEpxSVFoMEsvckFNVk9Pck1PdzRXckVKVlc3SFgzYWVURlBSL2Q4SjR2VG5hKzU5Y3BzV0tLb2FnNVZ0eGxReFQ5M3JTRm15RWl6RlhUS0oyZk01TjVXblJ4OUhoSTNTQ2k4NktDNlFXMnZtMzU0VXFHWTNrb2xIME9KZVhaNDVwYzNHVE9NcWF6Z01CVCszRExzczhQeVBXYml3TCt4ckUxNVkwelRWSXBkNUlN';
             // Définir le chemin de sauvegarde
-            /*const audioPath = path.join(__dirname, `audio.mp3`);
+            const audioPath = path.join(__dirname, `audio.mp3`);
 
             // Télécharger l'audio
             await downloadAudio(audioUrl, audioPath);
@@ -57,7 +57,7 @@ ovlcmd(
 
             // Envoyer le fichier audio
             let doc = {
-                audio: { url: 'https://dl204.filemate27.shop/?file=M3R4SUNiN3JsOHJ6WWQ3aTdPRFA4NW1rRVJIOGx2NCtnWjV4NVJrbUQ3MUpxSmdxbktHRGNJeHVmdXdnMkl1bEVKQlo1VzJlZDltSE5UQ1p0NHd1SHpiVDBjOHlyQ3ZhOFl0bEMrOThSa1c5eWNENzAyTlFyRFRBSnZiVVBaWURVbUExcmxBd2xTR1d3NnoybjFQOXEyMmt0VWlYWlNrUDcycGNicVdHbzhZWmhqeU5mZkxpN0pNTnFDV1V2OHNQeWViQXNBT2o%3D' /* audioPath*/ }, 
+                audio: { url: audioPath }, 
                 mimetype: 'audio/mp3', 
                 fileName: `${name}.mp3`, 
             };
