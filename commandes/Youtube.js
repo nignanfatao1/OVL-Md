@@ -1,8 +1,9 @@
 const { ovlcmd } = require("../framework/ovlcmd"); 
-const { youtubedl, downloadAudio } = require("../framework/youtube");
+const { youtubedl } = require("../framework/youtube");
 const ytsr = require("@distube/ytsr");
 const path = require("path");
-const fs = require('fs');
+const fs = require("fs");
+const axios = require("axios");
 
 ovlcmd(
     {
@@ -45,33 +46,48 @@ ovlcmd(
             // Obtenir l'URL de l'audio
             const yt = await youtubedl(url);
             console.log(yt);
-           /* const audioUrl = await yt.resultUrl.audio[0].download(); 
-            console.log(audioUrl);*/
-            const audioUrl = 'https://dl196.filemate13.shop/?file=M3R4SUNiN3JsOHJ6WWQ3aTdPRFA4NW1rRVJIOG1PVWhpdGsxMVJSb0xydEpxSVFoMEsvckFNVk9Pck1PdzRXckVKVlc3SFgzYWVURlBSL2Q4SjR2VG5hKzU5Y3BzV0tLb2FnNVZ0eGxReFQ5M3JTRm15RWl6RlhUS0oyZk01TjVXblJ4OUhoSTNTQ2k4NktDNlFXMnZtMzU0VXFHWTNrb2xIME9KZVhaNDVwYzNHVE9NcWF6Z01CVCszRExzczhQeVBXYml3TCt4ckUxNVkwelRWSXBkNUlN';
-            // Définir le chemin de sauvegarde
-            const audioPath = path.join(__dirname, `audio.mp3`);
 
-            // Télécharger l'audio
-            await downloadAudio(audioUrl, audioPath);
-            console.log('audio dl succes');
+            // Vérifiez que l'audio a été trouvé
+            if (yt.resultUrl.audio.length > 0) {
+                const audioUrl = yt.resultUrl.audio[0].download; // Utilisez le lien de téléchargement
+               console.log(audioUrl)
+                // Définir le chemin de sauvegarde
+                const audioPath = path.join(__dirname, `audio_${name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.mp3`);
 
-            // Envoyer le fichier audio
-            let doc = {
-                audio: { url: audioPath }, 
-                mimetype: 'audio/mp3', 
-                fileName: `${name}.mp3`, 
-            };
+                // Télécharger l'audio
+                const response = await axios.get(audioUrl, { responseType: 'stream' });
+                const writer = fs.createWriteStream(audioPath);
 
-            await ovl.sendMessage(ms_org, doc, { quoted: ms });
+                response.data.pipe(writer);
+                writer.on('finish', async () => {
+                    console.log('Audio téléchargé avec succès');
 
-            // Supprimer le fichier après l'envoi
-            fs.unlink(audioPath, (err) => {
-                if (err) {
-                    console.error("Erreur lors de la suppression du fichier audio :", err);
-                } else {
-                    console.log("Fichier audio supprimé avec succès.");
-                }
-            });
+                    // Envoyer le fichier audio
+                    const doc = {
+                        audio: { url: audioPath },
+                        mimetype: 'audio/mp3',
+                        fileName: `${name}.mp3`,
+                    };
+
+                    await ovl.sendMessage(ms_org, doc, { quoted: ms });
+
+                    // Supprimer le fichier après l'envoi
+                    fs.unlink(audioPath, (err) => {
+                        if (err) {
+                            console.error("Erreur lors de la suppression du fichier audio :", err);
+                        } else {
+                            console.log("Fichier audio supprimé avec succès.");
+                        }
+                    });
+                });
+
+                writer.on('error', (error) => {
+                    console.error("Erreur lors du téléchargement de l'audio :", error);
+                    await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de l'audio." });
+                });
+            } else {
+                await ovl.sendMessage(ms_org, { text: "Aucun lien audio trouvé." });
+            }
 
         } catch (error) {
             console.error("Erreur lors du téléchargement de la chanson :", error.message || error);
@@ -79,6 +95,7 @@ ovlcmd(
         }
     }
 );
+
 
 ovlcmd(
     {
