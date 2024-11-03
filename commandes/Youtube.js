@@ -1,7 +1,8 @@
 const { ovlcmd } = require("../framework/ovlcmd"); 
-const { youtubedl, downloadAudio } = require("../framework/youtube"); // Importer downloadAudio
+const { youtubedl, downloadAudio } = require("../framework/youtube");
 const ytsr = require("@distube/ytsr");
 const path = require("path");
+const fs = require('fs');
 
 ovlcmd(
     {
@@ -41,30 +42,40 @@ ovlcmd(
                 caption: caption,
             });
 
+            // Obtenir l'URL de l'audio
             const yt = await youtubedl(url); 
-            const audioUrl = await yt.resultUrl.audio[0].download(); // Récupérer l'URL de l'audio
+            const audioUrl = await yt.resultUrl.audio[0].download(); 
 
-            // Définir le chemin de sauvegarde de l'audio
-            const audioPath = path.join(__dirname, `${name}.mp3`); // Chemin où l'audio sera enregistré
+            // Définir le chemin de sauvegarde
+            const audioPath = path.join(__dirname, `${name}.mp3`);
 
-            // Télécharger l'audio en local
+            // Télécharger l'audio
             await downloadAudio(audioUrl, audioPath);
 
-            // Envoyer le fichier audio téléchargé
+            // Envoyer le fichier audio
             let doc = {
-                audio: { url: audioPath }, // Utiliser le chemin local du fichier audio
-                mimetype: 'audio/mp3', // Spécifier le type MIME approprié
-                fileName: `${name}.mp3`, // Nom du fichier
+                audio: { url: audioPath }, 
+                mimetype: 'audio/mp3', 
+                fileName: `${name}.mp3`, 
             };
 
             await ovl.sendMessage(ms_org, doc, { quoted: ms });
+
+            // Supprimer le fichier après l'envoi
+            fs.unlink(audioPath, (err) => {
+                if (err) {
+                    console.error("Erreur lors de la suppression du fichier audio :", err);
+                } else {
+                    console.log("Fichier audio supprimé avec succès.");
+                }
+            });
+
         } catch (error) {
             console.error("Erreur lors du téléchargement de la chanson :", error.message || error);
             await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la chanson." });
         }
     }
 );
-
 
 ovlcmd(
     {
