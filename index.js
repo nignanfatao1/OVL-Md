@@ -108,8 +108,8 @@ async function main() {
     const nom_Auteur_Message = ms.pushName;
     const arg = texte ? texte.trim().split(/ +/).slice(1) : null;
     const verif_Cmd = texte ? texte.startsWith(prefixe) : false;
-    const cmds = verif_Cmd ? texte.slice(1).trim().split(/ +/).shift().toLowerCase() : false;
-
+    const cmds = verif_Cmd ? texte.slice(prefixe.length).trim().split(/ +/).shift().toLowerCase() : false;
+          
     function groupe_Admin(membre_Groupe) {
         let admin = [];
         for (let m of membre_Groupe) {
@@ -154,7 +154,7 @@ async function main() {
     if (verif_Groupe) {
         console.log("Groupe: " + nom_Groupe);
     }
-    console.log("Auteur message: " + `${nom_Auteur_Message}\nNumero: ${auteur_Message.split("@s.whatsapp.net")[0]}]`);
+    console.log("Auteur message: " + `${nom_Auteur_Message}\nNumero: ${auteur_Message.split("@s.whatsapp.net")[0]}`);
     console.log("Type: " + mtype);
     console.log("Message:");
     console.log(texte);
