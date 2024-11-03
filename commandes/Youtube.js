@@ -40,10 +40,11 @@ ovlcmd(
                 caption: caption,
             });
 
-            const yt = await youtubedl(url);
-            console.log(yt);
-            /*const link = await yt.resultUrl.video[0].download();
-            let doc = {
+            const yt = await youtubedl(url); 
+            //const link = await yt.resultUrl.video[0].download();
+            const link = await yt.resultUrl.video[0];
+            console.log(link);
+          /*  let doc = {
                 video: { url: link },
                 mimetype: 'audio/mp4',
                 fileName: `${name}.mp3`,
