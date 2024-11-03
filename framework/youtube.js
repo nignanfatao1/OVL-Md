@@ -23,7 +23,7 @@ async function youtubedl(link) {
     });
     const data = response.data;
 
-    const result = {
+   /* const result = {
       title: data.title,
       duration: parseDuration(data.t),
       author: data.a
@@ -47,7 +47,8 @@ async function youtubedl(link) {
     return {
       result,
       resultUrl
-    };
+    };*/
+    return data;
 
   } catch (error) {
     console.error(`Error: ${error.response ? error.response.status : error.message}`);
