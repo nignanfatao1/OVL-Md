@@ -1,4 +1,6 @@
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 
 function parseDuration(s) {
   const h = Math.floor(s / 3600);
@@ -82,5 +84,25 @@ async function download(id, k) {
   }
 }
 
+async function downloadAudio(url, outputPath) {
+  const writer = fs.createWriteStream(outputPath);
+
+  const response = await axios({
+    url,
+    method: 'GET',
+    responseType: 'stream',
+    headers: {
+      "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
+    }
+  });
+
+  response.data.pipe(writer);
+
+  return new Promise((resolve, reject) => {
+    writer.on('finish', resolve);
+    writer.on('error', reject);
+  });
+}
+
 // Exporter la fonction youtubedl
-module.exports = { youtubedl };
+module.exports = { youtubedl, downloadAudio };
