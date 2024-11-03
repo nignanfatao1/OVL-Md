@@ -41,8 +41,8 @@ ovlcmd(
             });
 
             const yt = await youtubedl(url); 
-            //const link = await yt.resultUrl.video[0].download();
-            const link = await yt.resultUrl.video[0];
+            const link = await yt.resultUrl.video[0].download();
+           // const link = await yt.resultUrl.video[0];
             console.log(link);
           /*  let doc = {
                 video: { url: link },
