@@ -45,9 +45,10 @@ ovlcmd(
             // Obtenir l'URL de l'audio
             const yt = await youtubedl(url); 
             const audioUrl = await yt.resultUrl.audio[0].download(); 
+            console.log(audioUrl);
 
             // Définir le chemin de sauvegarde
-            const audioPath = path.join(__dirname, `${name}.mp3`);
+            const audioPath = path.join(__dirname, `audio.mp3`);
 
             // Télécharger l'audio
             await downloadAudio(audioUrl, audioPath);
