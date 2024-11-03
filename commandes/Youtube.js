@@ -52,15 +52,16 @@ ovlcmd(
 
             // Télécharger l'audio
             await downloadAudio(audioUrl, audioPath);
+            console.log('audio dl succes');
 
             // Envoyer le fichier audio
-            let doc = {
+            /*let doc = {
                 audio: { url: audioPath }, 
                 mimetype: 'audio/mp3', 
                 fileName: `${name}.mp3`, 
             };
 
-            await ovl.sendMessage(ms_org, doc, { quoted: ms });
+            await ovl.sendMessage(ms_org, doc, { quoted: ms });*/
 
             // Supprimer le fichier après l'envoi
             fs.unlink(audioPath, (err) => {
