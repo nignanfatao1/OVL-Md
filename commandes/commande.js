@@ -39,7 +39,7 @@ ovlcmd(
             // Construire le message de description
             let descriptionMsg = "📜 *Liste des commandes disponibles :*\n\n";
             commandes.forEach(cmd => {
-                descriptionMsg += `*${cmd.nom_cmd}* (${cmd.alias.join(", ")}): ${cmd.desc}\n`;
+                descriptionMsg += `nom commande: *${cmd.nom_cmd}*\nAlias: [${cmd.alias.join(", ")}]\ndescription: ${cmd.desc}\n\n`;
             });
 
             // Envoyer la liste des commandes
