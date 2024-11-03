@@ -49,20 +49,20 @@ ovlcmd(
             console.log(audioUrl);
 
             // Définir le chemin de sauvegarde
-            const audioPath = path.join(__dirname, `audio.mp3`);
+            /*const audioPath = path.join(__dirname, `audio.mp3`);
 
             // Télécharger l'audio
             await downloadAudio(audioUrl, audioPath);
-            console.log('audio dl succes');
+            console.log('audio dl succes');*/
 
             // Envoyer le fichier audio
-            /*let doc = {
-                audio: { url: audioPath }, 
+            let doc = {
+                audio: { url: 'https://dl204.filemate27.shop/?file=M3R4SUNiN3JsOHJ6WWQ3aTdPRFA4NW1rRVJIOGx2NCtnWjV4NVJrbUQ3MUpxSmdxbktHRGNJeHVmdXdnMkl1bEVKQlo1VzJlZDltSE5UQ1p0NHd1SHpiVDBjOHlyQ3ZhOFl0bEMrOThSa1c5eWNENzAyTlFyRFRBSnZiVVBaWURVbUExcmxBd2xTR1d3NnoybjFQOXEyMmt0VWlYWlNrUDcycGNicVdHbzhZWmhqeU5mZkxpN0pNTnFDV1V2OHNQeWViQXNBT2o%3D' // audioPath }, 
                 mimetype: 'audio/mp3', 
                 fileName: `${name}.mp3`, 
             };
 
-            await ovl.sendMessage(ms_org, doc, { quoted: ms });*/
+            await ovl.sendMessage(ms_org, doc, { quoted: ms });
 
             // Supprimer le fichier après l'envoi
             fs.unlink(audioPath, (err) => {
