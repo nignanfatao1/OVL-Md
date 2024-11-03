@@ -1,6 +1,7 @@
 const { ovlcmd } = require("../framework/ovlcmd"); 
-const { youtubedl } = require("../framework/youtube");
+const { youtubedl, downloadAudio } = require("../framework/youtube"); // Importer downloadAudio
 const ytsr = require("@distube/ytsr");
+const path = require("path");
 
 ovlcmd(
     {
@@ -41,21 +42,29 @@ ovlcmd(
             });
 
             const yt = await youtubedl(url); 
-            const link = await yt.resultUrl.video[0].download();
-           // const link = await yt.resultUrl.video[0];
-            console.log(link);
+            const audioUrl = await yt.resultUrl.audio[0].download(); // Récupérer l'URL de l'audio
+
+            // Définir le chemin de sauvegarde de l'audio
+            const audioPath = path.join(__dirname, `${name}.mp3`); // Chemin où l'audio sera enregistré
+
+            // Télécharger l'audio en local
+            await downloadAudio(audioUrl, audioPath);
+
+            // Envoyer le fichier audio téléchargé
             let doc = {
-                video: { url: link },
-                mimetype: 'audio/mp4',
-                fileName: `${name}.mp3`,
+                audio: { url: audioPath }, // Utiliser le chemin local du fichier audio
+                mimetype: 'audio/mp3', // Spécifier le type MIME approprié
+                fileName: `${name}.mp3`, // Nom du fichier
             };
-            ovl.sendMessage(ms_org, doc, { quoted: ms });
+
+            await ovl.sendMessage(ms_org, doc, { quoted: ms });
         } catch (error) {
             console.error("Erreur lors du téléchargement de la chanson :", error.message || error);
             await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la chanson." });
         }
     }
 );
+
 
 ovlcmd(
     {
