@@ -43,7 +43,8 @@ ovlcmd(
             });
 
             // Obtenir l'URL de l'audio
-            const yt = await youtubedl(url); 
+            const yt = await youtubedl(url);
+            console.log(yt);
             const audioUrl = await yt.resultUrl.audio[0].download(); 
             console.log(audioUrl);
 
