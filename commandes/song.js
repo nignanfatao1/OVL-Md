@@ -42,6 +42,7 @@ ovlcmd(
         const q = '128kbps';
         const yt = await youtubedl(url).catch(async (_) => await youtubedlv2(url));
         const dl_url = await yt.audio[q].download();
+            console.log(dl_url);
           const doc = {
                         audio: { url: dl_url },
                         mimetype: 'audio/mpeg',
