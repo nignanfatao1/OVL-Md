@@ -45,7 +45,7 @@ ovlcmd(
             console.log(dl_url);
           const doc = {
                         audio: { url: dl_url },
-                        mimetype: 'audio/mpeg',
+                        mimetype: 'audio/mp4',
                         fileName: `${name}.mp3`,
                     };
 
