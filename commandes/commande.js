@@ -70,8 +70,8 @@ ovlcmd(
             const lien = "https://telegra.ph/file/4d918694f786d7acfa3bd.jpg";
             const commandes = cmd;
             let menu = `╭───❏ 🄾🅅🄻 🄼🄳 ❏
-│ ✿ Prefixe => ${conf.prefixe}
-│ ✿ Owner => ${conf.owner_name}
+│ ✿ Prefixe => ${conf.PREFIXE}
+│ ✿ Owner => ${conf.NOM_OWNER}
 │ ✿ Commandes => ${commandes.length}
 │ ✿ Uptime => ${uptime}
 │ ✿ Développeur => Ainz
