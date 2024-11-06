@@ -167,9 +167,12 @@ async function main() {
         const cd = evt.cmd.find((ovlcmd) => ovlcmd.nom_cmd === cmds || (ovlcmd.alias && ovlcmd.alias.includes(cmds)));
         
         if (cd) {
-            try { 
+            try {
+             if(cd.react) {
                 await ovl.sendMessage(ms_org, { react: { text: cd.react, key: ms.key } });
-                cd.fonction(ms_org, ovl, cmd_options);
+             } else { await ovl.sendMessage(ms_org, { react: { text: "🎐", key: ms.key } });
+                    }
+              cd.fonction(ms_org, ovl, cmd_options);
             } catch (e) {
                 console.log("Erreur: " + e);
                 ovl.sendMessage(ms_org, { text: "Erreur: " + e }, { quoted: ms });
