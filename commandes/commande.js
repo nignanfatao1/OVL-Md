@@ -1,4 +1,6 @@
 const { ovlcmd, cmd } = require("../framework/ovlcmd");
+const conf = require("../sérieux");
+const startTime = require("../index");
 
 ovlcmd(
     {
@@ -27,7 +29,6 @@ ovlcmd(
     {
         nom_cmd: "description",
         classe: "Outils",
-        react: "ℹ️",
         desc: "Affiche la liste des commandes avec leurs descriptions",
         alias: ["desc", "help"],
     },
@@ -47,5 +48,53 @@ ovlcmd(
         } catch (error) {
             console.error("Erreur lors de l'affichage des descriptions :", error.message || error);
         }
+    }
+);
+
+ovlcmd(
+    {
+        nom_cmd: "menu",
+        classe: "Outils",
+        react: "🔅",
+        desc: "affiche le menu du bot",
+    },
+    async (ms_org, ovl, commandeOptions) => {
+        try {
+            const uptimeMs = Date.now() - startTime;
+            const s = Math.floor((uptimeMs / 1000) % 60);
+            const min = Math.floor((uptimeMs / (1000 * 60)) % 60);
+            const h = Math.floor((uptimeMs / (1000 * 60 * 60)) % 24);
+            const j = Math.floor(uptimeMs / (1000 * 60 * 60 * 24));
+            
+            let uptime = `${j} Jour, ${h} Heures, ${m} Minutes, ${s} Secondes`;
+            const lien = " https://telegra.ph/file/4d918694f786d7acfa3bd.jpg",
+            const commandes = cmd;
+            let menu = `╭───❏ 🄾🅅🄻 🄼🄳 ❏
+│ ✿ Prefixe => ${conf.prefixe}
+│ ✿ Owner => ${conf.owner_name}
+│ ✿ Commandes => ${commandes.length}
+│ ✿ Uptime => ${uptime}
+│ ✿ Développeur => Ainz
+╰══════════════⊷\n\n`;
+ const cmd_classe = {};
+            commandes.forEach((cmd) => {
+                if (!cmd_classe[cmd.classe]) {
+                    cmd_classe[cmd.classe] = [];
+                }
+                cmd_classe[cmd.classe].push(cmd);
+            });
+            for (const [classe, cmds] of Object.entries(cmd_classe)) {
+                menu += `╭───❏ ${classe} ❏\n`;
+                cmds.forEach((cmd) => {
+                    menu += `│☞ ${cmd.nom_cmd}\n`;
+                });
+                menu += `╰═══════════════⊷\n\n`;
+            }
+
+            menu += "> ©2024 OVL-MD WA-BOT By Ainz";
+            await ovl.sendMessage(ms_org, { image: { url: lien }, caption: menu });
+        } catch (error) {
+            console.error("Erreur lors de la génération du menu :", error);
+             }
     }
 );
