@@ -6,29 +6,53 @@ ovlcmd(
         nom_cmd: "song",
         classe: "Téléchargement",
         react: "🎵",
-        desc: "Télécharge une chanson depuis YouTube avec un terme de recherche",
+        desc: "Télécharge une chanson depuis YouTube avec un terme de recherche ou un lien YouTube",
         alias: ["aud"],
     },
     async (ms_org, ovl, cmd_options) => {
         const { repondre, arg, ms } = cmd_options;
+        
         try {
+            if (!arg.length) {
+                return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un titre de chanson ou un lien YouTube." });
+            }
+
             const query = arg.join(" ");
-            if (!query) {
-                return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un titre de chanson." });
+            let url, name, duration, lien;
+
+            // Vérifie si le premier argument est un lien YouTube
+            const isYouTubeLink = /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(arg[0]);
+
+            if (isYouTubeLink) {
+                // Si c'est un lien, on l'utilise directement pour le téléchargement
+                url = arg[0];
+
+                // Récupère les informations de la chanson depuis l'URL
+                const songInfoResponse = await axios.get(`https://api.giftedtech.my.id/api/info/yts?apikey=gifted&url=${url}`);
+                const songInfo = songInfoResponse.data.results[0];
+
+                if (!songInfo) {
+                    return await ovl.sendMessage(ms_org, { text: "Impossible de récupérer les informations de la vidéo." });
+                }
+
+                name = songInfo.title;
+                duration = songInfo.duration.timestamp;
+                lien = songInfo.thumbnail;
+
+            } else {
+                // Sinon, on effectue une recherche pour obtenir l'URL
+                const searchResponse = await axios.get(`https://api.giftedtech.my.id/api/search/yts?apikey=gifted&query=${query}`);
+                const song = searchResponse.data.results[0];  // Prend le premier résultat de la recherche
+
+                if (!song) {
+                    return await ovl.sendMessage(ms_org, { text: "Aucun résultat trouvé pour cette recherche." });
+                }
+
+                name = song.title;
+                url = song.url;
+                duration = song.duration.timestamp;
+                lien = song.thumbnail;
             }
-
-            // Recherche de la chanson
-            const searchResponse = await axios.get(`https://api.giftedtech.my.id/api/search/yts?apikey=gifted&query=${query}`);
-            const song = searchResponse.data.result[0];  // Prend le premier résultat de la recherche
-
-            if (!song) {
-                return await ovl.sendMessage(ms_org, { text: "Aucun résultat trouvé pour cette recherche." });
-            }
-
-            const name = song.title;
-            const url = song.url;
-            const duration = song.duration.timestamp;
-            const lien = song.thumbnail;
 
             const caption = `╭──── 〔 OVL-MD SONG 〕 ─⬣
 ⬡ Titre: ${name}
@@ -44,7 +68,7 @@ ovlcmd(
 
             // Téléchargement de l'audio
             const downloadResponse = await axios.get(`https://api.giftedtech.my.id/api/download/ytaudio?apikey=gifted&url=${url}`);
-            const link = downloadResponse.data.result.download_url;
+            const link = downloadResponse.data.results.download_url;
 
             if (link) {
                 const doc = {
@@ -57,12 +81,14 @@ ovlcmd(
             } else {
                 await ovl.sendMessage(ms_org, { text: "Aucun lien audio trouvé." });
             }
+
         } catch (error) {
             console.error("Erreur lors du téléchargement de la chanson :", error.message || error);
             await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la chanson." });
         }
     }
 );
+
 
 /*ovlcmd(
     {
