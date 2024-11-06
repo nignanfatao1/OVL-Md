@@ -1,8 +1,4 @@
 const { ovlcmd } = require("../framework/ovlcmd"); 
-const { youtubedl } = require("../framework/youtube");
-const ytsr = require("@distube/ytsr");
-const path = require("path");
-const fs = require("fs");
 const axios = require("axios");
 
 ovlcmd(
@@ -21,74 +17,46 @@ ovlcmd(
                 return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un titre de chanson." });
             }
 
-            const searchResults = await ytsr(query, { limit: 1 });
-            const song = searchResults.items[0];
+            // Recherche de la chanson
+            const searchResponse = await axios.get(`https://api.giftedtech.my.id/api/search/yts?apikey=gifted&query=${query}`);
+            const song = searchResponse.data.result[0];  // Prend le premier résultat de la recherche
 
-            if (!song || !song.url) {
-                return await ovl.sendMessage(ms_org, { text: "Aucun résultat trouvé pour la recherche." });
+            if (!song) {
+                return await ovl.sendMessage(ms_org, { text: "Aucun résultat trouvé pour cette recherche." });
             }
 
-            const name = song.name;
+            const name = song.title;
             const url = song.url;
-            const duration = song.duration;
+            const duration = song.duration.timestamp;
             const lien = song.thumbnail;
+
             const caption = `╭──── 〔 OVL-MD SONG 〕 ─⬣
 ⬡ Titre: ${name}
 ⬡ Durée: ${duration}
 ⬡ Lien: ${url}
 ╰────────⬣`;
 
+            // Envoie l'image avec la description
             await ovl.sendMessage(ms_org, {
                 image: { url: lien },
                 caption: caption,
             });
 
-            // Obtenir l'URL de l'audio
-            const yt = await youtubedl(url);
-            console.log(yt);
+            // Téléchargement de l'audio
+            const downloadResponse = await axios.get(`https://api.giftedtech.my.id/api/download/ytaudio?apikey=gifted&url=${url}`);
+            const link = downloadResponse.data.result.download_url;
 
-            // Vérifiez que l'audio a été trouvé
-            if (yt.resultUrl.audio.length > 0) {
-                const audioUrl = yt.resultUrl.audio[0].download; // Utilisez le lien de téléchargement
-               console.log(audioUrl)
-                // Définir le chemin de sauvegarde
-                const audioPath = path.join(__dirname, `audio_${name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.mp3`);
+            if (link) {
+                const doc = {
+                    audio: { url: link },
+                    mimetype: 'audio/mp4',
+                    fileName: `${name}.mp3`,
+                };
 
-                // Télécharger l'audio
-                const response = await axios.get(audioUrl, { responseType: 'stream' });
-                const writer = fs.createWriteStream(audioPath);
-
-                response.data.pipe(writer);
-                writer.on('finish', async () => {
-                    console.log('Audio téléchargé avec succès');
-
-                    // Envoyer le fichier audio
-                    const doc = {
-                        audio: { url: audioPath },
-                        mimetype: 'audio/mp3',
-                        fileName: `${name}.mp3`,
-                    };
-
-                    await ovl.sendMessage(ms_org, doc, { quoted: ms });
-
-                    // Supprimer le fichier après l'envoi
-                    fs.unlink(audioPath, (err) => {
-                        if (err) {
-                            console.error("Erreur lors de la suppression du fichier audio :", err);
-                        } else {
-                            console.log("Fichier audio supprimé avec succès.");
-                        }
-                    });
-                });
-
-                writer.on('error', async (error) => {
-                    console.error("Erreur lors du téléchargement de l'audio :", error);
-                    await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de l'audio." });
-                });
+                await ovl.sendMessage(ms_org, doc, { quoted: ms });
             } else {
                 await ovl.sendMessage(ms_org, { text: "Aucun lien audio trouvé." });
             }
-
         } catch (error) {
             console.error("Erreur lors du téléchargement de la chanson :", error.message || error);
             await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la chanson." });
@@ -96,8 +64,7 @@ ovlcmd(
     }
 );
 
-
-ovlcmd(
+/*ovlcmd(
     {
         nom_cmd: "video",
         classe: "Téléchargement",
@@ -230,4 +197,4 @@ ovlcmd(
             await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la chanson." });
         }
     }
-);
+);*/
