@@ -1,5 +1,5 @@
 const { ovlcmd, cmd } = require("../framework/ovlcmd");
-const conf = require("../sérieux");
+const conf = require("../set");
 
 ovlcmd(
     {
