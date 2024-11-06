@@ -109,7 +109,7 @@ async function main() {
     const arg = texte ? texte.trim().split(/ +/).slice(1) : null;
     const verif_Cmd = texte ? texte.startsWith(prefixe) : false;
     const cmds = verif_Cmd ? texte.slice(prefixe.length).trim().split(/ +/).shift().toLowerCase() : false;
-          
+    const startTime = Date.now();
     function groupe_Admin(membre_Groupe) {
         let admin = [];
         for (let m of membre_Groupe) {
@@ -147,7 +147,8 @@ async function main() {
         auteur_Msg_Repondu,
         ms, 
         ms_org, 
-        bot_pic
+        bot_pic,
+        startTime
     };
 
     console.log("{}=={} OVL-MD LOG-MESSAGES {}=={}");
