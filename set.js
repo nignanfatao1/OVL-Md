@@ -1,5 +1,5 @@
 module.exports = {
-    PREFIXE: process.env.PREFIXE || ".",
+    PREFIXE: process.env.PREFIXE,
     NOM_OWNER: process.env.NOM_OWNER || "Ainz",
     MENU: process.env.MENU || "https://i.ibb.co/ynx9QcZ/image.jpg",
     SESSION_ID: process.env.SESSION_ID || "ovl",
