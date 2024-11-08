@@ -231,6 +231,7 @@ ovl.ev.on("connection.update", async (con) => {
         }
         delay(700);
      startTime = Date.now();
+     console.log("Start Time:", startTime); // Pour vérifier si startTime est correct
      let start_msg = `╭────《 OVL-MD 》─────⊷
 ⫸  *Préfixe*       : ${prefixe}
 ⫸  *Mode*          : Public
