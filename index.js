@@ -109,7 +109,6 @@ async function main() {
     const arg = texte ? texte.trim().split(/ +/).slice(1) : null;
     const verif_Cmd = texte ? texte.startsWith(prefixe) : false;
     const cmds = verif_Cmd ? texte.slice(prefixe.length).trim().split(/ +/).shift().toLowerCase() : false;
-    const startTime = Date.now();
     function groupe_Admin(membre_Groupe) {
         let admin = [];
         for (let m of membre_Groupe) {
@@ -147,9 +146,8 @@ async function main() {
         auteur_Msg_Repondu,
         ms, 
         ms_org, 
-        bot_pic,
-        startTime
-    };
+        bot_pic
+   };
 
     console.log("{}=={} OVL-MD LOG-MESSAGES {}=={}");
     if (verif_Groupe) {
@@ -232,6 +230,7 @@ ovl.ev.on("connection.update", async (con) => {
             }
         }
         delay(700);
+     let startTime = startTime = Date.now();
      let start_msg = `╭────《 OVL-MD 》─────⊷
 ⫸  *Préfixe*       : ${prefixe}
 ⫸  *Mode*          : Public
@@ -379,3 +378,4 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log("Listening on port: " + port);
 });
+module.exports = startTime;
