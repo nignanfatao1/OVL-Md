@@ -23,6 +23,14 @@ async function youtubedl(link) {
 
     const data = response.data;
 
+    // Debugging
+    console.log("Received data:", data);
+
+    if (!data.links || !data.links.mp4 || !data.links.mp3) {
+      console.error("No links for mp4 or mp3 found.");
+      return { error: "No links found for mp4 or mp3." };
+    }
+
     const result = {
       title: data.title,
       duration: parseDuration(data.t),
@@ -30,21 +38,28 @@ async function youtubedl(link) {
     };
 
     const resultUrl = {
-      video: await Promise.all(Object.values(data.links.mp4).map(async v => ({
-        size: v.size,
-        format: v.f,
-        quality: v.q,
-        download: await downloadAsBuffer(data.vid, v.k) // Convertir le lien en buffer
-      }))),
-      audio: await Promise.all(Object.values(data.links.mp3).map(async v => ({
-        size: v.size,
-        format: v.f,
-        quality: v.q,
-        download: await downloadAsBuffer(data.vid, v.k) // Convertir le lien en buffer
-      })))
+      video: await Promise.all(Object.values(data.links.mp4 || []).map(async v => {
+        const downloadBuffer = await downloadAsBuffer(data.vid, v.k);
+        if (!downloadBuffer) return null;
+        return {
+          size: v.size,
+          format: v.f,
+          quality: v.q,
+          download: downloadBuffer
+        };
+      })).filter(Boolean),
+      audio: await Promise.all(Object.values(data.links.mp3 || []).map(async v => {
+        const downloadBuffer = await downloadAsBuffer(data.vid, v.k);
+        if (!downloadBuffer) return null;
+        return {
+          size: v.size,
+          format: v.f,
+          quality: v.q,
+          download: downloadBuffer
+        };
+      })).filter(Boolean)
     };
 
-    // Retourner le résultat avec les buffers de téléchargement
     return {
       result,
       resultUrl
@@ -54,7 +69,7 @@ async function youtubedl(link) {
     console.error(`Error: ${error.response ? error.response.status : error.message}`);
     return { error: `Error: ${error.response ? error.response.status : error.message}` };
   }
-}
+} 
 
 async function downloadAsBuffer(id, k) {
   try {
