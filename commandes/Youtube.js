@@ -1,33 +1,43 @@
 const { ovlcmd } = require("../framework/ovlcmd");
-//const fetchYoutubeData = require("../framework/youtube");
-
-const youtubedl = require('youtube-dl-exec');
+const axios = require('axios');
 
 async function fetchYoutubeData(query) {
     try {
-        const result = await youtubedl(query, {
-            dumpSingleJson: true,
-            noWarnings: true,
-            format: 'bestaudio[ext=m4a]/bestvideo[ext=mp4]',
-        });
+        // Construction de l'URL de l'API avec le terme de recherche
+        const apiUrl = `https://bk9.fun/download/youtube?url=${encodeURIComponent(query)}`;
+        
+        // Requête à l'API
+        const response = await axios.get(apiUrl);
+        
+        if (!response.data.status) {
+            return { error: true, message: "Erreur dans la récupération des données." };
+        }
 
-        const audioUrl = result.formats.find(format => format.ext === 'm4a')?.url;
-        const videoUrl = result.formats.find(format => format.ext === 'mp4' && format.vcodec !== 'none')?.url;
+        const data = response.data.BK9;
+
+        // Extraction des informations audio et vidéo
+        const audioUrl = data.audio?.url;
+        const videoUrl = data.video?.url;
+        const title = data.audio?.title || data.video?.title;
+        const thumb = data.audio?.thumb || data.video?.thumb;
+        const author = data.audio?.channel || data.video?.channel;
+        const published = data.audio?.published || data.video?.published;
+        const views = data.audio?.views || data.video?.views;
 
         return {
-            title: result.title,
-            duration: result.duration,
-            author: result.uploader,
+            title,
             audioUrl,
             videoUrl,
+            thumb,
+            author,
+            published,
+            views,
         };
     } catch (error) {
-        console.error("Erreur lors de la récupération des informations de YouTube:", error);
-        return { error: true };
+        console.error("Erreur lors de la récupération des informations:", error);
+        return { error: true, message: "Erreur lors de la récupération des informations." };
     }
 }
-
-//module.exports = fetchYoutubeData;
 
 ovlcmd(
     {
@@ -48,15 +58,16 @@ ovlcmd(
         const ytResponse = await fetchYoutubeData(query);
 
         if (ytResponse.error || !ytResponse.audioUrl) {
-            return await ovl.sendMessage(ms_org, { text: "Erreur lors de la récupération des informations de la chanson." });
+            return await ovl.sendMessage(ms_org, { text: ytResponse.message || "Erreur lors de la récupération des informations de la chanson." });
         }
 
-        const { title, duration, author, audioUrl } = ytResponse;
+        const { title, audioUrl, author, thumb } = ytResponse;
 
         const caption = `╭──── 〔 OVL-MD SONG 〕 ─⬣
 ⬡ Titre: ${title}
-⬡ Durée: ${duration}
 ⬡ Auteur: ${author}
+⬡ Vues: ${ytResponse.views}
+⬡ Publié: ${ytResponse.published}
 ╰────────⬣`;
 
         await ovl.sendMessage(ms_org, { text: caption });
@@ -87,15 +98,16 @@ ovlcmd(
         const ytResponse = await fetchYoutubeData(query);
 
         if (ytResponse.error || !ytResponse.videoUrl) {
-            return await ovl.sendMessage(ms_org, { text: "Erreur lors de la récupération des informations de la vidéo." });
+            return await ovl.sendMessage(ms_org, { text: ytResponse.message || "Erreur lors de la récupération des informations de la vidéo." });
         }
 
-        const { title, duration, author, videoUrl } = ytResponse;
+        const { title, videoUrl, author, thumb } = ytResponse;
 
         const caption = `╭──── 〔 OVL-MD VIDEO 〕 ─⬣
 ⬡ Titre: ${title}
-⬡ Durée: ${duration}
 ⬡ Auteur: ${author}
+⬡ Vues: ${ytResponse.views}
+⬡ Publié: ${ytResponse.published}
 ╰────────⬣`;
 
         await ovl.sendMessage(ms_org, { text: caption });
