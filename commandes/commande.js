@@ -11,7 +11,7 @@ ovlcmd(
     },
     async (ms_org, ovl, cmd_options) => {
         try {
-            const mess = `🌐 Bienvenue sur *OVL-MD*, votre bot WhatsApp multi-device.🔍 Tapez *${prefixe}menu* pour voir toutes les commandes disponibles.\n> By *AINZ*`;
+            const mess = `\`\`\`🌐 Bienvenue sur *OVL-MD*, votre bot WhatsApp multi-device.🔍 Tapez *${prefixe}menu* pour voir toutes les commandes disponibles.\`\`\`\n> By *AINZ*`;
             const img = 'https://telegra.ph/file/8173c870f9de5570db8c3.jpg';
             await ovl.sendMessage(ms_org, { 
                 image: { url: img }, 
@@ -73,7 +73,7 @@ ovlcmd(
 │ ✿ Owner => ${conf.NOM_OWNER}
 │ ✿ Commandes => ${commandes.length}
 │ ✿ Uptime => ${uptime.trim()}
-│ ✿ Développeur => Ainz
+│ ✿ Développeur => AINZ
 ╰══════════════⊷\n\n`;
 
             const cmd_classe = {};
