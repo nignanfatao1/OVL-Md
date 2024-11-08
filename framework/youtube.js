@@ -34,17 +34,17 @@ async function youtubedl(link) {
         size: v.size,
         format: v.f,
         quality: v.q,
-        download: await download(data.vid, v.k)
+        download: await downloadAsBuffer(data.vid, v.k) // Convertir le lien en buffer
       }))),
       audio: await Promise.all(Object.values(data.links.mp3).map(async v => ({
         size: v.size,
         format: v.f,
         quality: v.q,
-        download: await download(data.vid, v.k)
+        download: await downloadAsBuffer(data.vid, v.k) // Convertir le lien en buffer
       })))
     };
 
-    // Retourner le résultat avec les liens de téléchargement directs
+    // Retourner le résultat avec les buffers de téléchargement
     return {
       result,
       resultUrl
@@ -56,8 +56,9 @@ async function youtubedl(link) {
   }
 }
 
-async function download(id, k) {
+async function downloadAsBuffer(id, k) {
   try {
+    // Récupération du lien direct de téléchargement
     const response = await axios.post("https://www.yt1s.com/api/ajaxConvert/convert", new URLSearchParams({
       vid: id,
       k
@@ -72,12 +73,13 @@ async function download(id, k) {
 
     const data = response.data;
 
-    // Vérifiez que la réponse contient les champs attendus
     if (data.status === "ok" && data.c_status === "CONVERTED") {
-      return data.dlink; // Lien direct de téléchargement
+      // Téléchargement du fichier en tant que buffer
+      const fileResponse = await axios.get(data.dlink, { responseType: 'arraybuffer' });
+      return Buffer.from(fileResponse.data); // Retourner le buffer du fichier
     } else {
       console.error(`Error in download: ${data.mess}`);
-      return null; // En cas d'erreur, retournez null
+      return null;
     }
   } catch (error) {
     console.error(`Error: ${error.response ? error.response.status : error.message}`);
