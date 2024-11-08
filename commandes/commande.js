@@ -10,6 +10,7 @@ ovlcmd(
         desc: "Tester la connectivité du bot"
     },
     async (ms_org, ovl, cmd_options) => {
+        const prefixe = cmd_options;
         try {
             const mess = `\`\`\`🌐 Bienvenue sur *OVL-MD*, votre bot WhatsApp multi-device.🔍 Tapez *${prefixe}menu* pour voir toutes les commandes disponibles.\`\`\`\n> By *AINZ*`;
             const img = 'https://telegra.ph/file/8173c870f9de5570db8c3.jpg';
