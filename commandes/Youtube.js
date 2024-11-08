@@ -1,5 +1,33 @@
 const { ovlcmd } = require("../framework/ovlcmd");
-const { youtubedl } = require("../framework/youtube"); // Assurez-vous que le chemin vers youtubedl est correct
+//const fetchYoutubeData = require("../framework/youtube");
+
+const youtubedl = require('youtube-dl-exec');
+
+async function fetchYoutubeData(query) {
+    try {
+        const result = await youtubedl(query, {
+            dumpSingleJson: true,
+            noWarnings: true,
+            format: 'bestaudio[ext=m4a]/bestvideo[ext=mp4]',
+        });
+
+        const audioUrl = result.formats.find(format => format.ext === 'm4a')?.url;
+        const videoUrl = result.formats.find(format => format.ext === 'mp4' && format.vcodec !== 'none')?.url;
+
+        return {
+            title: result.title,
+            duration: result.duration,
+            author: result.uploader,
+            audioUrl,
+            videoUrl,
+        };
+    } catch (error) {
+        console.error("Erreur lors de la récupération des informations de YouTube:", error);
+        return { error: true };
+    }
+}
+
+//module.exports = fetchYoutubeData;
 
 ovlcmd(
     {
@@ -17,45 +45,27 @@ ovlcmd(
         }
 
         const query = arg.join(" ");
-        let isYouTubeLink = /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(arg[0]);
+        const ytResponse = await fetchYoutubeData(query);
 
-        try {
-            // Utilise la fonction youtubedl pour obtenir les informations
-            const ytResponse = await youtubedl(isYouTubeLink ? arg[0] : query);
+        if (ytResponse.error || !ytResponse.audioUrl) {
+            return await ovl.sendMessage(ms_org, { text: "Erreur lors de la récupération des informations de la chanson." });
+        }
 
-            if (ytResponse.error) {
-                return await ovl.sendMessage(ms_org, { text: "Erreur lors de la récupération des informations de la chanson." });
-            }
+        const { title, duration, author, audioUrl } = ytResponse;
 
-            const { title, duration, author } = ytResponse.result;
-            const audioLink = ytResponse.resultUrl.audio[0]?.download;
-
-            if (!audioLink) {
-                return await ovl.sendMessage(ms_org, { text: "Aucun lien audio trouvé." });
-            }
-
-            const caption = `╭──── 〔 OVL-MD SONG 〕 ─⬣
+        const caption = `╭──── 〔 OVL-MD SONG 〕 ─⬣
 ⬡ Titre: ${title}
 ⬡ Durée: ${duration}
 ⬡ Auteur: ${author}
 ╰────────⬣`;
 
-            await ovl.sendMessage(ms_org, {
-                text: caption
-            });
+        await ovl.sendMessage(ms_org, { text: caption });
 
-            const audioBuffer = audioLink; // Le lien est déjà un buffer grâce à downloadAsBuffer
-
-            await ovl.sendMessage(ms_org, {
-                audio: audioBuffer,
-                mimetype: 'audio/mp4',
-                fileName: `${title}.mp3`
-            }, { quoted: ms });
-
-        } catch (error) {
-            console.error("Erreur lors du téléchargement de la chanson :", error.message || error);
-            await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la chanson." });
-        }
+        await ovl.sendMessage(ms_org, {
+            audio: { url: audioUrl },
+            mimetype: 'audio/mp4',
+            fileName: `${title}.mp3`
+        }, { quoted: ms });
     }
 );
 
@@ -74,44 +84,26 @@ ovlcmd(
         }
 
         const query = arg.join(" ");
-        let isYouTubeLink = /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(arg[0]);
+        const ytResponse = await fetchYoutubeData(query);
 
-        try {
-            // Utilise la fonction youtubedl pour obtenir les informations
-            const ytResponse = await youtubedl(isYouTubeLink ? arg[0] : query);
+        if (ytResponse.error || !ytResponse.videoUrl) {
+            return await ovl.sendMessage(ms_org, { text: "Erreur lors de la récupération des informations de la vidéo." });
+        }
 
-            if (ytResponse.error) {
-                return await ovl.sendMessage(ms_org, { text: "Erreur lors de la récupération des informations de la vidéo." });
-            }
+        const { title, duration, author, videoUrl } = ytResponse;
 
-            const { title, duration, author } = ytResponse.result;
-            const videoLink = ytResponse.resultUrl.video[0]?.download;
-
-            if (!videoLink) {
-                return await ovl.sendMessage(ms_org, { text: "Aucun lien vidéo trouvé." });
-            }
-
-            const caption = `╭──── 〔 OVL-MD VIDEO 〕 ─⬣
+        const caption = `╭──── 〔 OVL-MD VIDEO 〕 ─⬣
 ⬡ Titre: ${title}
 ⬡ Durée: ${duration}
 ⬡ Auteur: ${author}
 ╰────────⬣`;
 
-            await ovl.sendMessage(ms_org, {
-                text: caption
-            });
+        await ovl.sendMessage(ms_org, { text: caption });
 
-            const videoBuffer = videoLink; // Le lien est déjà un buffer grâce à downloadAsBuffer
-
-            await ovl.sendMessage(ms_org, {
-                video: videoBuffer,
-                mimetype: 'video/mp4',
-                fileName: `${title}.mp4`
-            }, { quoted: ms });
-
-        } catch (error) {
-            console.error("Erreur lors du téléchargement de la vidéo :", error.message || error);
-            await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la vidéo." });
-        }
+        await ovl.sendMessage(ms_org, {
+            video: { url: videoUrl },
+            mimetype: 'video/mp4',
+            fileName: `${title}.mp4`
+        }, { quoted: ms });
     }
 );
