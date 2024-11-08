@@ -10,7 +10,7 @@ const session = config.SESSION_ID || "";
 let evt = require(__dirname + "/framework/ovlcmd");
 const FileType = require('file-type')
 const prefixe = config.PREFIXE;
-
+let startTime;
  async function ovlAuth(session) {
     let sessionId;
     try {
@@ -230,7 +230,7 @@ ovl.ev.on("connection.update", async (con) => {
             }
         }
         delay(700);
-     let startTime = startTime = Date.now();
+     startTime = Date.now();
      let start_msg = `╭────《 OVL-MD 》─────⊷
 ⫸  *Préfixe*       : ${prefixe}
 ⫸  *Mode*          : Public
