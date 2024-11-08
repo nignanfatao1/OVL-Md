@@ -54,9 +54,13 @@ ovlcmd(
         desc: "affiche le menu du bot",
     },
     async (ms_org, ovl, cmd_options) => {
-       
         try {
+            // Vérifiez la valeur de `startTime`
+            console.log("Valeur de startTime:", startTime);
+
             const uptimeMs = Date.now() - startTime;
+            console.log("Uptime en millisecondes :", uptimeMs);
+
             const s = Math.floor((uptimeMs / 1000) % 60);
             const m = Math.floor((uptimeMs / (1000 * 60)) % 60);
             const h = Math.floor((uptimeMs / (1000 * 60 * 60)) % 24);
