@@ -27,6 +27,7 @@
     "pm2": "^5.4.2",
     "pino": "^8.1.0",
     "qrcode": "latest",
+    "telegra.ph": "^1.0.1",
     "wa-sticker-formatter": "^4.4.4"
   }
 }
