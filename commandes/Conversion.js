@@ -10,14 +10,14 @@ ovlcmd(
     },
     async (ms_org, ovl, cmd_options) => {
       const msg_Repondu = cmd_options;
-        if (!msg_Repondu.imageMessage && !msg_Repondu.videoMessage) {
+        if (!msg_Repondu.imageMessage || !msg_Repondu.videoMessage) {
             return ovl.sendMessage(ms_org, { text: "Veuillez mentionner une image ou une vidéo" });
         }
         const mediaMessage = msg_Repondu.imageMessage || msg_Repondu.videoMessage;
-        const mediaBuffer = await ovl.dl_save_media_ms(mediaMessage);
+        const media = await ovl.dl_save_media_ms(mediaMessage);
 
         try {
-            const response = await upload(mediaBuffer, "media.jpg");
+            const response = await upload(media, "media.jpg");
             const link = response.url;
             await ovl.sendMessage(ms_org, { text: link });
         } catch (error) {
