@@ -1,6 +1,5 @@
 const { ovlcmd, cmd } = require("../framework/ovlcmd");
 const conf = require("../set");
-const startTime = require("../index");
 
 ovlcmd(
     {
@@ -12,7 +11,7 @@ ovlcmd(
     async (ms_org, ovl, cmd_options) => {
         const prefixe = cmd_options;
         try {
-            const mess = `\`\`\`🌐 Bienvenue sur *OVL-MD*, votre bot WhatsApp multi-device.🔍 Tapez *${prefixe}menu* pour voir toutes les commandes disponibles.\`\`\`\n> By *AINZ*`;
+            const mess = `\`\`\`🌐 Bienvenue sur *OVL-MD*, votre bot WhatsApp multi-device.🔍 Tapez *${prefixe}menu* pour voir toutes les commandes disponibles.\`\`\`\n> ©2024 OVL-MD By *AINZ*`;
             const img = 'https://telegra.ph/file/8173c870f9de5570db8c3.jpg';
             await ovl.sendMessage(ms_org, { 
                 image: { url: img }, 
@@ -54,13 +53,9 @@ ovlcmd(
         desc: "affiche le menu du bot",
     },
     async (ms_org, ovl, cmd_options) => {
-        try {
-            // Vérifiez la valeur de `startTime`
-            console.log("Valeur de startTime:", startTime);
-
+        try { 
+            const startTime = process.uptime();
             const uptimeMs = Date.now() - startTime;
-            console.log("Uptime en millisecondes :", uptimeMs);
-
             const s = Math.floor((uptimeMs / 1000) % 60);
             const m = Math.floor((uptimeMs / (1000 * 60)) % 60);
             const h = Math.floor((uptimeMs / (1000 * 60 * 60)) % 24);
@@ -97,7 +92,7 @@ ovlcmd(
                 menu += `╰═══════════════⊷\n\n`;
             }
 
-            menu += "> ©2024 OVL-MD WA-BOT By Ainz";
+            menu += "> ©2024 OVL-MD WA-BOT";
             await ovl.sendMessage(ms_org, { image: { url: lien }, caption: menu });
         } catch (error) {
             console.error("Erreur lors de la génération du menu :", error);
