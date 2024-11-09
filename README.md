@@ -2,7 +2,8 @@
 
 ![Demo](ezgif-7-16d6d87a38.gif)
 
-[![SESSION-ID](https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Barcode_scanner_icon.svg/1024px-Barcode_scanner_icon.svg.png)](https://xenophobic-nelia-ainz-oest-org-5bf6622e.koyeb.app/)
+[![QR Code Icon](https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Barcode_scanner_icon.svg/50px-Barcode_scanner_icon.svg.png)](https://xenophobic-nelia-ainz-oest-org-5bf6622e.koyeb.app/)
+**[SESSION-ID](https://xenophobic-nelia-ainz-oest-org-5bf6622e.koyeb.app/)**
 
 ## 📄 License
 
