@@ -40,12 +40,12 @@ ovlcmd(
                 };
             
 
-            const caption = `╭──── 〔 OVL-MD SONG 〕 ─⬣
+            const caption = `╭─── 〔 OVL-MD SONG 〕 ──⬣
 ⬡ Titre: ${videoInfo.title}
 ⬡ URL: ${videoInfo.url}
 ⬡ Vues: ${videoInfo.views}
 ⬡ Durée: ${videoInfo.duration}
-╰────────⬣`;
+╰───────────────────⬣`;
 
             await ovl.sendMessage(ms_org, { image: { url: videoInfo.thumbnail }, caption: caption });
             }
@@ -104,12 +104,12 @@ ovlcmd(
                 };
             
 
-            const caption = `╭──── 〔 OVL-MD VIDEO 〕 ─⬣
+            const caption = `╭─── 〔 OVL-MD VIDEO 〕 ──⬣
 ⬡ Titre: ${videoInfo.title}
 ⬡ URL: ${videoInfo.url}
 ⬡ Vues: ${videoInfo.views}
 ⬡ Durée: ${videoInfo.duration}
-╰────────⬣`;
+╰───────────────────⬣`;
 
             await ovl.sendMessage(ms_org, { image: { url: videoInfo.thumbnail }, caption: caption });
             };
