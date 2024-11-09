@@ -2,6 +2,7 @@ const axios = require("axios");
 
 async function youtubedl(link) {
   try {
+    // Envoi de la première requête pour obtenir les informations de la vidéo
     const response = await axios.post("https://www.yt1s.com/api/ajaxSearch/index", new URLSearchParams({
       q: link,
       vt: "home"
@@ -20,6 +21,7 @@ async function youtubedl(link) {
       return { error: "Invalid data received." };
     }
 
+    // Structure des informations de base de la vidéo
     const result = {
       title: data.title,
       duration: parseDuration(data.t),
@@ -27,28 +29,10 @@ async function youtubedl(link) {
       thumbnail: `https://i.ytimg.com/vi/${data.vid}/0.jpg`
     };
 
+    // Téléchargement des formats disponibles (vidéo et audio)
     const resultUrl = {
-      video: (await Promise.all(Object.values(data.links.mp4 || []).map(async v => {
-        const downloadBuffer = await downloadAsBuffer(data.vid, v.k);
-        if (!downloadBuffer) return null;
-        return {
-          size: v.size,
-          format: v.f,
-          quality: v.q,
-          download: downloadBuffer
-        };
-      }))).filter(Boolean),
-
-      audio: (await Promise.all(Object.values(data.links.mp3 || []).map(async v => {
-        const downloadBuffer = await downloadAsBuffer(data.vid, v.k);
-        if (!downloadBuffer) return null;
-        return {
-          size: v.size,
-          format: v.f,
-          quality: v.q,
-          download: downloadBuffer
-        };
-      }))).filter(Boolean)
+      video: await downloadMedia(data, "mp4"),
+      audio: await downloadMedia(data, "mp3")
     };
 
     return { result, resultUrl };
@@ -59,8 +43,24 @@ async function youtubedl(link) {
   }
 }
 
+// Fonction pour gérer le téléchargement de vidéos ou d'audios en utilisant `downloadAsBuffer`
+async function downloadMedia(data, type) {
+  return (await Promise.all(Object.values(data.links[type] || []).map(async v => {
+    const downloadBuffer = await downloadAsBuffer(data.vid, v.k);
+    if (!downloadBuffer) return null;
+    return {
+      size: v.size,
+      format: v.f,
+      quality: v.q,
+      download: downloadBuffer
+    };
+  }))).filter(Boolean);
+}
+
+// Fonction pour télécharger un fichier en buffer
 async function downloadAsBuffer(id, k) {
   try {
+    // Requête pour convertir le lien de téléchargement
     const response = await axios.post("https://www.yt1s.com/api/ajaxConvert/convert", new URLSearchParams({
       vid: id,
       k
@@ -88,6 +88,7 @@ async function downloadAsBuffer(id, k) {
   }
 }
 
+// Fonction pour convertir la durée en format hh:mm:ss
 function parseDuration(seconds) {
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
