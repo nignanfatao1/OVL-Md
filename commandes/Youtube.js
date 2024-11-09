@@ -1,43 +1,6 @@
 const { ovlcmd } = require("../framework/ovlcmd");
-const axios = require('axios');
-
-async function fetchYoutubeData(query) {
-    try {
-        // Construction de l'URL de l'API avec le terme de recherche
-        const apiUrl = `https://bk9.fun/download/youtube?url=${query}`;
-        
-        // Requête à l'API
-        const response = await axios.get(apiUrl);
-        
-        if (!response.data.status) {
-            return { error: true, message: "Erreur dans la récupération des données." };
-        }
-
-        const data = response.data.BK9;
-
-        // Extraction des informations audio et vidéo
-        const audioUrl = data.audio?.url;
-        const videoUrl = data.video?.url;
-        const title = data.audio?.title || data.video?.title;
-        const thumb = data.audio?.thumb || data.video?.thumb;
-        const author = data.audio?.channel || data.video?.channel;
-        const published = data.audio?.published || data.video?.published;
-        const views = data.audio?.views || data.video?.views;
-
-        return {
-            title,
-            audioUrl,
-            videoUrl,
-            thumb,
-            author,
-            published,
-            views,
-        };
-    } catch (error) {
-        console.error("Erreur lors de la récupération des informations:", error);
-        return { error: true, message: "Erreur lors de la récupération des informations." };
-    }
-}
+const { youtubedl } = require("../framework/youtubedl");
+const axios = require("axios");
 
 ovlcmd(
     {
@@ -55,28 +18,44 @@ ovlcmd(
         }
 
         const query = arg.join(" ");
-        const ytResponse = await fetchYoutubeData(query);
+        let isYouTubeLink = /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(arg[0]);
 
-        if (ytResponse.error || !ytResponse.audioUrl) {
-            return await ovl.sendMessage(ms_org, { text: ytResponse.message || "Erreur lors de la récupération des informations de la chanson." });
-        }
+        try {
+            // Utilise la fonction youtubedl pour obtenir les informations
+            const ytResponse = await youtubedl(isYouTubeLink ? arg[0] : query);
 
-        const { title, audioUrl, author, thumb } = ytResponse;
+            if (ytResponse.error) {
+                return await ovl.sendMessage(ms_org, { text: "Erreur lors de la récupération des informations de la chanson." });
+            }
 
-        const caption = `╭──── 〔 OVL-MD SONG 〕 ─⬣
+            const { title, duration, author } = ytResponse.result;
+             
+            if (!audioLink) {
+                return await ovl.sendMessage(ms_org, { text: "Aucun lien audio trouvé." });
+            }
+
+            const caption = `╭──── 〔 OVL-MD SONG 〕 ─⬣
 ⬡ Titre: ${title}
+⬡ Durée: ${duration}
 ⬡ Auteur: ${author}
-⬡ Vues: ${ytResponse.views}
-⬡ Publié: ${ytResponse.published}
 ╰────────⬣`;
 
-        await ovl.sendMessage(ms_org, { text: caption });
+            await ovl.sendMessage(ms_org, {
+                text: caption
+            });
 
-        await ovl.sendMessage(ms_org, {
-            audio: { url: audioUrl },
-            mimetype: 'audio/mp4',
-            fileName: `${title}.mp3`
-        }, { quoted: ms });
+            const audioBuffer = axios.get(`https://ironman.koyeb.app/ironman/dl/yta?url=${query}`);
+
+            await ovl.sendMessage(ms_org, {
+                audio: audioBuffer,
+                mimetype: 'audio/mp4',
+                fileName: `${title}.mp3`
+            }, { quoted: ms });
+
+        } catch (error) {
+            console.error("Erreur lors du téléchargement de la chanson :", error.message || error);
+            await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la chanson." });
+        }
     }
 );
 
@@ -95,27 +74,38 @@ ovlcmd(
         }
 
         const query = arg.join(" ");
-        const ytResponse = await fetchYoutubeData(query);
+        let isYouTubeLink = /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(arg[0]);
 
-        if (ytResponse.error || !ytResponse.videoUrl) {
-            return await ovl.sendMessage(ms_org, { text: ytResponse.message || "Erreur lors de la récupération des informations de la vidéo." });
-        }
+        try {
+            // Utilise la fonction youtubedl pour obtenir les informations
+            const ytResponse = await youtubedl(isYouTubeLink ? arg[0] : query);
 
-        const { title, videoUrl, author, thumb } = ytResponse;
+            if (ytResponse.error) {
+                return await ovl.sendMessage(ms_org, { text: "Erreur lors de la récupération des informations de la vidéo." });
+            }
 
-        const caption = `╭──── 〔 OVL-MD VIDEO 〕 ─⬣
+            const { title, duration, author } = ytResponse.result;
+
+            const caption = `╭──── 〔 OVL-MD VIDEO 〕 ─⬣
 ⬡ Titre: ${title}
+⬡ Durée: ${duration}
 ⬡ Auteur: ${author}
-⬡ Vues: ${ytResponse.views}
-⬡ Publié: ${ytResponse.published}
 ╰────────⬣`;
 
-        await ovl.sendMessage(ms_org, { text: caption });
+            await ovl.sendMessage(ms_org, {
+                text: caption
+            });
 
-        await ovl.sendMessage(ms_org, {
-            video: { url: videoUrl },
-            mimetype: 'video/mp4',
-            fileName: `${title}.mp4`
-        }, { quoted: ms });
+            const livid = axios.get(`https://ironman.koyeb.app/ironman/dl/yta?url=${query}`);
+            await ovl.sendMessage(ms_org, {
+                video: livid,
+                mimetype: 'video/mp4',
+                fileName: `${title}.mp4`
+            }, { quoted: ms });
+
+        } catch (error) {
+            console.error("Erreur lors du téléchargement de la vidéo :", error.message || error);
+            await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la vidéo." });
+        }
     }
 );
