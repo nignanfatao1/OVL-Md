@@ -30,9 +30,9 @@ ovlcmd(
 
             const { title, duration, author } = ytResponse.result;
              
-            if (!audioLink) {
+          /*  if (!audioLink) {
                 return await ovl.sendMessage(ms_org, { text: "Aucun lien audio trouvé." });
-            }
+            }*/
 
             const caption = `╭──── 〔 OVL-MD SONG 〕 ─⬣
 ⬡ Titre: ${title}
