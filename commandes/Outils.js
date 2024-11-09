@@ -3,7 +3,7 @@ const conf = require("../set");
 
 ovlcmd(
     {
-        nom_cmd: "test",
+        nom_cmd: "teste",
         classe: "Outils",
         react: "🌟",
         desc: "Tester la connectivité du bot"
@@ -26,7 +26,7 @@ ovlcmd(
 
 ovlcmd(
     {
-        nom_cmd: "description",
+        nom_cmd: "descriptions",
         classe: "Outils",
         desc: "Affiche la liste des commandes avec leurs descriptions",
         alias: ["desc", "help"],
