@@ -1,5 +1,5 @@
 const { ovlcmd } = require("../framework/ovlcmd");
-const { youtubedl } = require("../framework/youtubedl");
+const { youtubedl } = require("../framework/youtube");
 const axios = require("axios");
 
 ovlcmd(
