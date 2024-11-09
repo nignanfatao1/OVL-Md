@@ -1,4 +1,4 @@
-const axios = require('axios');
+const axios = require("axios");
 
 function parseDuration(s) {
   const h = Math.floor(s / 3600);
@@ -23,7 +23,6 @@ async function youtubedl(link) {
 
     const data = response.data;
 
-    // Debugging
     console.log("Received data:", data);
 
     if (!data.links || !data.links.mp4 || !data.links.mp3) {
@@ -38,7 +37,7 @@ async function youtubedl(link) {
     };
 
     const resultUrl = {
-      video: await Promise.all(Object.values(data.links.mp4 || []).map(async v => {
+      video: (await Promise.all(Object.values(data.links.mp4 || []).map(async v => {
         const downloadBuffer = await downloadAsBuffer(data.vid, v.k);
         if (!downloadBuffer) return null;
         return {
@@ -47,8 +46,9 @@ async function youtubedl(link) {
           quality: v.q,
           download: downloadBuffer
         };
-      })).filter(Boolean),
-      audio: await Promise.all(Object.values(data.links.mp3 || []).map(async v => {
+      }))).filter(Boolean), // .filter(Boolean) élimine les valeurs nulles
+
+      audio: (await Promise.all(Object.values(data.links.mp3 || []).map(async v => {
         const downloadBuffer = await downloadAsBuffer(data.vid, v.k);
         if (!downloadBuffer) return null;
         return {
@@ -57,23 +57,19 @@ async function youtubedl(link) {
           quality: v.q,
           download: downloadBuffer
         };
-      })).filter(Boolean)
+      }))).filter(Boolean) // .filter(Boolean) élimine les valeurs nulles
     };
 
-    return {
-      result,
-      resultUrl
-    };
+    return { result, resultUrl };
 
   } catch (error) {
     console.error(`Error: ${error.response ? error.response.status : error.message}`);
     return { error: `Error: ${error.response ? error.response.status : error.message}` };
   }
-} 
+}
 
 async function downloadAsBuffer(id, k) {
   try {
-    // Récupération du lien direct de téléchargement
     const response = await axios.post("https://www.yt1s.com/api/ajaxConvert/convert", new URLSearchParams({
       vid: id,
       k
@@ -89,9 +85,8 @@ async function downloadAsBuffer(id, k) {
     const data = response.data;
 
     if (data.status === "ok" && data.c_status === "CONVERTED") {
-      // Téléchargement du fichier en tant que buffer
       const fileResponse = await axios.get(data.dlink, { responseType: 'arraybuffer' });
-      return Buffer.from(fileResponse.data); // Retourner le buffer du fichier
+      return Buffer.from(fileResponse.data);
     } else {
       console.error(`Error in download: ${data.mess}`);
       return null;
