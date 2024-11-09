@@ -44,7 +44,7 @@ ovlcmd(
         }
     }
 );
-*/
+
 ovlcmd(
     {
         nom_cmd: "menu",
@@ -98,3 +98,4 @@ ovlcmd(
         }
     }
 );
+*/
