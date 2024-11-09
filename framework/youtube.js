@@ -1,12 +1,5 @@
 const axios = require("axios");
 
-function parseDuration(s) {
-  const h = Math.floor(s / 3600);
-  const m = Math.floor(s / 60) % 60;
-  s = Math.floor(s) % 60;
-  return [h, m, s].map(v => v.toString().padStart(2, "0")).join(":");
-}
-
 async function youtubedl(link) {
   try {
     const response = await axios.post("https://www.yt1s.com/api/ajaxSearch/index", new URLSearchParams({
@@ -14,26 +7,24 @@ async function youtubedl(link) {
       vt: "home"
     }), {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
+        "User-Agent": "Mozilla/5.0",
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         "Referer": "https://www.yt1s.com",
-        "Origin": "https://www.yt1s.com/en2aef"
+        "Origin": "https://www.yt1s.com"
       }
     });
 
     const data = response.data;
-
-    console.log("Received data:", data);
-
-    if (!data.links || !data.links.mp4 || !data.links.mp3) {
-      console.error("No links for mp4 or mp3 found.");
-      return { error: "No links found for mp4 or mp3." };
+    if (data.status !== "ok" || !data.links) {
+      console.error("No valid data received.");
+      return { error: "Invalid data received." };
     }
 
     const result = {
       title: data.title,
       duration: parseDuration(data.t),
-      author: data.a
+      author: data.a,
+      thumbnail: `https://i.ytimg.com/vi/${data.vid}/0.jpg`
     };
 
     const resultUrl = {
@@ -46,7 +37,7 @@ async function youtubedl(link) {
           quality: v.q,
           download: downloadBuffer
         };
-      }))).filter(Boolean), // .filter(Boolean) élimine les valeurs nulles
+      }))).filter(Boolean),
 
       audio: (await Promise.all(Object.values(data.links.mp3 || []).map(async v => {
         const downloadBuffer = await downloadAsBuffer(data.vid, v.k);
@@ -57,7 +48,7 @@ async function youtubedl(link) {
           quality: v.q,
           download: downloadBuffer
         };
-      }))).filter(Boolean) // .filter(Boolean) élimine les valeurs nulles
+      }))).filter(Boolean)
     };
 
     return { result, resultUrl };
@@ -75,7 +66,7 @@ async function downloadAsBuffer(id, k) {
       k
     }), {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
+        "User-Agent": "Mozilla/5.0",
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         "Referer": "https://www.yt1s.com/",
         "Origin": "https://www.yt1s.com"
@@ -92,9 +83,16 @@ async function downloadAsBuffer(id, k) {
       return null;
     }
   } catch (error) {
-    console.error(`Error: ${error.response ? error.response.status : error.message}`);
+    console.error(`Error during download: ${error.message}`);
     return null;
   }
+}
+
+function parseDuration(seconds) {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+  return [h, m, s].map(v => String(v).padStart(2, '0')).join(':');
 }
 
 module.exports = { youtubedl };
