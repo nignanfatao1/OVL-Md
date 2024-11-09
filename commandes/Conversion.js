@@ -3,14 +3,14 @@ const { upload } = require("telegra.ph");
 
 ovlcmd(
     {
-        nom_cmd: "telegraph_upload",
-        classe: "upload",
-        react: "📤",
+        nom_cmd: "url",
+        classe: "Converssion",
+        react: "✨",
         desc: "Upload une image ou vidéo sur Telegraph et renvoie le lien"
     },
     async (ms_org, ovl, cmd_options) => {
       const msg_Repondu = cmd_options;
-        if (!msg_Repondu.imageMessage || !msg_Repondu.videoMessage) {
+        if (msg_Repondu) {
             return ovl.sendMessage(ms_org, { text: "Veuillez mentionner une image ou une vidéo" });
         }
         const mediaMessage = msg_Repondu.imageMessage || msg_Repondu.videoMessage;
