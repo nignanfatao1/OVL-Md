@@ -1,5 +1,6 @@
 const { ovlcmd } = require("../framework/ovlcmd");
-const { youtubedl } = require("../framework/youtube");
+const axios = require("axios");
+const ytsr = require('@distube/ytsr');
 
 ovlcmd(
     {
@@ -20,28 +21,43 @@ ovlcmd(
         const isYouTubeLink = /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(arg[0]);
 
         try {
-            // Utilise la fonction youtubedl pour obtenir les informations et le lien de téléchargement direct
-            const ytResponse = await youtubedl(isYouTubeLink ? arg[0] : query, { format: "bestaudio" });
+            let videoInfo;
 
-            if (ytResponse.error) {
-                return await ovl.sendMessage(ms_org, { text: "Erreur lors de la récupération des informations de la chanson." });
+            if (isYouTubeLink) {
+                videoInfo = { url: query }; // Si c'est un lien, on prend directement l'URL
+            } else {
+                const searchResults = await ytsr(query, { limit: 1 });
+                if (searchResults.items.length === 0) {
+                    return await ovl.sendMessage(ms_org, { text: "Aucun résultat trouvé pour cette recherche." });
+                }
+                const song = searchResults.items[0];
+                videoInfo = {
+                    url: song.url,
+                    title: song.name,
+                    views: song.views,
+                    duration: song.duration,
+                    thumbnail: song.bestThumbnail.url
+                };
             }
 
-            const { title, duration, author, thumbnail, url: audioLink } = ytResponse.result;
-
             const caption = `╭──── 〔 OVL-MD SONG 〕 ─⬣
-⬡ Titre: ${title}
-⬡ Durée: ${duration}
-⬡ Auteur: ${author}
+⬡ Titre: ${videoInfo.title}
+⬡ URL: ${videoInfo.url}
+⬡ Vues: ${videoInfo.views}
+⬡ Durée: ${videoInfo.duration}
 ╰────────⬣`;
 
-            await ovl.sendMessage(ms_org, { image: { url: thumbnail }, caption: caption });
+            await ovl.sendMessage(ms_org, { image: { url: videoInfo.thumbnail }, caption: caption });
 
-            // Envoie directement l'audio à partir du lien fourni par YouTubeDL
+            // Téléchargement de l'audio
+            const audioResponse = await axios.get(`https://ironman.koyeb.app/ironman/dl/yta?url=${videoInfo.url}`, {
+                responseType: 'arraybuffer'
+            });
+
             await ovl.sendMessage(ms_org, {
-                audio: { url: audioLink },
+                audio: Buffer.from(audioResponse.data),
                 mimetype: 'audio/mp4',
-                fileName: `${title}.mp3`
+                fileName: `${videoInfo.title}.mp3`
             }, { quoted: ms });
 
         } catch (error) {
@@ -69,28 +85,43 @@ ovlcmd(
         const isYouTubeLink = /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(arg[0]);
 
         try {
-            // Utilise la fonction youtubedl pour obtenir les informations et le lien de téléchargement direct
-            const ytResponse = await youtubedl(isYouTubeLink ? arg[0] : query, { format: "bestvideo+bestaudio" });
+            let videoInfo;
 
-            if (ytResponse.error) {
-                return await ovl.sendMessage(ms_org, { text: "Erreur lors de la récupération des informations de la vidéo." });
-            }
-
-            const { title, duration, author, thumbnail, url: videoLink } = ytResponse.result;
+            if (isYouTubeLink) {
+                videoInfo = { url: query }; // Si c'est un lien, on prend directement l'URL
+            } else {
+                const searchResults = await ytsr(query, { limit: 1 });
+                if (searchResults.items.length === 0) {
+                    return await ovl.sendMessage(ms_org, { text: "Aucun résultat trouvé pour cette recherche." });
+                }
+                const video = searchResults.items[0];
+                videoInfo = {
+                    url: video.url,
+                    title: video.name,
+                    views: video.views,
+                    duration: video.duration,
+                    thumbnail: video.bestThumbnail.url
+                };
+            
 
             const caption = `╭──── 〔 OVL-MD VIDEO 〕 ─⬣
-⬡ Titre: ${title}
-⬡ Durée: ${duration}
-⬡ Auteur: ${author}
+⬡ Titre: ${videoInfo.title}
+⬡ URL: ${videoInfo.url}
+⬡ Vues: ${videoInfo.views}
+⬡ Durée: ${videoInfo.duration}
 ╰────────⬣`;
 
-            await ovl.sendMessage(ms_org, { image: { url: thumbnail }, caption: caption });
+            await ovl.sendMessage(ms_org, { image: { url: videoInfo.thumbnail }, caption: caption });
+            };
+            // Téléchargement de la vidéo
+            const videoResponse = await axios.get(`https://ironman.koyeb.app/ironman/dl/ytv?url=${videoInfo.url}`, {
+                responseType: 'arraybuffer'
+            });
 
-            // Envoie directement la vidéo à partir du lien fourni par YouTubeDL
             await ovl.sendMessage(ms_org, {
-                video: { url: videoLink },
+                video: Buffer.from(videoResponse.data),
                 mimetype: 'video/mp4',
-                fileName: `${title}.mp4`
+                fileName: `${videoInfo.title}.mp4`
             }, { quoted: ms });
 
         } catch (error) {
