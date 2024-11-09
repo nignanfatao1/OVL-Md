@@ -1,10 +1,9 @@
 /*const { ovlcmd } = require("../framework/ovlcmd");
 const { Sticker, StickerTypes } = require('wa-sticker-formatter');
 const fs = require('fs');
-const path = require('path');
+const path = require('path');*/
 
-
-//console.log("mon test");
+const { ovlcmd } = require("../framework/ovlcmd");
 
 ovlcmd(
     {
@@ -12,48 +11,40 @@ ovlcmd(
         categorie: "Groupe",
         reaction: "💬"
     },
-    async (dest, ovl, commandeOptions) => {
+    async (dest, ovl, options) => {
         try {
-            const { ms, repondre, arg, verifGroupe, nomGroupe, infosGroupe, nomAuteurMessage, verifAdmin, superUser } = commandeOptions;
+            const { ms, repondre, arg, verif_Groupe, infos_Groupe, nom_Auteur_Message, verif_Admin } = options;
 
-            if (!verifGroupe) {
-                repondre("❌ Commande réservée aux groupes");
-                return;
+            if (!verif_Groupe) {
+                return repondre("❌ Cette commande est réservée aux groupes");
             }
 
-              if (!arg || arg === ' ') {
-  mess = ''
-  } else {
-    mess = arg.join(' ')
-              }
-            let membresGroupe = verifGroupe ? await infosGroupe.participants : "";
-            let tag = `╔═════════════════╗
-║ 🄾🅅🄻-🄼🄳 🅃🄰🄶🄰🄻🄻
-║👤 Auteur : *${nomAuteurMessage}* 
-║💬 Message : *${mess}*\n║`;
+            const messageTexte = arg && arg.length > 0 ? arg.join(' ') : '';
+            const membresGroupe = verif_Groupe ? await infos_Groupe.participants : [];
+            
+            let tagMessage = `╭───〔  TAG ALL 〕───⬣\n`;
+            tagMessage += `│👤 Auteur : *${nom_Auteur_Message}*\n`;
+            tagMessage += `│💬 Message : *${messageTexte}*\n│\n`;
 
-           // tag += `╔═════════════════╗\n`;
-            let emoji = ['🔅', '💤', '🔷', '❌', '✔️', '🥱', '⚙️', '🀄', '🎊', '🏀', '🙏', '🎧', '⛔️', '🔋','🏮','🎐','🦦'];
-            let random = Math.floor(Math.random() * emoji.length);
+            membresGroupe.forEach(membre => {
+                tagMessage += `│◦❒ @${membre.id.split("@")[0]}\n`;
+            });
+            tagMessage += `╰═══════════════⬣\n`;
 
-            for (const membre of membresGroupe) {
-                tag += `║${emoji[random]} @${membre.id.split("@")[0]}\n`;
-            }
-            tag += `╚═════════════════╝\n`;
-
-            if (verifAdmin) {
-                await ovl.sendMessage(dest, { text: tag, mentions: membresGroupe.map((i) => i.id) }, { quoted: ms });
+            if (verif_Admin) {
+                await ovl.sendMessage(dest, { text: tagMessage, mentions: membresGroupe.map(m => m.id) }, { quoted: ms });
             } else {
-                repondre('Commande utilisable seulement par les admins du groupe');
+                repondre('❌ Seuls les administrateurs peuvent utiliser cette commande');
             }
         } catch (error) {
-            console.error("Erreur lors de l'envoi du message :", error);
+            console.error("Erreur lors de l'envoi du message avec tagall :", error);
         }
     }
 );
 
 
-ovlcmd(
+
+/*ovlcmd(
     {
         nomCom: "hidtag",
         reaction: "💬",
