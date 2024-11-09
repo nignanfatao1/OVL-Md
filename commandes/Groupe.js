@@ -46,43 +46,43 @@ ovlcmd(
         desc: "partager un message à tous les membres d'un groupe"
 
     },
-    async (dest, ovl, commande_options) => {
-        const { repondre, msg_repondu, verif_groupe, arg, verif_admin } = commande_options;
+    async (dest, ovl, cmd_options) => {
+        const { repondre, msg_Repondu, verif_Groupe, arg, verif_Admin } = cmd_options;
 
-        if (!verif_groupe) {
+        if (!verif_Groupe) {
             repondre("Cette commande ne fonctionne que dans les groupes");
             return;
         }
 
-        if (verif_admin) {
+        if (verif_Admin) {
             let metadata_groupe = await ovl.groupMetadata(dest);
-            let membres_groupe = metadata_groupe.participants.map(participant => participant.id);
+            let membres_Groupe = metadata_groupe.participants.map(participant => participant.id);
             let contenu_msg;
 
-            if (msg_repondu) {
-                if (msg_repondu.imageMessage) {
-                    let media_image = await ovl.dl_save_media_ms(msg_repondu.imageMessage);
+            if (msg_Repondu) {
+                if (msg_Repondu.imageMessage) {
+                    let media_image = await ovl.dl_save_media_ms(msg_Repondu.imageMessage);
                     contenu_msg = {
                         image: { url: media_image },
-                        caption: msg_repondu.imageMessage.caption,
-                        mentions: membres_groupe
+                        caption: msg_Repondu.imageMessage.caption,
+                        mentions: membres_Groupe
                     };
-                } else if (msg_repondu.videoMessage) {
-                    let media_video = await ovl.dl_save_media_ms(msg_repondu.videoMessage);
+                } else if (msg_Repondu.videoMessage) {
+                    let media_video = await ovl.dl_save_media_ms(msg_Repondu.videoMessage);
                     contenu_msg = {
                         video: { url: media_video },
-                        caption: msg_repondu.videoMessage.caption,
-                        mentions: membres_groupe
+                        caption: msg_Repondu.videoMessage.caption,
+                        mentions: membres_Groupe
                     };
-                } else if (msg_repondu.audioMessage) {
-                    let media_audio = await ovl.dl_save_media_ms(msg_repondu.audioMessage);
+                } else if (msg_Repondu.audioMessage) {
+                    let media_audio = await ovl.dl_save_media_ms(msg_Repondu.audioMessage);
                     contenu_msg = {
                         audio: { url: media_audio },
                         mimetype: 'audio/mp4',
-                        mentions: membres_groupe
+                        mentions: membres_Groupe
                     };
-                } else if (msg_repondu.stickerMessage) {
-                    let media_sticker = await ovl.dl_save_media_ms(msg_repondu.stickerMessage);
+                } else if (msg_Repondu.stickerMessage) {
+                    let media_sticker = await ovl.dl_save_media_ms(msg_Repondu.stickerMessage);
                     let sticker_msg = new Sticker(media_sticker, {
                         pack: 'OVL-MD Hidtag',
                         type: StickerTypes.CROPPED,
@@ -92,28 +92,28 @@ ovlcmd(
                         background: "transparent",
                     });
                     const sticker_buffer = await sticker_msg.toBuffer();
-                    contenu_msg = { sticker: sticker_buffer, mentions: membres_groupe };
+                    contenu_msg = { sticker: sticker_buffer, mentions: membres_Groupe };
                 } else {
                     contenu_msg = {
-                        text: msg_repondu.conversation,
-                        mentions: membres_groupe
+                        text: msg_Repondu.conversation,
+                        mentions: membres_Groupe
                     };
                 }
 
                 ovl.sendMessage(dest, contenu_msg);
             } else {
                 if (!arg || !arg[0]) {
-                    repondre("📝 Veuillez inclure ou mentionner un message à partager.");
+                    repondre("Veuillez inclure ou mentionner un message à partager.");
                     return;
                 }
 
                 ovl.sendMessage(dest, {
                     text: arg.join(' '),
-                    mentions: membres_groupe
+                    mentions: membres_Groupe
                 });
             }
         } else {
-            repondre("Cette commande est réservée aux administrateurs.");
+            repondre("Cette commande est réservée aux administrateurs du groupe");
         }
     }
 );
