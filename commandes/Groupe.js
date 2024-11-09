@@ -11,12 +11,12 @@ ovlcmd(
         categorie: "Groupe",
         reaction: "💬"
     },
-    async (dest, ovl, options) => {
+    async (dest, ovl, cmd_options) => {
         try {
-            const { ms, repondre, arg, verif_Groupe, infos_Groupe, nom_Auteur_Message, verif_Admin } = options;
+            const { ms, repondre, arg, verif_Groupe, infos_Groupe, nom_Auteur_Message, verif_Admin } = cmd_options;
 
             if (!verif_Groupe) {
-                return repondre("❌ Cette commande est réservée aux groupes");
+                return repondre("Cette commande ne fonctionne que dans les groupes");
             }
 
             const messageTexte = arg && arg.length > 0 ? arg.join(' ') : '';
@@ -34,7 +34,7 @@ ovlcmd(
             if (verif_Admin) {
                 await ovl.sendMessage(dest, { text: tagMessage, mentions: membresGroupe.map(m => m.id) }, { quoted: ms });
             } else {
-                repondre('❌ Seuls les administrateurs peuvent utiliser cette commande');
+                repondre('Seuls les administrateurs peuvent utiliser cette commande');
             }
         } catch (error) {
             console.error("Erreur lors de l'envoi du message avec tagall :", error);
