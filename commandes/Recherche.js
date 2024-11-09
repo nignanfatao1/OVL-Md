@@ -9,10 +9,10 @@ ovlcmd(
         desc: "Recherche d'images"
     },
     async (ms_org, ovl, cmd_options) => {
-      const arg = cmd_options;
+      const { arg } = cmd_options;
         const searchTerm = arg.join(" ");
         if (!searchTerm) {
-            return ovl.sendMessage(ms_org, { text: "Veuillez fournir un terme de recherche, par exemple : img chat" });
+            return ovl.sendMessage(ms_org, { text: "Veuillez fournir un terme de recherche, par exemple : img ovl-Md" });
         }
 
         gis(searchTerm, async (error, results) => {
