@@ -66,10 +66,14 @@ async function downloadAsBuffer(id, k) {
       k
     }), {
       headers: {
-        "User-Agent": "Mozilla/5.0",
+        "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        "Referer": "https://www.yt1s.com/",
-        "Origin": "https://www.yt1s.com"
+        "Referer": "https://www.yt1s.com",
+        "Origin": "https://www.yt1s.com",
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7",
+        "X-Requested-With": "XMLHttpRequest"
       }
     });
 
