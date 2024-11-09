@@ -24,6 +24,7 @@
     "path": "^0.12.7",
     "pm2": "^5.4.2",
     "pino": "^8.1.0",
-    "qrcode": "latest"
+    "qrcode": "latest",
+    "wa-sticker-formatter": "^4.4.4"
   }
 }
