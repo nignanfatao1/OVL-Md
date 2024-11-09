@@ -1,6 +1,5 @@
 const { ovlcmd } = require("../framework/ovlcmd");
 const { youtubedl } = require("../framework/youtube");
-const axios = require("axios");
 
 ovlcmd(
     {
@@ -21,14 +20,14 @@ ovlcmd(
         const isYouTubeLink = /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(arg[0]);
 
         try {
-            // Utilise la fonction youtubedl pour obtenir les informations
-            const ytResponse = await youtubedl(isYouTubeLink ? arg[0] : query);
+            // Utilise la fonction youtubedl pour obtenir les informations et le lien de téléchargement direct
+            const ytResponse = await youtubedl(isYouTubeLink ? arg[0] : query, { format: "bestaudio" });
 
             if (ytResponse.error) {
                 return await ovl.sendMessage(ms_org, { text: "Erreur lors de la récupération des informations de la chanson." });
             }
 
-            const { title, duration, author, thumbnail } = ytResponse.result;
+            const { title, duration, author, thumbnail, url: audioLink } = ytResponse.result;
 
             const caption = `╭──── 〔 OVL-MD SONG 〕 ─⬣
 ⬡ Titre: ${title}
@@ -38,13 +37,9 @@ ovlcmd(
 
             await ovl.sendMessage(ms_org, { image: { url: thumbnail }, caption: caption });
 
-            // Télécharger l'audio en utilisant l'API externe
-            const audioResponse = await axios.get(`https://ironman.koyeb.app/ironman/dl/yta?url=${query}`, {
-                responseType: 'arraybuffer'
-            });
-
+            // Envoie directement l'audio à partir du lien fourni par YouTubeDL
             await ovl.sendMessage(ms_org, {
-                audio: Buffer.from(audioResponse.data),
+                audio: { url: audioLink },
                 mimetype: 'audio/mp4',
                 fileName: `${title}.mp3`
             }, { quoted: ms });
@@ -74,14 +69,14 @@ ovlcmd(
         const isYouTubeLink = /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(arg[0]);
 
         try {
-            // Utilise la fonction youtubedl pour obtenir les informations
-            const ytResponse = await youtubedl(isYouTubeLink ? arg[0] : query);
+            // Utilise la fonction youtubedl pour obtenir les informations et le lien de téléchargement direct
+            const ytResponse = await youtubedl(isYouTubeLink ? arg[0] : query, { format: "bestvideo+bestaudio" });
 
             if (ytResponse.error) {
                 return await ovl.sendMessage(ms_org, { text: "Erreur lors de la récupération des informations de la vidéo." });
             }
 
-            const { title, duration, author, thumbnail } = ytResponse.result;
+            const { title, duration, author, thumbnail, url: videoLink } = ytResponse.result;
 
             const caption = `╭──── 〔 OVL-MD VIDEO 〕 ─⬣
 ⬡ Titre: ${title}
@@ -89,15 +84,11 @@ ovlcmd(
 ⬡ Auteur: ${author}
 ╰────────⬣`;
 
-           // await ovl.sendMessage(ms_org, { text: caption });
             await ovl.sendMessage(ms_org, { image: { url: thumbnail }, caption: caption });
-         // Télécharger la vidéo en utilisant l'API externe
-            const videoResponse = await axios.get(`https://ironman.koyeb.app/ironman/dl/ytv?url=${query}`, {
-                responseType: 'arraybuffer'
-            });
 
+            // Envoie directement la vidéo à partir du lien fourni par YouTubeDL
             await ovl.sendMessage(ms_org, {
-                video: Buffer.from(videoResponse.data),
+                video: { url: videoLink },
                 mimetype: 'video/mp4',
                 fileName: `${title}.mp4`
             }, { quoted: ms });
