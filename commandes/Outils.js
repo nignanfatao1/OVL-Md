@@ -1,7 +1,7 @@
 const { ovlcmd, cmd } = require("../framework/ovlcmd");
 const conf = require("../set");
 
-ovlcmd(
+/*ovlcmd(
     {
         nom_cmd: "test",
         classe: "Outils",
@@ -44,7 +44,7 @@ ovlcmd(
         }
     }
 );
-
+*/
 ovlcmd(
     {
         nom_cmd: "menu",
