@@ -4,7 +4,7 @@ const axios = require('axios');
 async function fetchYoutubeData(query) {
     try {
         // Construction de l'URL de l'API avec le terme de recherche
-        const apiUrl = `https://bk9.fun/download/youtube?url=${encodeURIComponent(query)}`;
+        const apiUrl = `https://bk9.fun/download/youtube?url=${query}`;
         
         // Requête à l'API
         const response = await axios.get(apiUrl);
