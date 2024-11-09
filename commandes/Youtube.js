@@ -33,21 +33,29 @@ ovlcmd(
                 const song = searchResults.items[0];
                 videoInfo = {
                     url: song.url,
-                    title: song.name,
+                    title: song.title, // Correction de 'name' à 'title'
                     views: song.views,
                     duration: song.duration,
                     thumbnail: song.bestThumbnail.url
                 };
             }
 
+            if (!videoInfo.url) {
+                throw new Error("URL de la vidéo introuvable.");
+            }
+
             const caption = `╭──── 〔 OVL-MD SONG 〕 ─⬣
-⬡ Titre: ${videoInfo.title}
+⬡ Titre: ${videoInfo.title || "Titre non disponible"}
 ⬡ URL: ${videoInfo.url}
-⬡ Vues: ${videoInfo.views}
-⬡ Durée: ${videoInfo.duration}
+⬡ Vues: ${videoInfo.views || "Non disponible"}
+⬡ Durée: ${videoInfo.duration || "Non disponible"}
 ╰────────⬣`;
 
-            await ovl.sendMessage(ms_org, { image: { url: videoInfo.thumbnail }, caption: caption });
+            if (videoInfo.thumbnail) {
+                await ovl.sendMessage(ms_org, { image: { url: videoInfo.thumbnail }, caption: caption });
+            } else {
+                await ovl.sendMessage(ms_org, { text: caption });
+            }
 
             // Téléchargement de l'audio
             const audioResponse = await axios.get(`https://ironman.koyeb.app/ironman/dl/yta?url=${videoInfo.url}`, {
@@ -57,7 +65,7 @@ ovlcmd(
             await ovl.sendMessage(ms_org, {
                 audio: Buffer.from(audioResponse.data),
                 mimetype: 'audio/mp4',
-                fileName: `${videoInfo.title}.mp3`
+                fileName: `${videoInfo.title || "audio"}.mp3`
             }, { quoted: ms });
 
         } catch (error) {
@@ -97,22 +105,30 @@ ovlcmd(
                 const video = searchResults.items[0];
                 videoInfo = {
                     url: video.url,
-                    title: video.name,
+                    title: video.title, // Correction de 'name' à 'title'
                     views: video.views,
                     duration: video.duration,
                     thumbnail: video.bestThumbnail.url
                 };
-            
+            }
+
+            if (!videoInfo.url) {
+                throw new Error("URL de la vidéo introuvable.");
+            }
 
             const caption = `╭──── 〔 OVL-MD VIDEO 〕 ─⬣
-⬡ Titre: ${videoInfo.title}
+⬡ Titre: ${videoInfo.title || "Titre non disponible"}
 ⬡ URL: ${videoInfo.url}
-⬡ Vues: ${videoInfo.views}
-⬡ Durée: ${videoInfo.duration}
+⬡ Vues: ${videoInfo.views || "Non disponible"}
+⬡ Durée: ${videoInfo.duration || "Non disponible"}
 ╰────────⬣`;
 
-            await ovl.sendMessage(ms_org, { image: { url: videoInfo.thumbnail }, caption: caption });
-            };
+            if (videoInfo.thumbnail) {
+                await ovl.sendMessage(ms_org, { image: { url: videoInfo.thumbnail }, caption: caption });
+            } else {
+                await ovl.sendMessage(ms_org, { text: caption });
+            }
+
             // Téléchargement de la vidéo
             const videoResponse = await axios.get(`https://ironman.koyeb.app/ironman/dl/ytv?url=${videoInfo.url}`, {
                 responseType: 'arraybuffer'
@@ -121,7 +137,7 @@ ovlcmd(
             await ovl.sendMessage(ms_org, {
                 video: Buffer.from(videoResponse.data),
                 mimetype: 'video/mp4',
-                fileName: `${videoInfo.title}.mp4`
+                fileName: `${videoInfo.title || "video"}.mp4`
             }, { quoted: ms });
 
         } catch (error) {
