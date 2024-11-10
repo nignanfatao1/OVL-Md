@@ -6,7 +6,7 @@ ovlcmd(
     nom_cmd: "exec",
     classe: "Owner",
     react: "⚙️",
-    desc: "Exécute une commande shell sur le serveur (accès restreint)"
+    desc: "Exécute une commande shell sur le serveur"
   },
   async (ms_org, ovl, cmd_options) => {
     const { arg, prenium_id } = cmd_options;
@@ -36,7 +36,7 @@ ovlcmd(
     nom_cmd: "eval",
     classe: "Owner",
     react: "📝",
-    desc: "Exécute du code JavaScript sur le serveur (accès restreint)"
+    desc: "Exécute du code JavaScript sur le serveur"
   },
   async (ms_org, ovl, cmd_options) => {
     const { arg, prenium_id } = cmd_options;
