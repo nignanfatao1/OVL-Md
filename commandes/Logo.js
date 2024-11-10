@@ -16,7 +16,7 @@ function addTextproCommand(nom_cmd, text_pro_url, desc) {
                 return await ovl.sendMessage(ms_org, { text: "Vous devez fournir un texte" }, { quoted: ms } );
             }
             try {
-                let logo_url = await maker.textpro(text_pro_url, query);
+                let logo_url = await maker.textpro(text_pro_url.image, query);
                 await ovl.sendMessage(ms_org, { image: { url: logo_url }, caption: "\`\`\`Powered By OVL-MD\`\`\`" }, { quoted: ms });
             } catch (error) {
                 console.error(`Erreur avec la commande ${nom_cmd}:`, error.message || error);
