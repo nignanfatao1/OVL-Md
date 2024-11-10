@@ -35,27 +35,25 @@ postgresql://postgres.qnjvgxwyncnsbpfxwrbq:ovlmdmdpasse@aws-0-eu-central-1.poole
 const { spawnSync } = require('child_process');
 const { existsSync } = require('fs');
 
+function runCommand(command, args, cwd) {
+  const result = spawnSync(command, args, { cwd, stdio: 'inherit' });
+  if (result.error) {
+    throw new Error(`Échec de l'exécution de ${command} ${args.join(' ')} : ${result.error.message}`);
+  }
+  return result;
+}
+
 if (!existsSync('ovl')) {
   console.log('Clonage du dépôt...');
-  const cloneResult = spawnSync('git', ['clone', 'https://github.com/Nignanfatao/OVL-Md', 'ovl'], { stdio: 'inherit' });
-  if (cloneResult.error) {
-    throw new Error(`Échec du clonage du dépôt : ${cloneResult.error.message}`);
-  }
+  runCommand('git', ['clone', 'https://github.com/Nignanfatao/OVL-Md', 'ovl']);
 
   console.log('Installation des dépendances...');
-  const ni = spawnSync('npm', ['install'], { cwd: 'ovl', stdio: 'inherit' });
-  if (ni.error) {
-    throw new Error(`Échec de l'installation des dépendances : ${ni.error.message}`);
-  }
-
-  const whi = spawnSync('npm', ['install', '@whiskeysockets/bailey'], { cwd: 'ovl', stdio: 'inherit' });
-  if (whi.error) {
-    throw new Error(`Échec de l'installation de @whiskeysockets/bailey : ${whi.error.message}`);
-  }
+  runCommand('npm', ['install'], { cwd: 'ovl' });
 }
-  console.log('Démarrage du bot...');
-  spawnSync('npm', ['run', 'Ovl'], { cwd: 'ovl', stdio: 'inherit' });
-  console.log('Le bot est en cours d\'exécution...');
+
+console.log('Démarrage du bot...');
+runCommand('npm', ['run', 'Ovl'], { cwd: 'ovl' });
+console.log('Le bot est en cours d\'exécution...');
 ```
 ---
 
