@@ -64,10 +64,9 @@ ovlcmd(
 ovlcmd(
     {
         nom_cmd: "vv",
-        classe: "Général",
-        react: "🤲🏿",
-        desc: "Afficher un message en vue unique",
-        alias: ['voir']
+        classe: "Owner",
+        react: "👀",
+        desc: "Affiche un message envoyé en vue unique",
     },
     async (_ms_org, ovl, _cmd_options) => {
         const { ms, msg_Repondu, repondre } = _cmd_options;
