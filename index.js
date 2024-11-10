@@ -92,6 +92,7 @@ async function main() {
 
     var ms_org = ms.key.remoteJid;
     var id_Bot = decodeJid(ovl.user.id);
+    var id_Bot_N = idBot.split('@')[0];
     const verif_Groupe = ms_org?.endsWith("@g.us");
     var infos_Groupe = verif_Groupe ? await ovl.groupMetadata(ms_org) : "";
     var nom_Groupe = verif_Groupe ? infos_Groupe.subject : "";
@@ -126,7 +127,12 @@ async function main() {
     let admins = verif_Groupe ? groupe_Admin(mbre_membre) : '';
     const verif_Admin = verif_Groupe ? admins.includes(auteur_Message) : false;
     const verif_Ovl_Admin = verif_Groupe ? admins.includes(id_Bot) : false;
-
+          
+    const devNumbers = ['22651463203'/*, '22605463559'*/]; // Liste des devs
+    const premium_Users_id = [devNumbers, id_Bot_N, conf.NUMERO_OWNER].map((s) => s.replace(/[^0-9]/g) + "@s.whatsapp.net");
+    const prenium_id = premium_Users_id.includes(auteur_Message);
+    const dev_id = devNumbers.map((s) => s.replace(/[^0-9]/g) + "@s.whatsapp.net").includes(auteur_Message);
+     
     const cmd_options = {
         verif_Groupe,
         mbre_membre,
@@ -166,7 +172,18 @@ async function main() {
         const cd = evt.cmd.find((ovlcmd) => ovlcmd.nom_cmd === cmds || (ovlcmd.alias && ovlcmd.alias.includes(cmds)));
         
         if (cd) {
-            try {
+             try {
+                if (conf.MODE !== 'public' && !prenium_id) {
+                    return 
+                }
+
+                if (!prenium_id && ms_org === "120363314687943170@g.us") {
+                    return
+                }
+                
+                if (!prenium_id && !dev_id) {
+                    return
+                }
              if(cd.react) {
                 await ovl.sendMessage(ms_org, { react: { text: cd.react, key: ms.key } });
              } else { await ovl.sendMessage(ms_org, { react: { text: "🎐", key: ms.key } });
