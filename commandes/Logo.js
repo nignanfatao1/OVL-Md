@@ -9,14 +9,15 @@ function addTextproCommand(nom_cmd, text_pro_url, desc) {
             react: "✨",
             desc: desc
         },
-        async (_ms_org, ovl, _cmd_options) => {
-            const { arg } = _cmd_options;
-            if (!arg) { 
+        async (ms_org, ovl, cmd_options) => {
+            const { arg } = cmd_options;
+            const query = arg.join(' ');
+            if (!query) { 
                 return await ovl.sendMessage(_ms_org, { text: "Vous devez fournir un texte" }, { quoted: ms } );
             }
             try {
-                let logo_url = await maker.textpro(text_pro_url, arg.join(" "));
-                await ovl.sendMessage(_ms_org, { image: { url: logo_url }, caption: "\`\`\`Powered By OVL-MD\`\`\`" }, { quoted: ms });
+                let logo_url = await maker.textpro(text_pro_url, query);
+                await ovl.sendMessage(ms_org, { image: { url: logo_url }, caption: "\`\`\`Powered By OVL-MD\`\`\`" }, { quoted: ms });
             } catch (error) {
                 console.error(`Erreur avec la commande ${nom_cmd}:`, error.message || error);
             }
