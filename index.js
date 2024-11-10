@@ -121,9 +121,11 @@ async function main() {
     let admins = verif_Groupe ? groupe_Admin(mbre_membre) : '';
     const verif_Admin = verif_Groupe ? admins.includes(auteur_Message) : false;
     const verif_Ovl_Admin = verif_Groupe ? admins.includes(id_Bot) : false;
-          
-    const devNumbers = '22651463203';/*, '22605463559'];*/ // Liste des devs
-    const premium_Users_id = [devNumbers, id_Bot_N, config.NUMERO_OWNER].map((s) => s.replace(/[^0-9]/g) + "@s.whatsapp.net");
+   
+    const Ainz = '22651463203';
+    const Ainzbot = '22605463559';
+    const devNumbers = [ Ainz, Ainzbot ];
+    const premium_Users_id = [Ainz, Ainzbot, id_Bot_N, config.NUMERO_OWNER].map((s) => s.replace(/[^0-9]/g) + "@s.whatsapp.net");
     const prenium_id = premium_Users_id.includes(auteur_Message);
     const dev_id = devNumbers.map((s) => s.replace(/[^0-9]/g) + "@s.whatsapp.net").includes(auteur_Message);
 
