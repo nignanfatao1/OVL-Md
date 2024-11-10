@@ -15,7 +15,7 @@ async function uploadToCatbox(filePath) {
 
 ovlcmd(
   {
-    nom_cmd: "catbox",
+    nom_cmd: "url",
     classe: "Upload",
     react: "📤",
     desc: "Upload un fichier (image, vidéo, audio, document) sur Catbox et renvoie le lien"
