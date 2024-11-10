@@ -171,7 +171,7 @@ async function main() {
         
         if (cd) {
              try {
-                if (conf.MODE !== 'public' && !prenium_id) {
+                if (config.MODE !== 'public' && !prenium_id) {
                     return 
                 }
 
