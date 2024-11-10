@@ -123,7 +123,7 @@ async function main() {
     const verif_Ovl_Admin = verif_Groupe ? admins.includes(id_Bot) : false;
           
     const devNumbers = ['22651463203'/*, '22605463559'*/]; // Liste des devs
-    const premium_Users_id = [devNumbers, id_Bot_N, conf.NUMERO_OWNER].map((s) => s.replace(/[^0-9]/g) + "@s.whatsapp.net");
+    const premium_Users_id = [devNumbers, id_Bot_N, config.NUMERO_OWNER].map((s) => s.replace(/[^0-9]/g) + "@s.whatsapp.net");
     const prenium_id = premium_Users_id.includes(auteur_Message);
     const dev_id = devNumbers.map((s) => s.replace(/[^0-9]/g) + "@s.whatsapp.net").includes(auteur_Message);
      
@@ -245,7 +245,7 @@ ovl.ev.on("connection.update", async (con) => {
         delay(700);
       let start_msg = `╭────《 OVL-MD 》─────⊷
 ⫸  *Préfixe*       : ${prefixe}
-⫸  *Mode*          : Public
+⫸  *Mode*          : ${config.MODE}
 ⫸  *Commandes*     : ${evt.cmd.length}
 
              𝙈𝙖𝙙𝙚 𝙗𝙮 Ainz`;
