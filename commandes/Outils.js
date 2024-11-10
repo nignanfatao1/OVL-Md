@@ -1,5 +1,5 @@
 const { ovlcmd, cmd } = require("../framework/ovlcmd");
-const conf = require("../set");
+const config = require("../set");
 
 ovlcmd(
     {
@@ -68,8 +68,8 @@ ovlcmd(
             const lien = "https://telegra.ph/file/4d918694f786d7acfa3bd.jpg";
             const commandes = cmd;
             let menu = `╭───❏ 🄾🅅🄻 🄼🄳 ❏
-│ ✿ Prefixe => ${conf.PREFIXE}
-│ ✿ Owner => ${conf.NOM_OWNER}
+│ ✿ Prefixe => ${config.PREFIXE}
+│ ✿ Owner => ${config.NOM_OWNER}
 │ ✿ Commandes => ${commandes.length}
 │ ✿ Uptime => ${uptime.trim()}
 │ ✿ Développeur => AINZ
