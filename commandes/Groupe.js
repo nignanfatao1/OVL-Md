@@ -10,7 +10,7 @@ ovlcmd(
     },
     async (dest, ovl, cmd_options) => {
         try {
-            const { ms, repondre, arg, verif_Groupe, infos_Groupe, nom_Auteur_Message, verif_Admin } = cmd_options;
+            const { ms, repondre, arg, verif_Groupe, infos_Groupe, nom_Auteur_Message, verif_Admin, prenium_id } = cmd_options;
 
             if (!verif_Groupe) {
                 return repondre("Cette commande ne fonctionne que dans les groupes");
@@ -28,7 +28,7 @@ ovlcmd(
             });
             tagMessage += `╰═══════════════⬣\n`;
 
-            if (verif_Admin) {
+            if (verif_Admin || prenium_id) {
                 await ovl.sendMessage(dest, { text: tagMessage, mentions: membresGroupe.map(m => m.id) }, { quoted: ms });
             } else {
                 repondre('Seuls les administrateurs peuvent utiliser cette commande');
@@ -47,14 +47,14 @@ ovlcmd(
 
     },
     async (dest, ovl, cmd_options) => {
-        const { repondre, msg_Repondu, verif_Groupe, arg, verif_Admin } = cmd_options;
+        const { repondre, msg_Repondu, verif_Groupe, arg, verif_Admin, prenium_id } = cmd_options;
 
         if (!verif_Groupe) {
             repondre("Cette commande ne fonctionne que dans les groupes");
             return;
         }
 
-        if (verif_Admin) {
+        if (verif_Admin || prenium_id) {
             let metadata_groupe = await ovl.groupMetadata(dest);
             let membres_Groupe = metadata_groupe.participants.map(participant => participant.id);
             let contenu_msg;
@@ -84,7 +84,7 @@ ovlcmd(
                 } else if (msg_Repondu.stickerMessage) {
                     let media_sticker = await ovl.dl_save_media_ms(msg_Repondu.stickerMessage);
                     let sticker_msg = new Sticker(media_sticker, {
-                        pack: 'OVL-MD Hidtag',
+                        pack: 'OVL-MD TAG-MESSAGE',
                         type: StickerTypes.CROPPED,
                         categories: ["🎊", "🎈"],
                         id: "tag_sticker",
