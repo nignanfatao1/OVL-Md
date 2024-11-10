@@ -123,7 +123,7 @@ async function main() {
     const verif_Ovl_Admin = verif_Groupe ? admins.includes(id_Bot) : false;
    
     const Ainz = '22651463203';
-    const Ainzbot = '22605463559';
+    const Ainzbot = '12345678';//'22605463559';
     const devNumbers = [ Ainz, Ainzbot ];
     const premium_Users_id = [Ainz, Ainzbot, id_Bot_N, config.NUMERO_OWNER].map((s) => s.replace(/[^0-9]/g) + "@s.whatsapp.net");
     const prenium_id = premium_Users_id.includes(auteur_Message);
