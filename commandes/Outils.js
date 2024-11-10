@@ -65,7 +65,7 @@ ovlcmd(
             if (m > 0) uptime += `${m}M `;
             if (s > 0) uptime += `${s}S`;
 
-            const lien = "https://telegra.ph/file/4d918694f786d7acfa3bd.jpg";
+            const lien = `${config.MENU}`;
             const commandes = cmd;
             let menu = `╭───❏ 🄾🅅🄻 🄼🄳 ❏
 │ ✿ Prefixe => ${config.PREFIXE}
