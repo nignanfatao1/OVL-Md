@@ -10,7 +10,7 @@ cliquez ici [OVL-MD-FORK](https://github.com/Nignanfatao/OVL-Md/fork).
 ### Étape 3 : Créer une base de données
 - Cliquez ici [DATA-BASE](https://supabase.com)
 - Si vous en avez déjà une c'est plus la peine d'en créé
-Lien de la Base de données public
+- Lien de la Base de données public:
 ```sh
 postgresql://postgres.qnjvgxwyncnsbpfxwrbq:ovlmdmdpasse@aws-0-eu-central-1.pooler.supabase.com:6543/postgres
 ```
@@ -20,12 +20,12 @@ postgresql://postgres.qnjvgxwyncnsbpfxwrbq:ovlmdmdpasse@aws-0-eu-central-1.poole
 #### Deploy on Render
 - **Creer une compte** [compte-render](https://dashboard.render.com/register).
 - **Deployer**
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)]( )
+[![Render](https://render.com/images/deploy-to-render-button.svg)]( )
 
 #### Deploy on Koyeb
 - **Creer une compte** [compte-koyeb](https://app.koyeb.com/auth/signup).
 - **Deployer**
- [![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)]()
+ [![Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)]()
 ---
 
 ### 📄 License
