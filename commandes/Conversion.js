@@ -1,57 +1,66 @@
 const { ovlcmd, cmd } = require("../framework/ovlcmd");
-const axios = require('axios');
-const FormData = require('form-data');
-const fs = require('fs');
-const path = require('path');
+const { uploadToAnonFiles } = require("anonfile-api");
 
 ovlcmd(
     {
-        nom_cmd: "url",
-        classe: "Converssion",
-        react: "✨",
-        desc: "Upload une image ou vidéo sur Telegraph et renvoie le lien"
+        nom_cmd: "anonfile",
+        classe: "Upload",
+        react: "📤",
+        desc: "Upload un fichier (image, vidéo, audio, document) sur AnonFiles et renvoie le lien"
     },
     async (ms_org, ovl, cmd_options) => {
         const { msg_Repondu } = cmd_options;
-
         if (!msg_Repondu) {
-            return ovl.sendMessage(ms_org, { text: "Veuillez mentionner une image ou une vidéo" });
+            return ovl.sendMessage(ms_org, { text: "Veuillez mentionner un fichier (image, vidéo, audio ou document)." });
         }
 
-        // Identifier le type de média (image ou vidéo)
-        const mediaMessage = msg_Repondu.imageMessage || msg_Repondu.videoMessage;
+        const mediaMessage = msg_Repondu.imageMessage || msg_Repondu.videoMessage || msg_Repondu.documentMessage || msg_Repondu.audioMessage;
         if (!mediaMessage) {
-            return ovl.sendMessage(ms_org, { text: "Aucune image ou vidéo trouvée." });
+            return ovl.sendMessage(ms_org, { text: "Type de fichier non supporté. Veuillez mentionner une image, vidéo, audio ou document." });
         }
 
-        // Télécharger le fichier média
         const media = await ovl.dl_save_media_ms(mediaMessage);
-        const fileName = path.basename(media); // Extraire le nom du fichier
-        const filePath = path.resolve(__dirname, fileName);
 
         try {
-            // Créer le formulaire pour l'upload
-            const form = new FormData();
-            form.append('file', fs.createReadStream(filePath));  // Utiliser le fichier téléchargé
-
-            // Effectuer la requête POST vers Telegraph
-            const response = await axios.post('https://telegra.ph/upload', form, {
-                headers: {
-                    ...form.getHeaders(), // Ajouter les entêtes nécessaires pour le multipart/form-data
-                },
-            });
-
-            // Vérifier la réponse et obtenir l'URL
-            if (response.data && response.data[0] && response.data[0].src) {
-                const link = `https://telegra.ph${response.data[0].src}`;
-                await ovl.sendMessage(ms_org, { text: link });
-            } else {
-                console.error("Erreur de réponse de l'API Telegraph:", response.data);
-                await ovl.sendMessage(ms_org, { text: "Erreur lors de la création du lien Telegraph." });
-            }
+            const response = await uploadToAnonFiles(media);
+            const link = response.data.file.url.full;
+            await ovl.sendMessage(ms_org, { text: `Lien AnonFiles : ${link}` });
         } catch (error) {
-            console.error("Erreur lors de l'upload sur Telegraph:", error);
-            await ovl.sendMessage(ms_org, { text: "Erreur lors de l'upload de l'image/vidéo." });
+            console.error("Erreur lors de l'upload sur AnonFiles:", error);
+            await ovl.sendMessage(ms_org, { text: "Erreur lors de la création du lien AnonFiles." });
+        }
+    }
+);
+
+/*const { ovlcmd, cmd } = require("../framework/ovlcmd");
+const { uploadToCatbox } = require("catbox-uploader");
+*/
+ovlcmd(
+    {
+        nom_cmd: "catbox",
+        classe: "Upload",
+        react: "📤",
+        desc: "Upload un fichier (image, vidéo, audio, document) sur Catbox et renvoie le lien"
+    },
+    async (ms_org, ovl, cmd_options) => {
+        const { msg_Repondu } = cmd_options;
+        if (!msg_Repondu) {
+            return ovl.sendMessage(ms_org, { text: "Veuillez mentionner un fichier (image, vidéo, audio ou document)." });
+        }
+
+        const mediaMessage = msg_Repondu.imageMessage || msg_Repondu.videoMessage || msg_Repondu.documentMessage || msg_Repondu.audioMessage;
+        if (!mediaMessage) {
+            return ovl.sendMessage(ms_org, { text: "Type de fichier non supporté. Veuillez mentionner une image, vidéo, audio ou document." });
+        }
+
+        const media = await ovl.dl_save_media_ms(mediaMessage);
+
+        try {
+            const link = await uploadToCatbox(media);
+            await ovl.sendMessage(ms_org, { text: `Lien Catbox : ${link}` });
+        } catch (error) {
+            console.error("Erreur lors de l'upload sur Catbox:", error);
+            await ovl.sendMessage(ms_org, { text: "Erreur lors de la création du lien Catbox." });
         }
     }
 );
