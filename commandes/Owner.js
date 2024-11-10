@@ -9,9 +9,9 @@ ovlcmd(
     desc: "Exécute une commande shell sur le serveur (accès restreint)"
   },
   async (ms_org, ovl, cmd_options) => {
-    const { arg, id_Bot } = cmd_options;
+    const { arg, prenium_id } = cmd_options;
 
-    if (!id_Bot) {
+    if (!prenium_id) {
       return ovl.sendMessage(ms_org, { text: "Vous n'avez pas l'autorisation d'exécuter des commandes." });
     }
 
@@ -39,9 +39,9 @@ ovlcmd(
     desc: "Exécute du code JavaScript sur le serveur (accès restreint)"
   },
   async (ms_org, ovl, cmd_options) => {
-    const { arg, id_Bot } = cmd_options;
+    const { arg, prenium_id } = cmd_options;
 
-    if (!id_Bot) {
+    if (!prenium_id) {
       return;
     }
 
