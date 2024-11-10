@@ -117,12 +117,6 @@ async function main() {
         }
         return admin;
     }
-
-    function bot_pic() {
-        const indiceAleatoire = Math.floor(Math.random() * liens.length);
-        return liens[indiceAleatoire];
-    }
-
     const mbre_membre = verif_Groupe ? await infos_Groupe.participants : '';
     let admins = verif_Groupe ? groupe_Admin(mbre_membre) : '';
     const verif_Admin = verif_Groupe ? admins.includes(auteur_Message) : false;
@@ -143,6 +137,9 @@ async function main() {
         auteur_Message,
         nom_Auteur_Message,
         id_Bot,
+        prenium_id,
+        dev_id,
+        id_Bot_N,
         verif_Ovl_Admin,
         prefixe,
         arg,
@@ -151,8 +148,7 @@ async function main() {
         msg_Repondu,
         auteur_Msg_Repondu,
         ms, 
-        ms_org, 
-        bot_pic
+        ms_org
    };
 
     console.log("{}=={} OVL-MD LOG-MESSAGES {}=={}");
