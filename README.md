@@ -19,11 +19,11 @@ postgresql://postgres.qnjvgxwyncnsbpfxwrbq:ovlmdmdpasse@aws-0-eu-central-1.poole
 
 ### Deployer sur Render
 - **Creer une compte:** [compte-render](https://dashboard.render.com/register).
-- **Deployer:** [Deployer-Render]( )
+- **Deployer:** [Deployer-Render](https://dashboard.render.com/web/new)
 
 ### Deployer sur Koyeb
 - **Creer un compte:** [compte-koyeb](https://app.koyeb.com/auth/signup).
-- **Deployer:** [Deployer-Koyeb]()
+- **Deployer:** [Deployer sur Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?name=ovl-md&type=git&repository=Nignanfatao%2FOVL-Md&branch=main&builder=dockerfile&env%5BSESSION-ID%5D=Ovl-SESSION-ID&env%5BMODE%5D=public&env%5BNOM_OWNER%5D=Ainz&env%5BNUMERO_OWNER%5D=226xxxxxxxx&env%5BPEFIXE%5D=%F0%9F%8E%90&env%5BMENU%5D=https%3A%2F%2Fi.ibb.co%2Fynx9QcZ%2Fimage.jpg&env%5BDATABASE%5D=postgresql%3A%2F%2Fpostgres.qnjvgxwyncnsbpfxwrbq%3Aovlmdmdpasse%40aws-0-eu-central-1.pooler.supabase.com%3A6543%2Fpostgres&ports=8000%3Bhttp%3B%2F)
 ### Deployer sur panel
 - **Créer un compte:**
 - **Deployer:**
