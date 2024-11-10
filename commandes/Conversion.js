@@ -35,7 +35,7 @@ ovlcmd(
     try {
       const media = await ovl.dl_save_media_ms(mediaMessage);
       const link = await uploadToCatbox(media);
-      await ovl.sendMessage(ms_org, { text: `Lien Catbox : ${link}` });
+      await ovl.sendMessage(ms_org, { text: link });
     } catch (error) {
       console.error("Erreur lors de l'upload sur Catbox:", error);
       await ovl.sendMessage(ms_org, { text: "Erreur lors de la création du lien Catbox." });
