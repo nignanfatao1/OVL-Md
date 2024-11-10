@@ -13,7 +13,7 @@ function addTextproCommand(nom_cmd, text_pro_url, desc) {
             const { arg } = cmd_options;
             const query = arg.join(' ');
             if (!query) { 
-                return await ovl.sendMessage(_ms_org, { text: "Vous devez fournir un texte" }, { quoted: ms } );
+                return await ovl.sendMessage(ms_org, { text: "Vous devez fournir un texte" }, { quoted: ms } );
             }
             try {
                 let logo_url = await maker.textpro(text_pro_url, query);
