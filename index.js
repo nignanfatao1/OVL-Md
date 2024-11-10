@@ -92,7 +92,7 @@ async function main() {
 
     var ms_org = ms.key.remoteJid;
     var id_Bot = decodeJid(ovl.user.id);
-    var id_Bot_N = idBot.split('@')[0];
+    var id_Bot_N = id_Bot.split('@')[0];
     const verif_Groupe = ms_org?.endsWith("@g.us");
     var infos_Groupe = verif_Groupe ? await ovl.groupMetadata(ms_org) : "";
     var nom_Groupe = verif_Groupe ? infos_Groupe.subject : "";
