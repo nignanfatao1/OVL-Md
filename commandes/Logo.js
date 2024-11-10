@@ -10,7 +10,7 @@ function addTextproCommand(nom_cmd, text_pro_url, desc) {
             desc: desc
         },
         async (ms_org, ovl, cmd_options) => {
-            const { arg } = cmd_options;
+            const { arg, ms } = cmd_options;
             const query = arg.join(' ');
             if (!query) { 
                 return await ovl.sendMessage(ms_org, { text: "Vous devez fournir un texte" }, { quoted: ms } );
