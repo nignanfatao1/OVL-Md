@@ -1,4 +1,4 @@
-const fs = require('fs');
+  const fs = require('fs');
 const pino = require("pino");
 const path = require('path');
 const axios = require("axios");
@@ -8,10 +8,10 @@ const boom = require("@hapi/boom");
 const config = require("./set");
 const session = config.SESSION_ID || "";
 let evt = require(__dirname + "/framework/ovlcmd");
-const FileType = require('file-type')
+const FileType = require('file-type');
 const prefixe = config.PREFIXE;
 
- async function ovlAuth(session) {
+async function ovlAuth(session) {
     let sessionId;
     try {
         if (session.startsWith("Ovl-MD_") && session.endsWith("_SESSION-ID")) {
@@ -47,12 +47,10 @@ ovlAuth(session);
 async function main() {
     const { version, isLatest } = await fetchLatestBaileysVersion();
     const { state, saveCreds } = await useMultiFileAuthState(path.join(__dirname, 'auth'));
-        try {
-        const store = makeInMemoryStore({ logger: pino().child({ level: "silent", stream: "store"
-  })
-});
+    try {
+        const store = makeInMemoryStore({ logger: pino().child({ level: "silent", stream: "store" }) });
         const ovl = makeWASocket({
-            version, 
+            version,
             printQRInTerminal: true,
             logger: pino({ level: "silent" }),
             browser: ["Ubuntu", "Chrome", "20.0.04"],
@@ -64,147 +62,152 @@ async function main() {
             markOnlineOnConnect: false,
             keepAliveIntervalMs: 30000,
             auth: {
-            creds: state.creds,
-            keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" }))
-        },
-           getMessage: async (key) => {
+                creds: state.creds,
+                keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" }))
+            },
+            getMessage: async (key) => {
                 if (store) {
                     const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
                     return msg.message || undefined;
                 }
-                return {
-                    conversation: 'An Error Occurred, Repeat Command!'
-                };
-           }
+                return { conversation: 'An Error Occurred, Repeat Command!' };
+            }
         });
 
-         ovl.ev.on("messages.upsert", async (m) => {
-    const { messages } = m;
-    const ms = messages[0];
-    if (!ms.message) return;
-    
-    const decodeJid = (jid) => {
-        if (!jid) return jid;
-        if (/:\d+@/gi.test(jid)) {
-            let decode = jidDecode(jid) || {};
-            return (decode.user && decode.server && `${decode.user}@${decode.server}`) || jid;
-        }
-        return jid;
-    };
+        ovl.ev.on("messages.upsert", async (m) => {
+            const { messages } = m;
+            const ms = messages[0];
+            if (!ms.message) return;
 
-    var mtype = getContentType(ms.message);
-    var texte = mtype === "conversation" ? ms.message.conversation :
-        mtype === "imageMessage" ? ms.message.imageMessage?.caption :
-        mtype === "videoMessage" ? ms.message.videoMessage?.caption :
-        mtype === "extendedTextMessage" ? ms.message.extendedTextMessage?.text :
-        mtype === "buttonsResponseMessage" ? ms.message.buttonsResponseMessage?.selectedButtonId :
-        mtype === "listResponseMessage" ? ms.message.listResponseMessage?.singleSelectReply?.selectedRowId :
-        mtype === "messageContextInfo" ? (ms.message.buttonsResponseMessage?.selectedButtonId || ms.message.listResponseMessage?.singleSelectReply?.selectedRowId || ms.text) : "";
-
-    var ms_org = ms.key.remoteJid;
-    var id_Bot = decodeJid(ovl.user.id);
-    var id_Bot_N = id_Bot.split('@')[0];
-    const verif_Groupe = ms_org?.endsWith("@g.us");
-    var infos_Groupe = verif_Groupe ? await ovl.groupMetadata(ms_org) : "";
-    var nom_Groupe = verif_Groupe ? infos_Groupe.subject : "";
-    var msg_Repondu = ms.message.extendedTextMessage?.contextInfo?.quotedMessage;
-    var auteur_Msg_Repondu = decodeJid(ms.message.extendedTextMessage?.contextInfo?.participant);
-    var mr = ms.message.extendedTextMessage?.contextInfo?.mentionedJid;
-    var user = mr || msg_Repondu ? auteur_Msg_Repondu : "";
-    var auteur_Message = verif_Groupe ? ms.key.participant || ms.participant : ms_org;
-    if (ms.key.fromMe) {
-        auteur_Message = id_Bot;
-    }
-
-    var membre_Groupe = verif_Groupe ? ms.key.participant : '';
-    const nom_Auteur_Message = ms.pushName;
-    const arg = texte ? texte.trim().split(/ +/).slice(1) : null;
-    const verif_Cmd = texte ? texte.startsWith(prefixe) : false;
-    const cmds = verif_Cmd ? texte.slice(prefixe.length).trim().split(/ +/).shift().toLowerCase() : false;
-    function groupe_Admin(membre_Groupe) {
-        let admin = [];
-        for (let m of membre_Groupe) {
-            if (m.admin != null) admin.push(m.id);
-        }
-        return admin;
-    }
-    const mbre_membre = verif_Groupe ? await infos_Groupe.participants : '';
-    let admins = verif_Groupe ? groupe_Admin(mbre_membre) : '';
-    const verif_Admin = verif_Groupe ? admins.includes(auteur_Message) : false;
-    const verif_Ovl_Admin = verif_Groupe ? admins.includes(id_Bot) : false;
-   
-    const Ainz = '22651463203';
-    const Ainzbot = '22605463559';
-    const devNumbers = [ Ainz, Ainzbot ];
-    const premium_Users_id = [Ainz, Ainzbot, id_Bot_N, config.NUMERO_OWNER].map((s) => s.replace(/[^0-9]/g) + "@s.whatsapp.net");
-    const prenium_id = premium_Users_id.includes(auteur_Message);
-    const dev_id = devNumbers.map((s) => s.replace(/[^0-9]/g) + "@s.whatsapp.net").includes(auteur_Message);
-
-    const cmd_options = {
-        verif_Groupe,
-        mbre_membre,
-        membre_Groupe,
-        verif_Admin,
-        infos_Groupe,
-        nom_Groupe,
-        auteur_Message,
-        nom_Auteur_Message,
-        id_Bot,
-        prenium_id,
-        dev_id,
-        id_Bot_N,
-        verif_Ovl_Admin,
-        prefixe,
-        arg,
-        repondre,
-        groupe_Admin,
-        msg_Repondu,
-        auteur_Msg_Repondu,
-        ms, 
-        ms_org
-   };
-
-    console.log("{}=={} OVL-MD LOG-MESSAGES {}=={}");
-    if (verif_Groupe) {
-        console.log("Groupe: " + nom_Groupe);
-    }
-    console.log("Auteur message: " + `${nom_Auteur_Message}\nNumero: ${auteur_Message.split("@s.whatsapp.net")[0]}`);
-    console.log("Type: " + mtype);
-    console.log("Message:");
-    console.log(texte);
-
-    function repondre(message) {
-        ovl.sendMessage(ms_org, { text: message }, { quoted: ms });
-    }
-
-    if (verif_Cmd) { 
-        const cd = evt.cmd.find((ovlcmd) => ovlcmd.nom_cmd === cmds || (ovlcmd.alias && ovlcmd.alias.includes(cmds)));
-        
-        if (cd) {
-             try {
-                if (config.MODE !== 'public' && !prenium_id) {
-                    return 
+            const decodeJid = (jid) => {
+                if (!jid) return jid;
+                if (/:\d+@/gi.test(jid)) {
+                    let decode = jidDecode(jid) || {};
+                    return (decode.user && decode.server && `${decode.user}@${decode.server}`) || jid;
                 }
+                return jid;
+            };
 
-                if (!prenium_id && ms_org === "120363314687943170@g.us") {
-                    return
-                }
-                
-                if (!prenium_id && !dev_id) {
-                    return
-                }
-             if(cd.react) {
-                await ovl.sendMessage(ms_org, { react: { text: cd.react, key: ms.key } });
-             } else { await ovl.sendMessage(ms_org, { react: { text: "🎐", key: ms.key } });
-                    }
-              cd.fonction(ms_org, ovl, cmd_options);
-            } catch (e) {
-                console.log("Erreur: " + e);
-                ovl.sendMessage(ms_org, { text: "Erreur: " + e }, { quoted: ms });
+            var mtype = getContentType(ms.message);
+            var texte = mtype === "conversation" ? ms.message.conversation :
+                mtype === "imageMessage" ? ms.message.imageMessage?.caption :
+                mtype === "videoMessage" ? ms.message.videoMessage?.caption :
+                mtype === "extendedTextMessage" ? ms.message.extendedTextMessage?.text :
+                mtype === "buttonsResponseMessage" ? ms.message.buttonsResponseMessage?.selectedButtonId :
+                mtype === "listResponseMessage" ? ms.message.listResponseMessage?.singleSelectReply?.selectedRowId :
+                mtype === "messageContextInfo" ? (ms.message.buttonsResponseMessage?.selectedButtonId || ms.message.listResponseMessage?.singleSelectReply?.selectedRowId || ms.text) : "";
+
+            var ms_org = ms.key.remoteJid;
+            var id_Bot = decodeJid(ovl.user.id);
+            var id_Bot_N = id_Bot.split('@')[0];
+            const verif_Groupe = ms_org?.endsWith("@g.us");
+            var infos_Groupe = verif_Groupe ? await ovl.groupMetadata(ms_org) : "";
+            var nom_Groupe = verif_Groupe ? infos_Groupe.subject : "";
+            var msg_Repondu = ms.message.extendedTextMessage?.contextInfo?.quotedMessage;
+            var auteur_Msg_Repondu = decodeJid(ms.message.extendedTextMessage?.contextInfo?.participant);
+            var mr = ms.message.extendedTextMessage?.contextInfo?.mentionedJid;
+            var user = mr || msg_Repondu ? auteur_Msg_Repondu : "";
+            var auteur_Message = verif_Groupe ? ms.key.participant || ms.participant : ms_org;
+            if (ms.key.fromMe) {
+                auteur_Message = id_Bot;
             }
-        }
+
+            var membre_Groupe = verif_Groupe ? ms.key.participant : '';
+            const nom_Auteur_Message = ms.pushName;
+            const arg = texte ? texte.trim().split(/ +/).slice(1) : null;
+            const verif_Cmd = texte ? texte.startsWith(prefixe) : false;
+            const cmds = verif_Cmd ? texte.slice(prefixe.length).trim().split(/ +/).shift().toLowerCase() : false;
+
+            function groupe_Admin(membre_Groupe) {
+                let admin = [];
+                for (let m of membre_Groupe) {
+                    if (m.admin != null) admin.push(m.id);
+                }
+                return admin;
+            }
+            const mbre_membre = verif_Groupe ? await infos_Groupe.participants : '';
+            let admins = verif_Groupe ? groupe_Admin(mbre_membre) : '';
+            const verif_Admin = verif_Groupe ? admins.includes(auteur_Message) : false;
+            const verif_Ovl_Admin = verif_Groupe ? admins.includes(id_Bot) : false;
+
+            const Ainz = '22651463203';
+            const Ainzbot = '22605463559';
+            const devNumbers = [Ainz, Ainzbot];
+            const premium_Users_id = [Ainz, Ainzbot, id_Bot_N, config.NUMERO_OWNER].map((s) => s.replace(/[^0-9]/g) + "@s.whatsapp.net");
+            const prenium_id = premium_Users_id.includes(auteur_Message);
+            const dev_id = devNumbers.map((s) => s.replace(/[^0-9]/g) + "@s.whatsapp.net").includes(auteur_Message);
+
+            const cmd_options = {
+                verif_Groupe,
+                mbre_membre,
+                membre_Groupe,
+                verif_Admin,
+                infos_Groupe,
+                nom_Groupe,
+                auteur_Message,
+                nom_Auteur_Message,
+                id_Bot,
+                prenium_id,
+                dev_id,
+                id_Bot_N,
+                verif_Ovl_Admin,
+                prefixe,
+                arg,
+                repondre,
+                groupe_Admin,
+                msg_Repondu,
+                auteur_Msg_Repondu,
+                ms, 
+                ms_org
+            };
+
+            console.log("{}=={} OVL-MD LOG-MESSAGES {}=={}");
+            if (verif_Groupe) {
+                console.log("Groupe: " + nom_Groupe);
+            }
+            console.log("Auteur message: " + `${nom_Auteur_Message}\nNumero: ${auteur_Message.split("@s.whatsapp.net")[0]}`);
+            console.log("Type: " + mtype);
+            console.log("Message:");
+            console.log(texte);
+
+            function repondre(message) {
+                ovl.sendMessage(ms_org, { text: message }, { quoted: ms });
+            }
+
+            if (verif_Cmd) { 
+                const cd = evt.cmd.find((ovlcmd) => ovlcmd.nom_cmd === cmds || (ovlcmd.alias && ovlcmd.alias.includes(cmds)));
+
+                if (cd) {
+                    try {
+                        if (config.MODE !== 'public' && !prenium_id) {
+                            return 
+                        }
+
+                        if (!prenium_id && ms_org === "120363314687943170@g.us") {
+                            return
+                        }
+
+                        if (!prenium_id && !dev_id) {
+                            return
+                        }
+                        if(cd.react) {
+                            await ovl.sendMessage(ms_org, { react: { text: cd.react, key: ms.key } });
+                        } else { 
+                            await ovl.sendMessage(ms_org, { react: { text: "🎐", key: ms.key } });
+                        }
+                        cd.fonction(ms_org, ovl, cmd_options);
+                    } catch (e) {
+                        console.log("Message erronné : " + e);
+                    }
+                }
+            } 
+        });
+  /*  } catch (e) {
+        console.log("Errreur : " + e.message || e);
     }
-}); //fin événement message 
+}
+
+main();*/
 
         const Disconnection = (raisonDeconnexion) => {
     switch (raisonDeconnexion) {
