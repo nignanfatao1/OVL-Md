@@ -17,19 +17,30 @@ const prefixe = config.PREFIXE;
         if (session.startsWith("Ovl-MD_") && session.endsWith("_SESSION-ID")) {
             sessionId = session.slice(7, -11);
         }
+        
         const response = await axios.get('https://pastebin.com/raw/' + sessionId);
         const data = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
         const filePath = path.join(__dirname, 'auth', 'creds.json');
+        
         if (!fs.existsSync(filePath)) {
-            console.log("connexion au bot en cours");
+            console.log("Connexion au bot en cours");
             await fs.writeFileSync(filePath, data, 'utf8'); 
         } else if (fs.existsSync(filePath) && session !== "ovl") {
             await fs.writeFileSync(filePath, data, 'utf8');
         }
+
+        // Vérifier si la session a bien été écrite
+        const writtenData = await fs.readFileSync(filePath, 'utf8');
+        if (writtenData === data) {
+            console.log("Session écrite avec succès dans creds.json");
+        } else {
+            console.log("Erreur : La session n'a pas été écrite correctement dans creds.json");
+        }
     } catch (e) {
         console.log("Session invalide: " + e.message || e);
     }
- }
+}
+
 // Appelez la fonction avec votre variable session
 ovlAuth(session);
 
