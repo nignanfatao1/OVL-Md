@@ -75,7 +75,7 @@ async function main() {
          ovl.ev.on("messages.upsert", async (m) => {
     const { messages } = m;
     const ms = messages[0];
-    if (!ms.message) return;
+   // if (!ms.message) return;
     
     const decodeJid = (jid) => {
         if (!jid) return jid;
