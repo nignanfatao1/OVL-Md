@@ -52,7 +52,6 @@ async function main() {
   })
 });
         const ovl = makeWASocket({
-            version, 
             printQRInTerminal: true,
             logger: pino({ level: "silent" }),
             browser: ["Ubuntu", "Chrome", "20.0.04"],
