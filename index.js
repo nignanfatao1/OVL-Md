@@ -95,7 +95,7 @@ async function main() {
         });
         store.bind(ovl.ev);
              
-         ovl.ev.on("messages.upsert", async (m) => {
+     /*    ovl.ev.on("messages.upsert", async (m) => {
     const { messages } = m;
     const ms = messages[0];
     if (!ms.message) return;
@@ -223,7 +223,24 @@ async function main() {
     }
 }); //fin événement message 
 
-        const Disconnection = (raisonDeconnexion) => {
+    */   ovl.ev.on("messages.upsert", async (m) => {
+    try {
+        if (!m || !m.messages || m.messages.length === 0) {
+            console.error("Aucun message détecté dans l'événement `messages.upsert`.");
+            return;
+        }
+        const ms = m.messages[0];
+        if (!ms.message) {
+            console.error("Message vide détecté.");
+            return;
+        }
+        // Continuez avec le traitement normal...
+    } catch (err) {
+        console.error("Erreur dans messages.upsert:", err);
+    }
+});
+
+         const Disconnection = (raisonDeconnexion) => {
     switch (raisonDeconnexion) {
         case DisconnectReason.badSession:
             console.log('Session ID incorrecte, veuillez obtenir une nouvelle session via QR-code/Pairing.');
