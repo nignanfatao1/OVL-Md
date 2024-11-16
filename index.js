@@ -94,6 +94,7 @@ async function main() {
            }
         });
         store.bind(ovl.ev);
+         await ovl.connect();
              
          ovl.ev.on("messages.upsert", async (m) => {
     const { messages } = m;
