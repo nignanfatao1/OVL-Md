@@ -44,28 +44,6 @@ const prefixe = config.PREFIXE;
 // Appelez la fonction avec votre variable session
 ovlAuth(session);
 
-/*const Void = VoidConnect({
-            logger: pino({ level: 'fatal' }),
-            printQRInTerminal: true,
-            browser: ['Izuku', 'safari', '1.0.0'],
-            fireInitQueries: false,
-            shouldSyncHistoryMessage: false,
-            downloadHistory: false,
-            syncFullHistory: false,
-            generateHighQualityLinkPreview: true,
-            auth: state,
-            version: getVersionWaweb() || [2, 2242, 6],
-            getMessage: async key => {
-                if (store) {
-                    const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
-                    return msg.message || undefined;
-                }
-                return { conversation: 'An Error Occurred, Repeat Command!' };
-            }
-        });
-
-        store.bind(Void.ev);*/
-
 async function main() {
     const { version, isLatest } = await fetchLatestBaileysVersion();
     const { state, saveCreds } = await useMultiFileAuthState(path.join(__dirname, 'auth'));
@@ -78,11 +56,10 @@ async function main() {
             logger: pino({ level: "silent" }),
             browser: ["Ubuntu", "Chrome", "20.0.04"],
             generateHighQualityLinkPreview: true,
-         /*   auth: {
+            auth: {
             creds: state.creds,
-            keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" }))
-        },*/
-           auth: state,
+            keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "silent" }).child({ level: "silent" }))
+        },
            getMessage: async (key) => {
                 if (store) {
                     const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
