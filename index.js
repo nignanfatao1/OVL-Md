@@ -95,7 +95,7 @@ async function main() {
         });
         store.bind(ovl.ev);
              
-     /*    ovl.ev.on("messages.upsert", async (m) => {
+         ovl.ev.on("messages.upsert", async (m) => {
     const { messages } = m;
     const ms = messages[0];
     if (!ms.message) return;
@@ -223,7 +223,7 @@ async function main() {
     }
 }); //fin événement message 
 
-    */   ovl.ev.on("messages.upsert", async (m) => {
+    /* ovl.ev.on("messages.upsert", async (m) => {
     try {
         if (!m || !m.messages || m.messages.length === 0) {
             console.error("Aucun message détecté dans l'événement `messages.upsert`.");
@@ -238,7 +238,7 @@ async function main() {
     } catch (err) {
         console.error("Erreur dans messages.upsert:", err);
     }
-});
+});*/
 
          const Disconnection = (raisonDeconnexion) => {
     switch (raisonDeconnexion) {
@@ -297,6 +297,11 @@ ovl.ev.on("connection.update", async (con) => {
 
              𝙈𝙖𝙙𝙚 𝙗𝙮 Ainz`;
         await ovl.sendMessage(ovl.user.id, { text: start_msg });
+
+     setTimeout(() => {
+    // Vérification du contenu de store après 30 secondes
+    console.log('Contenu de store:', JSON.stringify(store, null, 2));
+}, 30000);  // 30 secondes
         
     } else if (connection === "close") {
         const raisonDeconnexion = new boom.Boom(lastDisconnect?.error)?.output.statusCode;
