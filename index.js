@@ -62,9 +62,9 @@ ovlAuth(session);
                 }
                 return { conversation: 'An Error Occurred, Repeat Command!' };
             }
-        });*/
+        });
 
-        store.bind(Void.ev);
+        store.bind(Void.ev);*/
 
 async function main() {
     const { version, isLatest } = await fetchLatestBaileysVersion();
