@@ -70,12 +70,12 @@ async function main() {
     const { version, isLatest } = await fetchLatestBaileysVersion();
     const { state, saveCreds } = await useMultiFileAuthState(path.join(__dirname, 'auth'));
         try {
-        const store = makeInMemoryStore({ logger: pino().child({ level: "fatal", stream: "store"
+        const store = makeInMemoryStore({ logger: pino().child({ level: "silent", stream: "store"
   })
 });
         const ovl = makeWASocket({
             printQRInTerminal: true,
-            logger: pino({ level: "fatal" }),
+            logger: pino({ level: "silent" }),
             browser: ["Ubuntu", "Chrome", "20.0.04"],
             generateHighQualityLinkPreview: true,
          /*   auth: {
