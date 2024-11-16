@@ -298,6 +298,24 @@ ovl.ev.on("connection.update", async (con) => {
              𝙈𝙖𝙙𝙚 𝙗𝙮 Ainz`;
         await ovl.sendMessage(ovl.user.id, { text: start_msg });
 
+     // Simuler une récupération de messages depuis store après 30 secondes
+
+setTimeout(() => {
+    // Assurez-vous que store est correctement initialisé avant d'essayer de récupérer des messages.
+    if (store && typeof store.loadMessages === 'function') {
+        store.loadMessages()  // Charge tous les messages enregistrés
+            .then(messages => {
+                console.log('Liste des messages enregistrés:', messages);
+            })
+            .catch(err => {
+                console.error('Erreur lors de la récupération des messages:', err);
+            });
+    } else {
+        console.error('store ou la méthode loadMessages est introuvable');
+    }
+}, 30000);  // 30 000 ms = 30 secondes
+
+
      setTimeout(() => {
     // Vérification du contenu de store après 30 secondes
     console.log('Contenu de store:', JSON.stringify(store, null, 2));
