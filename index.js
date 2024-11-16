@@ -48,9 +48,9 @@ async function main() {
     const { version, isLatest } = await fetchLatestBaileysVersion();
     const { state, saveCreds } = await useMultiFileAuthState(path.join(__dirname, 'auth'));
         try {
-        const store = makeInMemoryStore({ logger: pino().child({ level: "fatal", stream: "store"
+       /* const store = makeInMemoryStore({ logger: pino().child({ level: "fatal", stream: "store"
   })
-});
+});*/
         const ovl = makeWASocket({
             printQRInTerminal: true,
             logger: pino({ level: "fatal" }),
@@ -58,19 +58,11 @@ async function main() {
             generateHighQualityLinkPreview: true,
             auth: {
             creds: state.creds,
-            keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" }))
+            keys: makeCacheableSignalKeyStore(state.keys)
         },
-           getMessage: async (key) => {
-                if (store) {
-                    const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
-                    return msg.message || undefined;
-                }
-                return {
-                    conversation: 'An Error Occurred, Repeat Command!'
-                };
-           }
+           getMessage
         });
-         store.bind(ovl.ev);
+      //  store.bind(ovl.ev);
              
          ovl.ev.on("messages.upsert", async (m) => {
     const { messages } = m;
