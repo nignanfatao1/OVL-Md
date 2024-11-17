@@ -102,6 +102,7 @@ async function main() {
            }
         });*/
         store.bind(ovl.ev);
+         setInterval(() => { store.writeToFile(__dirname + "/store.json");  }, 3000);
     //     await ovl.connect();
              
          ovl.ev.on("messages.upsert", async (m) => {
