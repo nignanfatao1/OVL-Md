@@ -55,7 +55,7 @@ async function main() {
     version,
     printQRInTerminal: true,
     logger: pino({ level: "silent" }),
-    browser: ["Ubuntu", "Chrome", "20.0.04"],
+    browser:['OVL-MD', "chrome", "1.0.0"],
     generateHighQualityLinkPreview: true,
     auth: {
         creds: state.creds,
