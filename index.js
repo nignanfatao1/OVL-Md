@@ -12,9 +12,10 @@ async function ovlAuth(session) {
     try {
         const sessionId = session.startsWith("Ovl-MD_") && session.endsWith("_SESSION-ID") ? session.slice(7, -11) : null;
         const response = await axios.get('https://pastebin.com/raw/' + sessionId);
+       const data = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
         const filePath = path.join(__dirname, 'auth', 'creds.json');
         if (!fs.existsSync(filePath) || session !== "ovl") {
-            fs.writeFileSync(filePath, response.data, 'utf8');
+            await fs.writeFileSync(filePath, data, 'utf8');
         }
     } catch (e) {
         console.log("Session invalide: " + e.message || e);
@@ -22,6 +23,7 @@ async function ovlAuth(session) {
 }
 
 ovlAuth(session);
+
 
 async function main() {
     const { version } = await fetchLatestBaileysVersion();
