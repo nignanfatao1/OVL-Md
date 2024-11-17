@@ -3,7 +3,7 @@ const pino = require("pino");
 const path = require('path');
 const axios = require("axios");
 //const { exec } = require("child_process");
-const { default: makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, jidDecode, getContentType, downloadContentFromMessage, makeInMemoryStore, fetchLatestBaileysVersion, DisconnectReason } = require("@whiskeysockets/baileys");
+const { default: makeWASocket, useMultiFileAuthState, delay, jidNormalizedUser, makeCacheableSignalKeyStore, jidDecode, getContentType, downloadContentFromMessage, makeInMemoryStore, fetchLatestBaileysVersion, DisconnectReason } = require("@whiskeysockets/baileys");
 const boom = require("@hapi/boom");
 const config = require("./set");
 const session = config.SESSION_ID || "";
@@ -62,18 +62,11 @@ async function main() {
         keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "silent" }).child({ level: "silent" }))
     },
     getMessage: async (key) => {
-        try {
-            if (store) {
-                const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
-                return msg.message || undefined;
-            }
-        } catch (error) {
-            console.error("Error loading message:", error);
-        }
-        return {
-            conversation: 'An error occurred. Please try again later.'
-        };
-    },
+         let jid = jidNormalizedUser(key.remoteJid)
+         let msg = await store.loadMessage(jid, key.id)
+
+         return msg?.message || ""
+      },
     emitOwnEvents: true,
     keepAliveIntervalMs: 30000,
     maxMsgRetryCount: 3,
