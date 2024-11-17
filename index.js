@@ -51,7 +51,38 @@ async function main() {
         const store = makeInMemoryStore({ logger: pino().child({ level: "silent", stream: "store"
   })
 });
-        const ovl = makeWASocket({
+         const ovl = makeWASocket({
+    version,
+    printQRInTerminal: true,
+    logger: pino({ level: "silent" }),
+    browser: ["Ubuntu", "Chrome", "20.0.04"],
+    generateHighQualityLinkPreview: true,
+    auth: {
+        creds: state.creds,
+        keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "silent" }).child({ level: "silent" }))
+    },
+    getMessage: async (key) => {
+        try {
+            if (store) {
+                const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
+                return msg.message || undefined;
+            }
+        } catch (error) {
+            console.error("Error loading message:", error);
+        }
+        return {
+            conversation: 'An error occurred. Please try again later.'
+        };
+    },
+    emitOwnEvents: true,
+    keepAliveIntervalMs: 30000,
+    maxMsgRetryCount: 3,
+    retryRequestDelayMs: 1000,
+    markOnlineOnConnect: true,
+    syncFullHistory: true
+});
+
+     /*   const ovl = makeWASocket({
             printQRInTerminal: true,
             logger: pino({ level: "silent" }),
             browser: ["Ubuntu", "Chrome", "20.0.04"],
@@ -69,7 +100,7 @@ async function main() {
                     conversation: 'An Error Occurred, Repeat Command!'
                 };
            }
-        });
+        });*/
         store.bind(ovl.ev);
     //     await ovl.connect();
              
