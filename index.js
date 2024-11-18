@@ -3,7 +3,7 @@ const pino = require("pino");
 const path = require('path');
 const axios = require("axios");
 //const { exec } = require("child_process");
-const { default: makeWASocket, useMultiFileAuthState, delay, jidNormalizedUser, makeCacheableSignalKeyStore, jidDecode, getContentType, downloadContentFromMessage, makeInMemoryStore, fetchLatestBaileysVersion, DisconnectReason } = require("@whiskeysockets/baileys");
+const { default: makeWASocket, useMultiFileAuthState, logger, delay, makeCacheableSignalKeyStore, jidDecode, getContentType, downloadContentFromMessage, makeInMemoryStore, fetchLatestBaileysVersion, DisconnectReason } = require("@whiskeysockets/baileys");
 const boom = require("@hapi/boom");
 const config = require("./set");
 const session = config.SESSION_ID || "";
@@ -51,7 +51,7 @@ async function main() {
         const store = makeInMemoryStore({ logger: pino().child({ level: "silent", stream: "store"
   })
 });
-         const ovl = makeWASocket({
+        /* const ovl = makeWASocket({
     version,
     printQRInTerminal: true,
     logger: pino({ level: "silent" }),
@@ -73,9 +73,9 @@ async function main() {
     retryRequestDelayMs: 1000,
     markOnlineOnConnect: true,
     syncFullHistory: true
-});
+});*/
 
-     /*   const ovl = makeWASocket({
+            const ovl = makeWASocket({
             printQRInTerminal: true,
             logger: pino({ level: "silent" }),
             browser: ["Ubuntu", "Chrome", "20.0.04"],
@@ -93,9 +93,9 @@ async function main() {
                     conversation: 'An Error Occurred, Repeat Command!'
                 };
            }
-        });*/
+        });
         store.bind(ovl.ev);
-         setInterval(() => { store.writeToFile(__dirname + "/store.json");  }, 3000);
+       //  setInterval(() => { store.writeToFile(__dirname + "/store.json");  }, 3000);
     //     await ovl.connect();
              
          ovl.ev.on("messages.upsert", async (m) => {
