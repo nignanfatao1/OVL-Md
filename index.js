@@ -73,9 +73,8 @@ async function main() {
     retryRequestDelayMs: 1000,
     markOnlineOnConnect: true,
     syncFullHistory: true
-});*/
-
-            const ovl = makeWASocket({
+}) */
+         const ovl = makeWASocket({
             printQRInTerminal: true,
             logger: pino({ level: "silent" }),
             browser: ["Ubuntu", "Chrome", "20.0.04"],
@@ -84,6 +83,11 @@ async function main() {
             creds: state.creds,
             keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "silent" }).child({ level: "silent" }))
         },
+           fireInitQueries: false,
+           shouldSyncHistoryMessage: true,
+           downloadHistory: true,
+           syncFullHistory: true,
+           markOnlineOnConnect: false,
            getMessage: async (key) => {
                 if (store) {
                     const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
@@ -99,6 +103,7 @@ async function main() {
     //     await ovl.connect();
              
          ovl.ev.on("messages.upsert", async (m) => {
+          console.log('message ohh');
     const { messages } = m;
     const ms = messages[0];
     if (!ms.message) return;
