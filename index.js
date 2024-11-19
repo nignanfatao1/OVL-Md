@@ -41,7 +41,7 @@ async function main() {
          const ovl = makeWASocket({
             printQRInTerminal: true,
             logger: pino({ level: "silent" }),
-            browser:['OVL-MD', "chrome", "1.0.0"],
+            browser: [ "Ubuntu", "Chrome", "20.0.04" ],
             generateHighQualityLinkPreview: true,
             auth: {
             creds: state.creds,
