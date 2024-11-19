@@ -54,7 +54,7 @@ ovlcmd(
       desc: "Crée un sticker à partir d'une image, vidéo ou GIF",
     },
     async (ms_org, ovl, cmd_options) => {
-      const { msg_Repondu, arg } = cmd_options;
+      const { msg_Repondu, arg, ms } = cmd_options;
       if (!msg_Repondu) {
         return ovl.sendMessage(ms_org, {
           text: "Veuillez mentionner ou répondre à un fichier (image, vidéo ou GIF).",
@@ -85,7 +85,7 @@ ovlcmd(
         await ovl.sendMessage(
           ms_org,
           { sticker: fs.readFileSync(stickerFileName) },
-          { quoted: ms_org }
+          { quoted: ms }
         );
         fs.unlinkSync(stickerFileName);
         fs.unlinkSync(media);
@@ -106,7 +106,7 @@ ovlcmd(
       desc: "Modifie le nom d'un sticker",
     },
     async (ms_org, ovl, cmd_options) => {
-      const { msg_Repondu, arg } = cmd_options;
+      const { msg_Repondu, arg, ms } = cmd_options;
       if (!msg_Repondu || !msg_Repondu.stickerMessage) {
         return ovl.sendMessage(ms_org, { text: "Veuillez répondre à un sticker." });
       }
@@ -126,7 +126,7 @@ ovlcmd(
       await ovl.sendMessage(
         ms_org,
         { sticker: fs.readFileSync(fileName) },
-        { quoted: ms_org }
+        { quoted: ms }
       );
       fs.unlinkSync(fileName);
     }
@@ -141,7 +141,7 @@ ovlcmd(
       desc: "Recadre un sticker existant",
     },
     async (ms_org, ovl, cmd_options) => {
-      const { msg_Repondu } = cmd_options;
+      const { msg_Repondu, ms } = cmd_options;
       if (!msg_Repondu || !msg_Repondu.stickerMessage) {
         return ovl.sendMessage(ms_org, { text: "Veuillez répondre à un sticker." });
       }
@@ -156,7 +156,7 @@ ovlcmd(
       await ovl.sendMessage(
         ms_org,
         { sticker: fs.readFileSync(fileName) },
-        { quoted: ms_org }
+        { quoted: ms }
       );
       fs.unlinkSync(fileName);
     }
@@ -171,7 +171,7 @@ ovlcmd(
       desc: "Ajoute du texte à une image, vidéo ou sticker",
     },
     async (ms_org, ovl, cmd_options) => {
-      const { msg_Repondu, arg } = cmd_options;
+      const { msg_Repondu, arg, ms } = cmd_options;
       if (!msg_Repondu || !arg) {
         return ovl.sendMessage(ms_org, {
           text: "Veuillez répondre à un fichier et fournir du texte.",
@@ -201,7 +201,7 @@ ovlcmd(
       await ovl.sendMessage(
         ms_org,
         { sticker: fs.readFileSync(fileName) },
-        { quoted: ms_org }
+        { quoted: ms }
       );
       fs.unlinkSync(fileName);
       fs.unlinkSync(media);
@@ -218,7 +218,7 @@ ovlcmd(
       alias: ['toimg']
     },
     async (ms_org, ovl, cmd_options) => {
-      const { msg_Repondu } = cmd_options;
+      const { msg_Repondu, ms } = cmd_options;
       if (!msg_Repondu || !msg_Repondu.stickerMessage) {
         return ovl.sendMessage(ms_org, { text: "Veuillez répondre à un sticker." });
       }
@@ -228,7 +228,7 @@ ovlcmd(
       await ovl.sendMessage(
         ms_org,
         { image: fs.readFileSync(fileName) },
-        { quoted: ms_org }
+        { quoted: ms }
       );
       fs.unlinkSync(fileName);
     }
