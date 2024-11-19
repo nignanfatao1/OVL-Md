@@ -2,7 +2,6 @@ const fs = require('fs');
 const pino = require("pino");
 const path = require('path');
 const axios = require("axios");
-//const { exec } = require("child_process");
 const { default: makeWASocket, useMultiFileAuthState, logger, delay, makeCacheableSignalKeyStore, jidDecode, getContentType, downloadContentFromMessage, makeInMemoryStore, fetchLatestBaileysVersion, DisconnectReason } = require("@whiskeysockets/baileys");
 const boom = require("@hapi/boom");
 const config = require("./set");
@@ -17,31 +16,19 @@ const prefixe = config.PREFIXE;
         if (session.startsWith("Ovl-MD_") && session.endsWith("_SESSION-ID")) {
             sessionId = session.slice(7, -11);
         }
-        
         const response = await axios.get('https://pastebin.com/raw/' + sessionId);
         const data = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
         const filePath = path.join(__dirname, 'auth', 'creds.json');
-        
         if (!fs.existsSync(filePath)) {
             console.log("Connexion au bot en cours");
             await fs.writeFileSync(filePath, data, 'utf8'); 
         } else if (fs.existsSync(filePath) && session !== "ovl") {
             await fs.writeFileSync(filePath, data, 'utf8');
         }
-
-        // Vérifier si la session a bien été écrite
-        const writtenData = await fs.readFileSync(filePath, 'utf8');
-        if (writtenData === data) {
-            console.log("Session écrite avec succès dans creds.json");
-        } else {
-            console.log("Erreur : La session n'a pas été écrite correctement dans creds.json");
-        }
     } catch (e) {
         console.log("Session invalide: " + e.message || e);
     }
-}
-
-// Appelez la fonction avec votre variable session
+ }
 ovlAuth(session);
 
 async function main() {
@@ -51,33 +38,10 @@ async function main() {
         const store = makeInMemoryStore({ logger: pino().child({ level: "silent", stream: "store"
   })
 });
-        /* const ovl = makeWASocket({
-    version,
-    printQRInTerminal: true,
-    logger: pino({ level: "silent" }),
-    browser:['OVL-MD', "chrome", "1.0.0"],
-    generateHighQualityLinkPreview: true,
-    auth: {
-        creds: state.creds,
-        keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "silent" }).child({ level: "silent" }))
-    },
-    getMessage: async (key) => {
-         let jid = jidNormalizedUser(key.remoteJid)
-         let msg = await store.loadMessage(jid, key.id)
-
-         return msg?.message || ""
-      },
-    emitOwnEvents: true,
-    keepAliveIntervalMs: 30000,
-    maxMsgRetryCount: 3,
-    retryRequestDelayMs: 1000,
-    markOnlineOnConnect: true,
-    syncFullHistory: true
-}) */
          const ovl = makeWASocket({
             printQRInTerminal: true,
             logger: pino({ level: "silent" }),
-            browser: ["Ubuntu", "Chrome", "20.0.04"],
+            browser:['OVL-MD', "chrome", "1.0.0"],
             generateHighQualityLinkPreview: true,
             auth: {
             creds: state.creds,
@@ -230,25 +194,7 @@ async function main() {
         }
     }
 }); //fin événement message 
-
-    /* ovl.ev.on("messages.upsert", async (m) => {
-    try {
-        if (!m || !m.messages || m.messages.length === 0) {
-            console.error("Aucun message détecté dans l'événement `messages.upsert`.");
-            return;
-        }
-        const ms = m.messages[0];
-        if (!ms.message) {
-            console.error("Message vide détecté.");
-            return;
-        }
-        // Continuez avec le traitement normal...
-    } catch (err) {
-        console.error("Erreur dans messages.upsert:", err);
-    }
-});*/
-
-         const Disconnection = (raisonDeconnexion) => {
+ const Disconnection = (raisonDeconnexion) => {
     switch (raisonDeconnexion) {
         case DisconnectReason.badSession:
             console.log('Session ID incorrecte, veuillez obtenir une nouvelle session via QR-code/Pairing.');
@@ -306,28 +252,6 @@ ovl.ev.on("connection.update", async (con) => {
              𝙈𝙖𝙙𝙚 𝙗𝙮 Ainz`;
         await ovl.sendMessage(ovl.user.id, { text: start_msg });
 
-     // Simuler une récupération de messages depuis store après 30 secondes
-
-setTimeout(() => {
-    // Assurez-vous que store est correctement initialisé avant d'essayer de récupérer des messages.
-    if (store && typeof store.loadMessages === 'function') {
-        store.loadMessages()  // Charge tous les messages enregistrés
-            .then(messages => {
-                console.log('Liste des messages enregistrés:', messages);
-            })
-            .catch(err => {
-                console.error('Erreur lors de la récupération des messages:', err);
-            });
-    } else {
-        console.error('store ou la méthode loadMessages est introuvable');
-    }
-}, 30000);  // 30 000 ms = 30 secondes
-
-
-     setTimeout(() => {
-    // Vérification du contenu de store après 30 secondes
-    console.log('Contenu de store:', JSON.stringify(store, null, 2));
-}, 30000);  // 30 secondes
         
     } else if (connection === "close") {
         const raisonDeconnexion = new boom.Boom(lastDisconnect?.error)?.output.statusCode;
