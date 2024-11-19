@@ -1,6 +1,6 @@
 const { ovlcmd, cmd } = require("../framework/ovlcmd");
 const config = require("../set");
-
+const prefixe = process.env.PREFIXE;
 ovlcmd(
     {
         nom_cmd: "test",
@@ -9,7 +9,6 @@ ovlcmd(
         desc: "Tester la connectivité du bot"
     },
     async (ms_org, ovl, cmd_options) => {
-        const prefixe = cmd_options;
         try {
             const mess = `\`\`\`🌐 Bienvenue sur *OVL-MD*, votre bot WhatsApp multi-device.🔍 Tapez *${prefixe}menu* pour voir toutes les commandes disponibles.\`\`\`\n> ©2024 OVL-MD By *AINZ*`;
             const img = 'https://telegra.ph/file/8173c870f9de5570db8c3.jpg';
@@ -26,7 +25,7 @@ ovlcmd(
 
 ovlcmd(
     {
-        nom_cmd: "descriptions",
+        nom_cmd: "description",
         classe: "Outils",
         desc: "Affiche la liste des commandes avec leurs descriptions",
         alias: ["desc", "help"],
