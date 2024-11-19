@@ -13,7 +13,7 @@
   "author": "Ainz",
   "license": "MIT",
 "dependencies": {
-    "@whiskeysockets/baileys": "github:Luffy2ndAccount/Baileys",
+    "@whiskeysockets/baileys": "github:Nignanfatao/Wa-Baileys",
     "@hapi/boom": "^10.0.1",
     "axios": "^1.4.0",
     "@distube/ytsr": "^2.0.4",
