@@ -1,7 +1,7 @@
 const { ovlcmd } = require("../framework/ovlcmd");
 const { Catbox } = require('node-catbox');
 const fs = require("fs");
-const { Canvas } = require("canvacord");
+const { Canvas } = require("@napi-rs/canvas");
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
 
 const catbox = new Catbox();
@@ -133,17 +133,11 @@ ovlcmd(
       if (!msg_Repondu || !msg_Repondu.stickerMessage) {
         return ovl.sendMessage(ms_org, { text: "Répondez à un sticker." });
       }
-
-      if (!arg) {
-        return ovl.sendMessage(ms_org, {
-          text: "Spécifiez un nouveau nom pour le sticker.",
-        });
-      }
-
+      
       try {
         const stickerBuffer = await ovl.dl_save_media_ms(msg_Repondu.stickerMessage);
         const sticker = new Sticker(stickerBuffer, {
-          pack: arg ? arg : nom_Auteur_Message,
+          pack: arg.join(' ') ? arg : nom_Auteur_Message,
           author: "OVL Bot",
           type: StickerTypes.FULL,
         });
