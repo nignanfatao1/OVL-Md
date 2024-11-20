@@ -143,7 +143,7 @@ ovlcmd(
       try {
         const stickerBuffer = await ovl.dl_save_media_ms(msg_Repondu.stickerMessage);
         const sticker = new Sticker(stickerBuffer, {
-          pack: arg && arg.trim() ? arg : nom_Auteur_Message,
+          pack: arg ? arg : nom_Auteur_Message,
           author: "OVL Bot",
           type: StickerTypes.FULL,
         });
@@ -167,7 +167,7 @@ ovlcmd(
   // Commande Write
 ovlcmd(
   {
-    nom_cmd: "write",
+    nom_cmd: "ecrire",
     classe: "Conversion",
     react: "📝",
     desc: "Ajoute du texte à une image, vidéo ou sticker",
@@ -194,7 +194,7 @@ ovlcmd(
 
     try {
       const media = await ovl.dl_save_media_ms(mediaMessage);
-      const image = await Canvas.loadImage(media);
+      const image = await Canvas.loadImage(fs.readFileSync(media)); // Chargement correct
 
       const canvas = Canvas.createCanvas(image.width, image.height);
       const context = canvas.getContext("2d");
@@ -227,41 +227,54 @@ ovlcmd(
     } catch (error) {
       console.error("Erreur lors de l'ajout du texte à l'image:", error);
       await ovl.sendMessage(ms_org, {
-        text: "Une erreur est survenue lors de l'ajout du texte.",
+        text: `Une erreur est survenue lors de l'ajout du texte : ${error.message}`,
       });
     }
   }
 );
+
   // Commande ToImage
   ovlcmd(
-    {
-      nom_cmd: "toimage",
-      classe: "Conversion",
-      react: "🖼️",
-      desc: "Convertit un sticker en image",
-      alias: ['toimg']
-    },
-    async (ms_org, ovl, cmd_options) => {
-      const { msg_Repondu, ms} = cmd_options;
-      if (!msg_Repondu || !msg_Repondu.stickerMessage) {
-        return ovl.sendMessage(ms_org, { text: "Répondez à un sticker." });
-      }
+  {
+    nom_cmd: "toimage",
+    classe: "Conversion",
+    react: "🖼️",
+    desc: "Convertit un sticker en image",
+    alias: ["toimg"],
+  },
+  async (ms_org, ovl, cmd_options) => {
+    const { msg_Repondu, ms } = cmd_options;
 
-      try {
-        const stickerBuffer = await ovl.dl_save_media_ms(msg_Repondu.stickerMessage);
-        const fileName = alea(".png");
-        fs.writeFileSync(fileName, stickerBuffer);
-
-        await ovl.sendMessage(
-          ms_org,
-          { image: fs.readFileSync(fileName) },
-          { quoted: ms }
-        );
-        fs.unlinkSync(fileName);
-      } catch (error) {
-        await ovl.sendMessage(ms_org, {
-          text: `Erreur lors de la conversion en image : ${error.message}`,
-        });
-      }
+    if (!msg_Repondu || !msg_Repondu.stickerMessage) {
+      return ovl.sendMessage(ms_org, { text: "Répondez à un sticker." });
     }
-  );
+
+    try {
+      const stickerBuffer = await ovl.dl_save_media_ms(msg_Repondu.stickerMessage);
+      const image = await Canvas.loadImage(stickerBuffer);
+
+      const canvas = Canvas.createCanvas(image.width, image.height);
+      const context = canvas.getContext("2d");
+
+      context.drawImage(image, 0, 0);
+
+      const outputBuffer = canvas.toBuffer("image/png");
+
+      const fileName = alea(".png");
+      fs.writeFileSync(fileName, outputBuffer);
+
+      await ovl.sendMessage(
+        ms_org,
+        { image: fs.readFileSync(fileName) },
+        { quoted: ms }
+      );
+
+      fs.unlinkSync(fileName);
+    } catch (error) {
+      console.error("Erreur lors de la conversion du sticker en image:", error);
+      await ovl.sendMessage(ms_org, {
+        text: `Erreur lors de la conversion en image : ${error.message}`,
+      });
+    }
+  }
+);
