@@ -1,7 +1,7 @@
 const { ovlcmd } = require("../framework/ovlcmd");
 const { Catbox } = require('node-catbox');
 const fs = require("fs");
-const sharp = require("sharp");
+const { Canvas } = require("canvacord");
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
 
 const catbox = new Catbox();
@@ -55,53 +55,70 @@ ovlcmd(
 );
   // Commande Sticker
   ovlcmd(
-    {
-      nom_cmd: "sticker",
-      classe: "Conversion",
-      react: "📄",
-      desc: "Crée un sticker à partir d'une image, vidéo ou GIF",
-      alias: ["s", "stick"]
-    },
-    async (ms_org, ovl, cmd_options) => {
-      const { msg_Repondu, arg, ms } = cmd_options;
-      if (!msg_Repondu) {
-        return ovl.sendMessage(ms_org, {
-          text: "Répondez à une image, vidéo ou GIF pour créer un sticker.",
-        });
-      }
-
-      try {
-        const media = await ovl.dl_save_media_ms(msg_Repondu);
-        if (!media || !isSupportedFile(media)) {
-          throw new Error("Fichier non supporté ou invalide.");
-        }
-
-        const buffer = fs.readFileSync(media);
-        const sticker = new Sticker(buffer, {
-          pack: "OVL-MD",
-          author: "OVL Bot",
-          type: arg.includes("-c") || arg.includes("crop")
-            ? StickerTypes.CROPPED
-            : StickerTypes.FULL,
-          quality: 100,
-        });
-
-        const stickerFileName = alea(".webp");
-        await sticker.toFile(stickerFileName);
-        await ovl.sendMessage(
-          ms_org,
-          { sticker: fs.readFileSync(stickerFileName) },
-          { quoted: ms }
-        );
-        fs.unlinkSync(media);
-        fs.unlinkSync(stickerFileName);
-      } catch (error) {
-        await ovl.sendMessage(ms_org, {
-          text: `Erreur lors de la création du sticker : ${error.message}`,
-        });
-      }
+  {
+    nom_cmd: "sticker",
+    classe: "Conversion",
+    react: "📄",
+    desc: "Crée un sticker à partir d'une image, vidéo ou GIF",
+    alias: ["s", "stick"]
+  },
+  async (ms_org, ovl, cmd_options) => {
+    const { msg_Repondu, arg, ms } = cmd_options;
+    
+    if (!msg_Repondu) {
+      return ovl.sendMessage(ms_org, {
+        text: "Répondez à une image, vidéo ou GIF pour créer un sticker.",
+      });
     }
-  );
+
+    let media;
+    try {
+      const mediaMessage =
+        msg_Repondu.imageMessage ||
+        msg_Repondu.videoMessage ||
+        msg_Repondu.stickerMessage;
+
+      if (!mediaMessage) {
+        return ovl.sendMessage(ms_org, {
+          text: "Veuillez répondre à une image, vidéo ou GIF valide.",
+        });
+      }
+
+      media = await ovl.dl_save_media_ms(mediaMessage);
+
+      if (!media) {
+        throw new Error("Impossible de télécharger le fichier.");
+      }
+
+      const buffer = fs.readFileSync(media);
+
+      const sticker = new Sticker(buffer, {
+        pack: "wa-bot",
+        author: "OVL-MD",
+        type: StickerTypes.FULL,
+        quality: 100,
+      });
+
+      const stickerFileName = `${Math.floor(Math.random() * 10000)}.webp`;
+      await sticker.toFile(stickerFileName);
+
+      await ovl.sendMessage(
+        ms_org,
+        { sticker: fs.readFileSync(stickerFileName) },
+        { quoted: ms }
+      );
+
+      fs.unlinkSync(media);
+      fs.unlinkSync(stickerFileName);
+    } catch (error) {
+      console.error("Erreur lors de la création du sticker:", error);
+      await ovl.sendMessage(ms_org, {
+        text: `Erreur lors de la création du sticker : ${error.message}`,
+      });
+    }
+  }
+);
+
 
   // Commande Take
   ovlcmd(
@@ -112,7 +129,7 @@ ovlcmd(
       desc: "Modifie le nom d'un sticker",
     },
     async (ms_org, ovl, cmd_options) => {
-      const { msg_Repondu, arg, ms } = cmd_options;
+      const { msg_Repondu, arg, nom_Auteur_Message, ms } = cmd_options;
       if (!msg_Repondu || !msg_Repondu.stickerMessage) {
         return ovl.sendMessage(ms_org, { text: "Répondez à un sticker." });
       }
@@ -126,7 +143,7 @@ ovlcmd(
       try {
         const stickerBuffer = await ovl.dl_save_media_ms(msg_Repondu.stickerMessage);
         const sticker = new Sticker(stickerBuffer, {
-          pack: arg,
+          pack: arg && arg.trim() ? arg : nom_Auteur_Message,
           author: "OVL Bot",
           type: StickerTypes.FULL,
         });
@@ -148,56 +165,73 @@ ovlcmd(
   );
 
   // Commande Write
-  ovlcmd(
-    {
-      nom_cmd: "write",
-      classe: "Conversion",
-      react: "📝",
-      desc: "Ajoute du texte à une image et crée un sticker",
-    },
-    async (ms_org, ovl, cmd_options) => {
-      const { msg_Repondu, arg, ms } = cmd_options;
-      if (!msg_Repondu || !arg) {
-        return ovl.sendMessage(ms_org, {
-          text: "Répondez à une image et fournissez du texte.",
-        });
-      }
+ovlcmd(
+  {
+    nom_cmd: "write",
+    classe: "Conversion",
+    react: "📝",
+    desc: "Ajoute du texte à une image, vidéo ou sticker",
+  },
+  async (ms_org, ovl, cmd_options) => {
+    const { msg_Repondu, arg, ms } = cmd_options;
 
-      try {
-        const media = await ovl.dl_save_media_ms(msg_Repondu.imageMessage);
-        const buffer = fs.readFileSync(media);
-        const editedImage = sharp(buffer)
-          .composite([
-            {
-              input: Buffer.from(arg, "utf-8"),
-              gravity: "southeast",
-            },
-          ])
-          .toBuffer();
-
-        const sticker = new Sticker(await editedImage, {
-          pack: "OVL-MD",
-          author: "OVL Bot",
-          type: StickerTypes.FULL,
-        });
-
-        const stickerFileName = alea(".webp");
-        await sticker.toFile(stickerFileName);
-        await ovl.sendMessage(
-          ms_org,
-          { sticker: fs.readFileSync(stickerFileName) },
-          { quoted: ms }
-        );
-        fs.unlinkSync(media);
-        fs.unlinkSync(stickerFileName);
-      } catch (error) {
-        await ovl.sendMessage(ms_org, {
-          text: `Erreur lors de l'édition de l'image : ${error.message}`,
-        });
-      }
+    if (!msg_Repondu || !arg) {
+      return ovl.sendMessage(ms_org, {
+        text: "Veuillez répondre à un fichier et fournir du texte.",
+      });
     }
-  );
 
+    const mediaMessage =
+      msg_Repondu.imageMessage ||
+      msg_Repondu.videoMessage ||
+      msg_Repondu.stickerMessage;
+
+    if (!mediaMessage) {
+      return ovl.sendMessage(ms_org, {
+        text: "Type de fichier non supporté. Veuillez mentionner une image, vidéo ou sticker.",
+      });
+    }
+
+    try {
+      const media = await ovl.dl_save_media_ms(mediaMessage);
+      const image = await Canvas.loadImage(media);
+
+      const canvas = Canvas.createCanvas(image.width, image.height);
+      const context = canvas.getContext("2d");
+
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      context.font = "bold 36px Arial";
+      context.fillStyle = "white";
+      context.textAlign = "center";
+      context.fillText(arg, canvas.width / 2, canvas.height - 50);
+
+      const outputBuffer = canvas.toBuffer();
+      const sticker = new Sticker(outputBuffer, {
+        pack: "wa-bot",
+        author: "OVL Bot",
+        type: StickerTypes.FULL,
+      });
+
+      const fileName = `${Math.floor(Math.random() * 10000)}.webp`;
+
+      await sticker.toFile(fileName);
+
+      await ovl.sendMessage(
+        ms_org,
+        { sticker: fs.readFileSync(fileName) },
+        { quoted: ms }
+      );
+
+      fs.unlinkSync(fileName);
+      fs.unlinkSync(media);
+    } catch (error) {
+      console.error("Erreur lors de l'ajout du texte à l'image:", error);
+      await ovl.sendMessage(ms_org, {
+        text: "Une erreur est survenue lors de l'ajout du texte.",
+      });
+    }
+  }
+);
   // Commande ToImage
   ovlcmd(
     {
