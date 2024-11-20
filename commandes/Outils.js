@@ -1,6 +1,6 @@
 const { ovlcmd, cmd } = require("../framework/ovlcmd");
 const config = require("../set");
-const prefixe = process.env.PREFIXE;
+const prefixe = config.PREFIXE;
 ovlcmd(
     {
         nom_cmd: "test",
