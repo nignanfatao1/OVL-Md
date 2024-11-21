@@ -1,7 +1,7 @@
 const { ovlcmd } = require("../framework/ovlcmd");
 const { Catbox } = require('node-catbox');
 const fs = require("fs");
-const { Canvas } = require("@napi-rs/canvas");
+const { Canvas, loadImage } = require("@napi-rs/canvas");
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
 
 const catbox = new Catbox();
@@ -188,7 +188,7 @@ ovlcmd(
 
     try {
       const media = await ovl.dl_save_media_ms(mediaMessage);
-      const image = await Canvas.loadImage(fs.readFileSync(media)); // Chargement correct
+      const image = await loadImage(fs.readFileSync(media)); // Chargement correct
 
       const canvas = Canvas.createCanvas(image.width, image.height);
       const context = canvas.getContext("2d");
@@ -245,7 +245,7 @@ ovlcmd(
 
     try {
       const stickerBuffer = await ovl.dl_save_media_ms(msg_Repondu.stickerMessage);
-      const image = await Canvas.loadImage(stickerBuffer);
+      const image = await loadImage(stickerBuffer);
 
       const canvas = Canvas.createCanvas(image.width, image.height);
       const context = canvas.getContext("2d");
