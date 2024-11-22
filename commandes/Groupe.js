@@ -1,6 +1,6 @@
 const { ovlcmd } = require("../framework/ovlcmd");
 const { Sticker, StickerTypes } = require('wa-sticker-formatter');
-const { Antilink } = require("../database/antilink");
+const { Antilink } = require("../DataBase/antilink");
 
 ovlcmd(
     {
