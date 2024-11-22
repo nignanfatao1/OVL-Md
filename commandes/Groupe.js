@@ -1,5 +1,6 @@
 const { ovlcmd } = require("../framework/ovlcmd");
 const { Sticker, StickerTypes } = require('wa-sticker-formatter');
+const { Antilink } = require("../database/antilink");
 
 ovlcmd(
     {
@@ -10,7 +11,7 @@ ovlcmd(
     },
     async (dest, ovl, cmd_options) => {
         try {
-            const { ms, repondre, arg, verif_Groupe, infos_Groupe, nom_Auteur_Message, verif_Admin, prenium_id } = cmd_options;
+            const { ms, repondre, arg, verif_Groupe, infos_Groupe, nom_Auteur_Message, verif_Admin } = cmd_options;
 
             if (!verif_Groupe) {
                 return repondre("Cette commande ne fonctionne que dans les groupes");
@@ -28,7 +29,7 @@ ovlcmd(
             });
             tagMessage += `╰═══════════════⬣\n`;
 
-            if (verif_Admin || prenium_id) {
+            if (verif_Admin) {
                 await ovl.sendMessage(dest, { text: tagMessage, mentions: membresGroupe.map(m => m.id) }, { quoted: ms });
             } else {
                 repondre('Seuls les administrateurs peuvent utiliser cette commande');
@@ -47,14 +48,14 @@ ovlcmd(
 
     },
     async (dest, ovl, cmd_options) => {
-        const { repondre, msg_Repondu, verif_Groupe, arg, verif_Admin, prenium_id } = cmd_options;
+        const { repondre, msg_Repondu, verif_Groupe, arg, verif_Admin } = cmd_options;
 
         if (!verif_Groupe) {
             repondre("Cette commande ne fonctionne que dans les groupes");
             return;
         }
 
-        if (verif_Admin || prenium_id) {
+        if (verif_Admin) {
             let metadata_groupe = await ovl.groupMetadata(dest);
             let membres_Groupe = metadata_groupe.participants.map(participant => participant.id);
             let contenu_msg;
@@ -84,7 +85,7 @@ ovlcmd(
                 } else if (msg_Repondu.stickerMessage) {
                     let media_sticker = await ovl.dl_save_media_ms(msg_Repondu.stickerMessage);
                     let sticker_msg = new Sticker(media_sticker, {
-                        pack: 'OVL-MD TAG-MESSAGE',
+                        pack: 'OVL-MD Hidtag',
                         type: StickerTypes.CROPPED,
                         categories: ["🎊", "🎈"],
                         id: "tag_sticker",
@@ -117,3 +118,67 @@ ovlcmd(
         }
     }
 );
+
+ovlcmd(
+  {
+    nom_cmd: "antilink",
+    classe: "Groupe",
+    react: "🔗",
+    desc: "Active ou configure l'antilink pour les groupes",
+  },
+  async (jid, ovl, cmd_options) => {
+    try {
+      const { ms, repondre, arg, verif_Groupe, infos_Groupe, verif_Admin } = cmd_options;
+
+      if (!verif_Groupe) {
+        return repondre("Cette commande ne fonctionne que dans les groupes");
+      }
+
+      if (!verif_Admin) {
+        return repondre("Seuls les administrateurs peuvent utiliser cette commande");
+      }
+      const sousCommande = arg[0]?.toLowerCase();
+      const validModes = ['on', 'off'];
+      const validTypes = ['supp', 'warn', 'kick'];
+
+      // Vérifier si la configuration existe pour ce groupe
+      const [settings] = await Antilink.findOrCreate({
+        where: { id: jid },
+        defaults: { id: jid, mode: 'non', type: 'supp' },
+      });
+
+      if (validModes.includes(sousCommande)) {
+        const newMode = sousCommande === 'on' ? 'oui' : 'non';
+        if (settings.mode === newMode) {
+          return repondre(`Antilink est déjà ${sousCommande}`);
+        }
+        settings.mode = newMode;
+        await settings.save();
+        return repondre(`Antilink ${sousCommande === 'on' ? 'activé' : 'désactivé'} avec succès !`);
+      }
+
+      if (validTypes.includes(sousCommande)) {
+        if (settings.mode !== 'oui') {
+          return repondre("Veuillez activer l'antilink d'abord en utilisant `antilink on`");
+        }
+        if (settings.type === sousCommande) {
+          return repondre(`L'action antilink est déjà définie sur ${sousCommande}`);
+        }
+        settings.type = sousCommande;
+        await settings.save();
+        return repondre(`Action antilink définie sur ${sousCommande} avec succès !`);
+      }
+
+      // Réponse par défaut
+      return repondre(
+        "Utilisation :\n" +
+        "`antilink on/off` - Activer ou désactiver l'antilink\n" +
+        "`antilink supp/warn/kick` - Configurer l'action antilink"
+      );
+    } catch (error) {
+      console.error("Erreur lors de la configuration d'antilink :", error);
+      repondre("Une erreur s'est produite lors de l'exécution de la commande.");
+    }
+  }
+);
+
