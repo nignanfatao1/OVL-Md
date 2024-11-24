@@ -128,7 +128,7 @@ ovlcmd(
   },
   async (jid, ovl, cmd_options) => {
     try {
-      const { ms, repondre, arg, verif_Groupe, infos_Groupe, verif_Admin } = cmd_options;
+      const { ms, repondre, arg, verif_Groupe, verif_Admin } = cmd_options;
 
       if (!verif_Groupe) {
         return repondre("Cette commande ne fonctionne que dans les groupes");
@@ -137,11 +137,11 @@ ovlcmd(
       if (!verif_Admin) {
         return repondre("Seuls les administrateurs peuvent utiliser cette commande");
       }
+
       const sousCommande = arg[0]?.toLowerCase();
       const validModes = ['on', 'off'];
       const validTypes = ['supp', 'warn', 'kick'];
 
-      // Vérifier si la configuration existe pour ce groupe
       const [settings] = await Antilink.findOrCreate({
         where: { id: jid },
         defaults: { id: jid, mode: 'non', type: 'supp' },
@@ -169,7 +169,6 @@ ovlcmd(
         return repondre(`Action antilink définie sur ${sousCommande} avec succès !`);
       }
 
-      // Réponse par défaut
       return repondre(
         "Utilisation :\n" +
         "`antilink on/off` - Activer ou désactiver l'antilink\n" +
