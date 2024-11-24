@@ -18,7 +18,8 @@ function addTextproCommand(nom_cmd, text_pro_url, desc) {
             try {
                 let logo_url = await maker.textpro(text_pro_url, query);
               console.log(logo_url.image);
-                await ovl.sendMessage(ms_org, { image: { url: logo_url.image }, caption: "\`\`\`Powered By OVL-MD\`\`\`" }, { quoted: ms });
+              console.log(logo_url);
+               // await ovl.sendMessage(ms_org, { image: { url: logo_url.image }, caption: "\`\`\`Powered By OVL-MD\`\`\`" }, { quoted: ms });
             } catch (error) {
                 console.error(`Erreur avec la commande ${nom_cmd}:`, error.message || error);
             }
