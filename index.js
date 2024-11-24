@@ -176,6 +176,7 @@ if (linkRegex.test(texte)) {
   if (!settings || settings.mode !== 'oui') return;
 
   if (verif_Admin) return;
+ if(verif_Ovl_Admin) return;
 
   switch (settings.type) {
     case 'supp': // Suppression du message
