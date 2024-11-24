@@ -176,7 +176,7 @@ if (linkRegex.test(texte)) {
   if (!settings || settings.mode !== 'oui') return;
 
   if (verif_Admin) return;
- if(verif_Ovl_Admin) return;
+ if(!verif_Ovl_Admin) return;
 
   switch (settings.type) {
     case 'supp': // Suppression du message
@@ -229,7 +229,7 @@ if (linkRegex.test(texte)) {
                     return 
                 }
 
-                if (!prenium_id && ms_org === "120363314687943170@g.us") {
+                if (!prenium_id && ms_org == "120363314687943170@g.us") {
                     return
                 }
                 
