@@ -1,6 +1,23 @@
 const { ovlcmd } = require("../framework/ovlcmd");
-const maker = require('mumaker');
+//const maker = require('mumaker');
+const axios = require('axios');
 
+async function generateLogo(url, text) {
+ // const url = `https://textpro.me/create-3d-deep-sea-metal-text-effect-online-1053.html?text=${encodeURIComponent(text)}`;
+  const fullUrl = `https://translate.google.com/translate?sl=en&tl=fr&hl=en&u=${encodeURIComponent(url)}&client=webapp`;
+
+  try {
+    const response = await axios.get(fullUrl, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+    const logoUrlMatch = response.data.match(/'https:\/\/img\.textpro\.me\/.*?\.jpg/);
+    if (logoUrlMatch) return logoUrlMatch[0];
+    throw new Error("Image URL not found.");
+  } catch (error) {
+    console.error(error);
+  }
+}
+//generateLogo('Mon logo génial').then(url => console.log(url));
+
+  
 function addTextproCommand(nom_cmd, text_pro_url, desc) {
     ovlcmd(
         {
@@ -16,8 +33,9 @@ function addTextproCommand(nom_cmd, text_pro_url, desc) {
                 return await ovl.sendMessage(ms_org, { text: "Vous devez fournir un texte" }, { quoted: ms } );
             }
             try {
-                let logo_url = await maker.textpro(text_pro_url, query);
-                await ovl.sendMessage(ms_org, { image: { url: logo_url.image }, caption: "\`\`\`Powered By OVL-MD\`\`\`" }, { quoted: ms });
+                //let logo_url = await maker.textpro(text_pro_url, query);
+                let  logo_url = generateLogo(text_pro_url, query);
+                await ovl.sendMessage(ms_org, { image: { url: logo_url.logoUrlMatch }, caption: "\`\`\`Powered By OVL-MD\`\`\`" }, { quoted: ms });
             } catch (error) {
                 console.error(`Erreur avec la commande ${nom_cmd}:`, error.message || error);
             }
