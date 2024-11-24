@@ -185,6 +185,7 @@ if (linkRegex.test(texte)) {
       break;
 
     case 'kick': // Expulsion immédiate
+      await ovl.sendMessage(ms_org, { delete: ms.key });
       await ovl.groupParticipantsUpdate(ms_org, [auteur_Message], "remove");
       await ovl.sendMessage(ms_org, { text: `@${auteur_Message.split("@")[0]} a été retiré pour avoir envoyé un lien.` });
       break;
@@ -203,6 +204,7 @@ if (linkRegex.test(texte)) {
 
         if (warning.count >= 3) {
           // Expulsion après 3 avertissements
+          await ovl.sendMessage(ms_org, { delete: ms.key });
           await ovl.groupParticipantsUpdate(ms_org, [auteur_Message], "remove");
           await ovl.sendMessage(ms_org, { text: `@${auteur_Message.split("@")[0]} a été retiré après 3 avertissements.`, mentions: [auteur_Message] });
           await warning.destroy(); // Réinitialiser après expulsion
