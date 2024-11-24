@@ -1,47 +1,31 @@
 const { ovlcmd } = require("../framework/ovlcmd");
-// const maker = require('mumaker');
-const axios = require('axios');
-
-async function generateLogo(textProUrl, text) {
-  const fullUrl = `${textProUrl}?text=${encodeURIComponent(text)}`;
-
-  try {
-    const response = await axios.get(fullUrl, { headers: { 'User-Agent': 'Mozilla/5.0' } });
-    const logoUrlMatch = response.data.match(/'https:\/\/img\.textpro\.me\/.*?\.jpg/);
-    if (logoUrlMatch) return logoUrlMatch[0];  // On retourne l'URL de l'image générée.
-    throw new Error("Image URL not found.");
-  } catch (error) {
-    console.error(error);
-    throw new Error("Une erreur est survenue lors de la génération du logo.");
-  }
-}
+const maker = require('mumaker');
 
 function addTextproCommand(nom_cmd, text_pro_url, desc) {
-  ovlcmd(
-    {
-      nom_cmd: nom_cmd,
-      classe: "Logo",
-      react: "✨",
-      desc: desc
-    },
-    async (ms_org, ovl, cmd_options) => {
-      const { arg, ms } = cmd_options;
-      const query = arg.join(' ');
-      if (!query) { 
-        return await ovl.sendMessage(ms_org, { text: "Vous devez fournir un texte." }, { quoted: ms });
-      }
-      try {
-        let logoUrl = await generateLogo(text_pro_url, query);  // On passe le texte et l'URL du modèle.
-        await ovl.sendMessage(ms_org, { image: { url: logoUrl }, caption: "\`\`\`Powered By OVL-MD\`\`\`" }, { quoted: ms });
-      } catch (error) {
-        console.error(`Erreur avec la commande ${nom_cmd}:`, error.message || error);
-        await ovl.sendMessage(ms_org, { text: "Erreur lors de la création du logo." }, { quoted: ms });
-      }
-    }
-  );
+    ovlcmd(
+        {
+            nom_cmd: nom_cmd,
+            classe: "Logo",
+            react: "✨",
+            desc: desc
+        },
+        async (ms_org, ovl, cmd_options) => {
+            const { arg, ms } = cmd_options;
+            const query = arg.join(' ');
+            if (!query) { 
+                return await ovl.sendMessage(ms_org, { text: "Vous devez fournir un texte" }, { quoted: ms } );
+            }
+            try {
+                let logo_url = await maker.textpro(text_pro_url, query);
+              console.log(logo_url);
+                await ovl.sendMessage(ms_org, { image: { url: logo_url.image }, caption: "\`\`\`Powered By OVL-MD\`\`\`" }, { quoted: ms });
+            } catch (error) {
+                console.error(`Erreur avec la commande ${nom_cmd}:`, error.message || error);
+            }
+        }
+    );
 }
 
-// Liste des commandes avec les effets Textpro
 addTextproCommand("deepsea", "https://textpro.me/create-3d-deep-sea-metal-text-effect-online-1053.html", "Créez un effet de texte 3D sur le thème de la mer profonde.");
 addTextproCommand("horror", "https://textpro.me/horror-blood-text-effect-online-883.html", "Créez un effet de texte avec du sang pour un style d'horreur.");
 addTextproCommand("whitebear", "https://textpro.me/online-black-and-white-bear-mascot-logo-creation-1012.html", "Créez un logo de mascotte de ours noir et blanc.");
