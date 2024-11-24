@@ -42,7 +42,7 @@ const Antilink_warnings = sequelize.define('Antilink_warnings', {
   },
   count: {
     type: DataTypes.INTEGER,
-    defaultValue: 0,
+    defaultValue: 1,
   },
 }, {
   tableName: 'antilink_warnings',
