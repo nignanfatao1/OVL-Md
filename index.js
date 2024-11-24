@@ -68,7 +68,6 @@ async function main() {
     //     await ovl.connect();
              
          ovl.ev.on("messages.upsert", async (m) => {
-          console.log('message ohh');
     const { messages } = m;
     const ms = messages[0];
     if (!ms.message) return;
