@@ -9,6 +9,7 @@ const session = config.SESSION_ID || "";
 let evt = require(__dirname + "/framework/ovlcmd");
 const FileType = require('file-type')
 const prefixe = config.PREFIXE;
+const { Antilink, Antilink_warnings } = require("./DataBase/antilink");
 
  async function ovlAuth(session) {
     let sessionId;
@@ -166,6 +167,57 @@ async function main() {
         ovl.sendMessage(ms_org, { text: message }, { quoted: ms });
     }
 
+          //antilink
+          const linkRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[^\s]+\.[^\s]+)/gi;
+
+if (linkRegex.test(texte)) {
+  if (!verif_Groupe || !ms_org) return;
+
+  const settings = await Antilink.findOne({ where: { id: ms_org } });
+  if (!settings || settings.mode !== 'oui') return;
+
+  if (verif_Admin) return;
+
+  switch (settings.type) {
+    case 'supp': // Suppression du message
+      await ovl.sendMessage(ms_org, { text: `@${auteur_Message.split("@")[0]}, Les liens ne sont pas autorisés ici.`, mentions: [auteur_Message] });
+      await ovl.sendMessage(ms_org, { delete: ms.key });
+      break;
+
+    case 'kick': // Expulsion immédiate
+      await ovl.groupParticipantsUpdate(ms_org, [auteur_Message], "remove");
+      await ovl.sendMessage(ms_org, { text: `@${auteur_Message.split("@")[0]} a été retiré pour avoir envoyé un lien.` });
+      break;
+
+    case 'warn': // Gestion des avertissements
+      let warning = await Antilink_warnings.findOne({ where: { groupId: ms_org, userId: auteur_Message } });
+
+      if (!warning) {
+        // Premier avertissement
+        await Warnings.create({ groupId: ms_org, userId: auteur_Message });
+        await ovl.sendMessage(ms_org, { text: `@${auteur_Message.split("@")[0]}, avertissement 1/3 pour avoir envoyé un lien.`, mentions: [auteur_Message] });
+      } else {
+        // Augmenter le nombre d'avertissements
+        warning.count += 1;
+        await warning.save();
+
+        if (warning.count >= 3) {
+          // Expulsion après 3 avertissements
+          await ovl.groupParticipantsUpdate(ms_org, [auteur_Message], "remove");
+          await ovl.sendMessage(ms_org, { text: `@${auteur_Message.split("@")[0]} a été retiré après 3 avertissements.`, mentions: [auteur_Message] });
+          await warning.destroy(); // Réinitialiser après expulsion
+        } else {
+          // Message pour chaque avertissement
+          await ovl.sendMessage(ms_org, { text: `@${auteur_Message.split("@")[0]}, avertissement ${warning.count}/3 pour avoir envoyé un lien.`, mentions: [auteur_Message] });
+        }
+      }
+      break;
+
+    default:
+      console.error(`Action inconnue : ${settings.type}`);
+  }
+}         
+          //fin antilink
     if (verif_Cmd) { 
         const cd = evt.cmd.find((ovlcmd) => ovlcmd.nom_cmd === cmds || (ovlcmd.alias && ovlcmd.alias.includes(cmds)));
         
