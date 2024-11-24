@@ -127,9 +127,9 @@ ovlcmd(
     desc: "Active ou configure l'antilink pour les groupes",
   },
   async (jid, ovl, cmd_options) => {
-    try {
       const { ms, repondre, arg, verif_Groupe, verif_Admin } = cmd_options;
-
+    try {
+      
       if (!verif_Groupe) {
         return repondre("Cette commande ne fonctionne que dans les groupes");
       }
@@ -150,11 +150,11 @@ ovlcmd(
       if (validModes.includes(sousCommande)) {
         const newMode = sousCommande === 'on' ? 'oui' : 'non';
         if (settings.mode === newMode) {
-          return repondre(`Antilink est déjà ${sousCommande}`);
+          return repondre(`L'Antilink est déjà ${sousCommande}`);
         }
         settings.mode = newMode;
         await settings.save();
-        return repondre(`Antilink ${sousCommande === 'on' ? 'activé' : 'désactivé'} avec succès !`);
+        return repondre(`L'Antilink ${sousCommande === 'on' ? 'activé' : 'désactivé'} avec succès !`);
       }
 
       if (validTypes.includes(sousCommande)) {
@@ -166,7 +166,7 @@ ovlcmd(
         }
         settings.type = sousCommande;
         await settings.save();
-        return repondre(`Action antilink définie sur ${sousCommande} avec succès !`);
+        return repondre(`L'Action de l'antilink définie sur ${sousCommande} avec succès !`);
       }
 
       return repondre(
