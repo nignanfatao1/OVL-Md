@@ -54,19 +54,11 @@ async function main() {
            syncFullHistory: true,
            markOnlineOnConnect: false,
            getMessage: async (key) => {
-                if (store) {
-                    const msg = await store.loadMessage(key.remoteJid, key.id, undefined);
-                    return msg.message || undefined;
-                }
-                return {
-                    conversation: 'An Error Occurred, Repeat Command!'
-                };
+                    const msg = await store.loadMessage(key.remoteJid, key.id);
+                    return msg.message;
            }
         });
         store.bind(ovl.ev);
-       //  setInterval(() => { store.writeToFile(__dirname + "/store.json");  }, 3000);
-    //     await ovl.connect();
-             
          ovl.ev.on("messages.upsert", async (m) => {
     const { messages } = m;
     const ms = messages[0];
