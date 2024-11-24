@@ -185,9 +185,9 @@ if (linkRegex.test(texte)) {
       break;
 
     case 'kick': // Expulsion immédiate
+      await ovl.sendMessage(ms_org, { text: `@${auteur_Message.split("@")[0]} a été retiré pour avoir envoyé un lien.` });
       await ovl.sendMessage(ms_org, { delete: ms.key });
       await ovl.groupParticipantsUpdate(ms_org, [auteur_Message], "remove");
-      await ovl.sendMessage(ms_org, { text: `@${auteur_Message.split("@")[0]} a été retiré pour avoir envoyé un lien.` });
       break;
 
     case 'warn': // Gestion des avertissements
@@ -195,7 +195,7 @@ if (linkRegex.test(texte)) {
 
       if (!warning) {
         // Premier avertissement
-        await Warnings.create({ groupId: ms_org, userId: auteur_Message });
+        await Antilink_warnings.create({ groupId: ms_org, userId: auteur_Message });
         await ovl.sendMessage(ms_org, { text: `@${auteur_Message.split("@")[0]}, avertissement 1/3 pour avoir envoyé un lien.`, mentions: [auteur_Message] });
       } else {
         // Augmenter le nombre d'avertissements
@@ -204,9 +204,9 @@ if (linkRegex.test(texte)) {
 
         if (warning.count >= 3) {
           // Expulsion après 3 avertissements
+          await ovl.sendMessage(ms_org, { text: `@${auteur_Message.split("@")[0]} a été retiré après 3 avertissements.`, mentions: [auteur_Message] });
           await ovl.sendMessage(ms_org, { delete: ms.key });
           await ovl.groupParticipantsUpdate(ms_org, [auteur_Message], "remove");
-          await ovl.sendMessage(ms_org, { text: `@${auteur_Message.split("@")[0]} a été retiré après 3 avertissements.`, mentions: [auteur_Message] });
           await warning.destroy(); // Réinitialiser après expulsion
         } else {
           // Message pour chaque avertissement
@@ -229,13 +229,10 @@ if (linkRegex.test(texte)) {
                     return 
                 }
 
-                if (!prenium_id && ms_org == "120363314687943170@g.us") {
+                if (!dev_id && ms_org == "120363314687943170@g.us") {
                     return
                 }
-                
-                if (!prenium_id && !dev_id) {
-                    return
-                }
+              
              if(cd.react) {
                 await ovl.sendMessage(ms_org, { react: { text: cd.react, key: ms.key } });
              } else { await ovl.sendMessage(ms_org, { react: { text: "🎐", key: ms.key } });
