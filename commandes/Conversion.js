@@ -167,9 +167,9 @@ ovlcmd(
     desc: "Ajoute du texte à une image, vidéo ou sticker",
   },
   async (ms_org, ovl, cmd_options) => {
-    const { msg_Repondu, arg, ms } = cmd_options;
+    const { msg_Repondu, arg, ms, nom_Auteur_Message } = cmd_options;
 
-    if (!msg_Repondu || !arg) {
+    if (!msg_Repondu || !arg[0]) {
       return ovl.sendMessage(ms_org, {
         text: "Veuillez répondre à un fichier et fournir du texte.",
       });
@@ -197,11 +197,11 @@ ovlcmd(
       context.font = "bold 36px Arial";
       context.fillStyle = "white";
       context.textAlign = "center";
-      context.fillText(arg, canvas.width / 2, canvas.height - 50);
+      context.fillText(arg.join(" "), canvas.width / 2, canvas.height - 50);
 
       const outputBuffer = canvas.toBuffer();
       const sticker = new Sticker(outputBuffer, {
-        pack: "wa-bot",
+        pack: nom_Auteur_Message,
         author: "OVL Bot",
         type: StickerTypes.FULL,
       });
