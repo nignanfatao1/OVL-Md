@@ -3,7 +3,7 @@ const { ovlcmd } = require("../framework/ovlcmd");
 ovlcmd(
     {
         nom_cmd: "vv",
-        classe: "Owner",
+        classe: "WhatsApp",
         react: "👀",
         desc: "Affiche un message envoyé en vue unique",
     },
