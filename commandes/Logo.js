@@ -1,30 +1,5 @@
 const { ovlcmd } = require("../framework/ovlcmd");
-//const maker = require('mumaker');
-
-const maker = require('w5-textmaker');
-
-ovlcmd(
-        {
-            nom_cmd: "logo1",
-            classe: "Logo",
-            react: "✨",
-            desc: " hhh"
-        },
-        async (ms_org, ovl, cmd_options) => {
-maker.textpro({
-    url: 'https://textpro.me/create-3d-neon-light-text-effect-online-1028.html',
-    text: ['VotreTexte'] // Remplacez par votre texte personnalisé
-})
-    .then((data) => {
-        console.log('URL du logo généré:', data); // Affiche le lien de l'image générée
-    })
-    .catch((err) => {
-        console.error('Erreur lors de la génération du logo:', err);
-    });
-
-        });
-
-
+const maker = require('mumaker');
 
 function addTextproCommand(nom_cmd, text_pro_url, desc) {
     ovlcmd(
@@ -44,7 +19,7 @@ function addTextproCommand(nom_cmd, text_pro_url, desc) {
                 let logo_url = await maker.textpro(text_pro_url, query);
               console.log(logo_url.image);
               console.log(logo_url);
-               // await ovl.sendMessage(ms_org, { image: { url: logo_url.image }, caption: "\`\`\`Powered By OVL-MD\`\`\`" }, { quoted: ms });
+               await ovl.sendMessage(ms_org, { image: { url: logo_url.image }, caption: "\`\`\`Powered By OVL-MD\`\`\`" }, { quoted: ms });
             } catch (error) {
                 console.error(`Erreur avec la commande ${nom_cmd}:`, error.message || error);
             }
