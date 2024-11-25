@@ -1,5 +1,30 @@
 const { ovlcmd } = require("../framework/ovlcmd");
-const maker = require('mumaker');
+//const maker = require('mumaker');
+
+const maker = require('w5-textmaker');
+
+ovlcmd(
+        {
+            nom_cmd: "logo1",
+            classe: "Logo",
+            react: "✨",
+            desc: " hhh"
+        },
+        async (ms_org, ovl, cmd_options) => {
+maker.textpro({
+    url: 'https://textpro.me/create-3d-neon-light-text-effect-online-1028.html',
+    text: ['VotreTexte'] // Remplacez par votre texte personnalisé
+})
+    .then((data) => {
+        console.log('URL du logo généré:', data); // Affiche le lien de l'image générée
+    })
+    .catch((err) => {
+        console.error('Erreur lors de la génération du logo:', err);
+    });
+
+        });
+
+
 
 function addTextproCommand(nom_cmd, text_pro_url, desc) {
     ovlcmd(
