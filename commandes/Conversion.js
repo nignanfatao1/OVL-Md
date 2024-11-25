@@ -1,7 +1,7 @@
 const { ovlcmd } = require("../framework/ovlcmd");
 const { Catbox } = require('node-catbox');
 const fs = require("fs");
-const { Canvas, loadImage } = require("@napi-rs/canvas");
+const { Canvas, loadImage, createCanvas } = require("@napi-rs/canvas");
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
 
 const catbox = new Catbox();
@@ -190,7 +190,7 @@ ovlcmd(
       const media = await ovl.dl_save_media_ms(mediaMessage);
       const image = await loadImage(fs.readFileSync(media)); // Chargement correct
 
-      const canvas = Canvas.createCanvas(image.width, image.height);
+      const canvas = createCanvas(image.width, image.height);
       const context = canvas.getContext("2d");
 
       context.drawImage(image, 0, 0, canvas.width, canvas.height);
@@ -232,7 +232,7 @@ ovlcmd(
   {
     nom_cmd: "toimage",
     classe: "Conversion",
-    react: "🖼️",
+    react: "🀄",
     desc: "Convertit un sticker en image",
     alias: ["toimg"],
   },
@@ -247,7 +247,7 @@ ovlcmd(
       const stickerBuffer = await ovl.dl_save_media_ms(msg_Repondu.stickerMessage);
       const image = await loadImage(stickerBuffer);
 
-      const canvas = Canvas.createCanvas(image.width, image.height);
+      const canvas = createCanvas(image.width, image.height);
       const context = canvas.getContext("2d");
 
       context.drawImage(image, 0, 0);
