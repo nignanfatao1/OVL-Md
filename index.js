@@ -60,6 +60,7 @@ async function main() {
         });
         store.bind(ovl.ev);
          ovl.ev.on("messages.upsert", async (m) => {
+    if (m.type !== 'notify') return;
     const { messages } = m;
     const ms = messages[0];
     if (!ms.message) return;
@@ -237,35 +238,7 @@ if (linkRegex.test(texte)) {
         }
     }
 }); //fin événement message 
- const Disconnection = (raisonDeconnexion) => {
-    switch (raisonDeconnexion) {
-        case DisconnectReason.badSession:
-            console.log('Session ID incorrecte, veuillez obtenir une nouvelle session via QR-code/Pairing.');
-            break;
-        case DisconnectReason.connectionClosed:
-            console.log('Connexion fermée, tentative de reconnexion...');
-            main();
-            break;
-        case DisconnectReason.connectionLost:
-            console.log('Connexion au serveur perdue. Reconnexion en cours...');
-            main();
-            break;
-        case DisconnectReason.connectionReplaced:
-            console.log('Connexion remplacée. Une autre session est déjà active.');
-            break;
-        case DisconnectReason.loggedOut:
-            console.log('Déconnecté. Veuillez obtenir une nouvelle session via QR-code/Pairing.');
-            break;
-        case DisconnectReason.restartRequired:
-            console.log('Redémarrage requis. Redémarrage du bot...');
-            main();
-            break;
-        default:
-            console.log('Erreur inconnue:', raisonDeconnexion);
-            exec("pm2 restart all");
-    }
-};
-
+         
 ovl.ev.on("connection.update", async (con) => {
     const { connection, lastDisconnect } = con;
 
@@ -296,14 +269,16 @@ ovl.ev.on("connection.update", async (con) => {
         await ovl.sendMessage(ovl.user.id, { text: start_msg });
 
         
-    } else if (connection === "close") {
-        const raisonDeconnexion = new boom.Boom(lastDisconnect?.error)?.output.statusCode;
-        Disconnection(raisonDeconnexion);
-        console.log("Statut de la connexion : " + connection);
+    } else if (connection === 'close') {
+                if (lastDisconnect.error?.output?.statusCode === DisconnectReason.loggedOut) {
+                    console.log('Connexion fermée: Déconnecté');
+                } else {
+                    console.log('Connexion fermée: Reconnexion en cours...');
+                 main()
+                }
     }
 });
 
-        
         // Gestion des mises à jour des identifiants
         ovl.ev.on("creds.update", saveCreds);
 
