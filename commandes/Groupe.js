@@ -127,9 +127,7 @@ ovlcmd(
   async (ms_org, ovl, cmd_options) => {
     const { verif_Groupe, auteur_Msg_Repondu, arg, infos_Groupe, verif_Admin, verif_Ovl_Admin, prenium_id } = cmd_options;
     if (!verif_Groupe) return ovl.sendMessage(ms_org, { text: "Commande utilisable uniquement dans les groupes." });
-    if (!prenium_id || !verif_Admin)
-      return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
-
+    if (prenium_id || verif_Admin) {
     const membres = await infos_Groupe.participants;
     const admins = membres.filter((m) => m.admin).map((m) => m.id);
     const membre = auteur_Msg_Repondu || (arg[0]?.includes("@") && `${arg[0].replace("@", "")}@s.whatsapp.net`);
@@ -148,6 +146,8 @@ ovlcmd(
       console.error("Erreur :", err);
       ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de l'exclusion." });
     }
+    } else { return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
+           };
   }
 );
 
@@ -161,8 +161,7 @@ ovlcmd(
   async (ms_org, ovl, cmd_options) => {
     const { verif_Groupe, auteur_Msg_Repondu, arg, infos_Groupe, verif_Admin, prenium_id, verif_Ovl_Admin } = cmd_options;
     if (!verif_Groupe) return ovl.sendMessage(ms_org, { text: "Commande utilisable uniquement dans les groupes." });
-    if (!verif_Admin || !prenium_id) return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
-
+    if (verif_Admin || prenium_id) {
     const membres = await infos_Groupe.participants;
     const admins = membres.filter((m) => m.admin).map((m) => m.id);
     const membre = auteur_Msg_Repondu || (arg[0]?.includes("@") && `${arg[0].replace("@", "")}@s.whatsapp.net`);
@@ -181,6 +180,8 @@ ovlcmd(
       console.error("Erreur :", err);
       ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de la promotion." });
     }
+    } else { return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
+           }
   }
 );
 
@@ -194,8 +195,7 @@ ovlcmd(
   async (ms_org, ovl, cmd_options) => {
     const { verif_Groupe, auteur_Msg_Repondu, arg, infos_Groupe, verif_Admin, prenium_id, verif_Ovl_Admin } = cmd_options;
     if (!verif_Groupe) return ovl.sendMessage(ms_org, { text: "Commande utilisable uniquement dans les groupes." });
-    if (!verif_Admin && !prenium_id) return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
-
+    if (verif_Admin || prenium_id) { 
     const membres = await infos_Groupe.participants;
     const admins = membres.filter((m) => m.admin).map((m) => m.id);
     const membre = auteur_Msg_Repondu || (arg[0]?.includes("@") && `${arg[0].replace("@", "")}@s.whatsapp.net`);
@@ -214,6 +214,8 @@ ovlcmd(
       console.error("Erreur :", err);
       ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de la rétrogradation." });
     }
+    } else { return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
+           }
   }
 );
 
@@ -226,7 +228,8 @@ ovlcmd(
   },
   async (ms_org, ovl, cmd_options) => {
     const { msg_Repondu, verif_Admin, prenium_id, verif_Ovl_Admin, ms } = cmd_options;
-    if (!verif_Admin && !prenium_id) return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
+    if (!verif_Groupe) return ovl.sendMessage(ms_org, { text: "Commande utilisable uniquement dans les groupes." });
+    if (verif_Admin || prenium_id) { 
     if(!verif_Ovl_Admin) return ovl.sendMessage(ms_org, { text: "Je dois être administrateur pour effectuer cette action." });
     if (!msg_Repondu) return ovl.sendMessage(ms_org, { text: "Veuillez répondre à un message pour le supprimer." });
   try { 
@@ -235,6 +238,8 @@ ovlcmd(
       console.error("Erreur :", err);
       ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de la suppression du message." });
     }
+    } else { return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
+           }
   }
 );
 
