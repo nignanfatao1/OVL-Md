@@ -97,6 +97,7 @@ ovl.ev.on("messages.upsert", async (m) => {
     const auteur_Msg_Repondu = decodeJid(ms.message.extendedTextMessage?.contextInfo?.participant);
     const mr = ms.message.extendedTextMessage?.contextInfo?.mentionedJid;
     const auteur_Message = verif_Groupe ? ms.key.participant || ms.participant : ms_org;
+    const membre_Groupe = verif_Groupe ? ms.key.participant : '';
     const nom_Auteur_Message = ms.pushName;
     const arg = texte ? texte.trim().split(/ +/).slice(1) : null;
     const verif_Cmd = texte ? texte.startsWith(prefixe) : false;
