@@ -4,7 +4,6 @@ const path = require('path');
 const axios = require("axios");
 const { exec } = require("child_process");
 const { default: makeWASocket, useMultiFileAuthState, logger, delay, makeCacheableSignalKeyStore, jidDecode, getContentType, downloadContentFromMessage, makeInMemoryStore, fetchLatestBaileysVersion, DisconnectReason } = require("@whiskeysockets/baileys");
-const boom = require("@hapi/boom");
 const config = require("./set");
 const session = config.SESSION_ID || "";
 let evt = require(__dirname + "/framework/ovlcmd");
