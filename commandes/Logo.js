@@ -1,4 +1,4 @@
-const { ovlcmd } = require("../framework/ovlcmd");
+/*const { ovlcmd } = require("../framework/ovlcmd");
 const maker = require('mumaker');
 
 function addTextproCommand(nom_cmd, text_pro_url, desc) {
@@ -59,3 +59,5 @@ addTextproCommand("blackpink", "https://textpro.me/create-blackpink-logo-style-o
 addTextproCommand("cat", "https://textpro.me/write-text-on-foggy-window-online-free-1015.html#google_vignette", "Créez un effet de texte sur une fenêtre brumeuse.");
 addTextproCommand("pottery", "https://textpro.me/create-3d-pottery-text-effect-online-1088.html", "Créez un effet de texte en poterie 3D.");
 addTextproCommand("slice", "https://textpro.me/create-light-glow-sliced-text-effect-online-1068.html", "Créez un effet de texte tranché avec lumière et éclat.");
+
+*/
