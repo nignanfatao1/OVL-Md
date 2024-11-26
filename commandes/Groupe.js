@@ -86,9 +86,7 @@ ovlcmd(
                     let media_sticker = await ovl.dl_save_media_ms(msg_Repondu.stickerMessage);
                     let sticker_msg = new Sticker(media_sticker, {
                         pack: 'OVL-MD Hidtag',
-                        type: StickerTypes.CROPPED,
-                        categories: ["🎊", "🎈"],
-                        id: "tag_sticker",
+                        type: StickerTypes.FULL,
                         quality: 80,
                         background: "transparent",
                     });
@@ -117,6 +115,40 @@ ovlcmd(
             repondre("Cette commande est réservée aux administrateurs du groupe");
         }
     }
+);
+
+ovlcmd(
+  {
+    nom_cmd: "kick",
+    classe: "Groupe",
+    react: "🛑",
+    desc: "Supprime un membre du groupe.",
+  },
+  async (ms_org, ovl, cmd_options) => {
+    const { verif_Groupe, auteur_Msg_Repondu, arg, infos_Groupe, verif_Admin, verif_Ovl_Admin, prenium_id } = cmd_options;
+    if (!verif_Groupe) return ovl.sendMessage(ms_org, { text: "Commande utilisable uniquement dans les groupes." });
+    if (!prenium_id || !verif_Admin)
+      return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
+
+    const membres = await infos_Groupe.participants;
+    const admins = membres.filter((m) => m.admin).map((m) => m.id);
+    if (!verif_Ovl_Admin))
+      return ovl.sendMessage(ms_org, { text: "Je dois être administrateur pour effectuer cette action." });
+
+    const membre = auteur_Msg_Repondu || (arg[0]?.includes("@") && `${arg[0].replace("@", "")}@s.whatsapp.net`);
+    if (!membre || !membres.find((m) => m.id === membre))
+      return ovl.sendMessage(ms_org, { text: "Membre introuvable dans ce groupe." });
+    if (admins.includes(membre))
+      return ovl.sendMessage(ms_org, { text: "Impossible d'exclure un administrateur du groupe." });
+
+    try {
+      await ovl.groupParticipantsUpdate(ms_org, [membre], "remove");
+      ovl.sendMessage(ms_org, { text: `@${membre.split("@")[0]} a été exclu.`, mentions: [membre] });
+    } catch (err) {
+      console.error("Erreur :", err);
+      ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de l'exclusion." });
+    }
+  }
 );
 
 ovlcmd(
@@ -171,8 +203,8 @@ ovlcmd(
 
       return repondre(
         "Utilisation :\n" +
-        "`antilink on/off` - Activer ou désactiver l'antilink\n" +
-        "`antilink supp/warn/kick` - Configurer l'action antilink"
+        "antilink on/off: Activer ou désactiver l'antilink\n" +
+        "antilink supp/warn/kick: Configurer l'action antilink"
       );
     } catch (error) {
       console.error("Erreur lors de la configuration d'antilink :", error);
