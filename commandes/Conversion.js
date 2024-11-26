@@ -188,7 +188,7 @@ ovlcmd(
 
     try {
       const media = await ovl.dl_save_media_ms(mediaMessage);
-      const image = await loadImage(fs.readFileSync(media)); // Chargement correct
+      const image = await loadImage(media);
 
       const canvas = createCanvas(image.width, image.height);
       const context = canvas.getContext("2d");
@@ -199,7 +199,7 @@ ovlcmd(
       context.textAlign = "center";
       context.fillText(arg.join(" "), canvas.width / 2, canvas.height - 50);
 
-      const outputBuffer = canvas.toBuffer();
+      const outputBuffer = canvas.toBuffer("image/png");
       const sticker = new Sticker(outputBuffer, {
         pack: nom_Auteur_Message,
         author: "OVL Bot",
