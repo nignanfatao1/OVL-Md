@@ -101,13 +101,11 @@ ovl.ev.on("messages.upsert", async (m) => {
     const arg = texte ? texte.trim().split(/ +/).slice(1) : null;
     const verif_Cmd = texte ? texte.startsWith(prefixe) : false;
     const cmds = verif_Cmd ? texte.slice(prefixe.length).trim().split(/ +/).shift().toLowerCase() : false;
-
     const groupe_Admin = (participants) => participants.filter((m) => m.admin).map((m) => m.id);
     const mbre_membre = verif_Groupe ? await infos_Groupe.participants : '';
     const admins = verif_Groupe ? groupe_Admin(mbre_membre) : '';
     const verif_Admin = verif_Groupe ? admins.includes(auteur_Message) : false;
     const verif_Ovl_Admin = verif_Groupe ? admins.includes(id_Bot) : false;
-
     const Ainz = '22651463203';
     const Ainzbot = '22605463559';
     const devNumbers = [Ainz, Ainzbot];
@@ -139,7 +137,7 @@ ovl.ev.on("messages.upsert", async (m) => {
         ms_org,
     };
 
-    console.log("=== OVL-MD LOG-MESSAGES ===");
+    console.log("={}=={}= OVL-MD LOG-MESSAGES ={}=={}=");
     if (verif_Groupe) {
         console.log("Groupe: " + nom_Groupe);
     }
@@ -164,37 +162,33 @@ if (linkRegex.test(texte)) {
  if(!verif_Ovl_Admin) return;
 
   switch (settings.type) {
-    case 'supp': // Suppression du message
+    case 'supp':
       await ovl.sendMessage(ms_org, { text: `@${auteur_Message.split("@")[0]}, Les liens ne sont pas autorisés ici.`, mentions: [auteur_Message] });
       await ovl.sendMessage(ms_org, { delete: ms.key });
       break;
 
-    case 'kick': // Expulsion immédiate
+    case 'kick':
       await ovl.sendMessage(ms_org, { text: `@${auteur_Message.split("@")[0]} a été retiré pour avoir envoyé un lien.` });
       await ovl.sendMessage(ms_org, { delete: ms.key });
       await ovl.groupParticipantsUpdate(ms_org, [auteur_Message], "remove");
       break;
 
-    case 'warn': // Gestion des avertissements
+    case 'warn':
       let warning = await Antilink_warnings.findOne({ where: { groupId: ms_org, userId: auteur_Message } });
 
       if (!warning) {
-        // Premier avertissement
         await Antilink_warnings.create({ groupId: ms_org, userId: auteur_Message });
         await ovl.sendMessage(ms_org, { text: `@${auteur_Message.split("@")[0]}, avertissement 1/3 pour avoir envoyé un lien.`, mentions: [auteur_Message] });
       } else {
-        // Augmenter le nombre d'avertissements
         warning.count += 1;
         await warning.save();
 
         if (warning.count >= 3) {
-          // Expulsion après 3 avertissements
           await ovl.sendMessage(ms_org, { text: `@${auteur_Message.split("@")[0]} a été retiré après 3 avertissements.`, mentions: [auteur_Message] });
           await ovl.sendMessage(ms_org, { delete: ms.key });
           await ovl.groupParticipantsUpdate(ms_org, [auteur_Message], "remove");
-          await warning.destroy(); // Réinitialiser après expulsion
+          await warning.destroy();
         } else {
-          // Message pour chaque avertissement
           await ovl.sendMessage(ms_org, { text: `@${auteur_Message.split("@")[0]}, avertissement ${warning.count}/3 pour avoir envoyé un lien.`, mentions: [auteur_Message] });
         }
       }
