@@ -158,9 +158,9 @@ ovlcmd(
     desc: "Promouvoir un membre comme administrateur.",
   },
   async (ms_org, ovl, cmd_options) => {
-    const { verif_Groupe, auteur_Msg_Repondu, arg, infos_Groupe, verif_Admin, dev_id } = cmd_options;
+    const { verif_Groupe, auteur_Msg_Repondu, arg, infos_Groupe, verif_Admin, prenium_id, verif_Ovl_Admin } = cmd_options;
     if (!verif_Groupe) return ovl.sendMessage(ms_org, { text: "Commande utilisable uniquement dans les groupes." });
-    if (!verif_Admin || !dev_id) return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
+    if (!verif_Admin || !prenium_id) return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
 
     const membres = await infos_Groupe.participants;
     const admins = membres.filter((m) => m.admin).map((m) => m.id);
@@ -193,7 +193,7 @@ ovlcmd(
   async (ms_org, ovl, cmd_options) => {
     const { verif_Groupe, auteur_Msg_Repondu, arg, infos_Groupe, verif_Admin, prenium_id, verif_Ovl_Admin } = cmd_options;
     if (!verif_Groupe) return ovl.sendMessage(ms_org, { text: "Commande utilisable uniquement dans les groupes." });
-    if (!verif_Admin || !dev_id) return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
+    if (!verif_Admin || !prenium_id) return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
 
     const membres = await infos_Groupe.participants;
     const admins = membres.filter((m) => m.admin).map((m) => m.id);
@@ -229,9 +229,9 @@ ovlcmd(
     if (!verif_Admin || !prenium_id) return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
     if(!verif_Ovl_Admin) return ovl.sendMessage(ms_org, { text: "Je dois être administrateur pour effectuer cette action." });
     if (!msg_Repondu) return ovl.sendMessage(ms_org, { text: "Veuillez répondre à un message pour le supprimer." });
-
+ const  key = ms.message.extendedTextMessage?.contextInfo?.quotedMessage.key;
     try { 
-        await ovl.sendMessage(ms_org, { delete: ms.key });
+        await ovl.sendMessage(ms_org, { delete: key });
           } catch (err) {
       console.error("Erreur :", err);
       ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de la suppression du message." });
