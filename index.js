@@ -58,69 +58,62 @@ async function main() {
                     return msg.message;
            }
         });
-        store.bind(ovl.ev);
-         ovl.ev.on("messages.upsert", async (m) => {
+store.bind(ovl.ev);
+
+ovl.ev.on("messages.upsert", async (m) => {
     if (m.type !== 'notify') return;
+
     const { messages } = m;
     const ms = messages[0];
     if (!ms.message) return;
-    
+
     const decodeJid = (jid) => {
         if (!jid) return jid;
         if (/:\d+@/gi.test(jid)) {
-            let decode = jidDecode(jid) || {};
+            const decode = jidDecode(jid) || {};
             return (decode.user && decode.server && `${decode.user}@${decode.server}`) || jid;
         }
         return jid;
     };
+    const mtype = getContentType(ms.message);
+    const texte = {
+    conversation: ms.message.conversation,
+    imageMessage: ms.message.imageMessage?.caption,
+    videoMessage: ms.message.videoMessage?.caption,
+    extendedTextMessage: ms.message.extendedTextMessage?.text,
+    buttonsResponseMessage: ms.message.buttonsResponseMessage?.selectedButtonId,
+    listResponseMessage: ms.message.listResponseMessage?.singleSelectReply?.selectedRowId,
+    messageContextInfo: ms.message.buttonsResponseMessage?.selectedButtonId ||
+        ms.message.listResponseMessage?.singleSelectReply?.selectedRowId || ms.text
+    }[mtype] || "";
 
-    var mtype = getContentType(ms.message);
-    var texte = mtype === "conversation" ? ms.message.conversation :
-        mtype === "imageMessage" ? ms.message.imageMessage?.caption :
-        mtype === "videoMessage" ? ms.message.videoMessage?.caption :
-        mtype === "extendedTextMessage" ? ms.message.extendedTextMessage?.text :
-        mtype === "buttonsResponseMessage" ? ms.message.buttonsResponseMessage?.selectedButtonId :
-        mtype === "listResponseMessage" ? ms.message.listResponseMessage?.singleSelectReply?.selectedRowId :
-        mtype === "messageContextInfo" ? (ms.message.buttonsResponseMessage?.selectedButtonId || ms.message.listResponseMessage?.singleSelectReply?.selectedRowId || ms.text) : "";
-
-    var ms_org = ms.key.remoteJid;
-    var id_Bot = decodeJid(ovl.user.id);
-    var id_Bot_N = id_Bot.split('@')[0];
+    const ms_org = ms.key.remoteJid;
+    const id_Bot = decodeJid(ovl.user.id);
+    const id_Bot_N = id_Bot.split('@')[0];
     const verif_Groupe = ms_org?.endsWith("@g.us");
-    var infos_Groupe = verif_Groupe ? await ovl.groupMetadata(ms_org) : "";
-    var nom_Groupe = verif_Groupe ? infos_Groupe.subject : "";
-    var msg_Repondu = ms.message.extendedTextMessage?.contextInfo?.quotedMessage;
-    var auteur_Msg_Repondu = decodeJid(ms.message.extendedTextMessage?.contextInfo?.participant);
-    var mr = ms.message.extendedTextMessage?.contextInfo?.mentionedJid;
-    var user = mr || msg_Repondu ? auteur_Msg_Repondu : "";
-    var auteur_Message = verif_Groupe ? ms.key.participant || ms.participant : ms_org;
-    if (ms.key.fromMe) {
-        auteur_Message = id_Bot;
-    }
-
-    var membre_Groupe = verif_Groupe ? ms.key.participant : '';
+    const infos_Groupe = verif_Groupe ? await ovl.groupMetadata(ms_org) : "";
+    const nom_Groupe = verif_Groupe ? infos_Groupe.subject : "";
+    const msg_Repondu = ms.message.extendedTextMessage?.contextInfo?.quotedMessage;
+    const auteur_Msg_Repondu = decodeJid(ms.message.extendedTextMessage?.contextInfo?.participant);
+    const mr = ms.message.extendedTextMessage?.contextInfo?.mentionedJid;
+    const auteur_Message = verif_Groupe ? ms.key.participant || ms.participant : ms_org;
     const nom_Auteur_Message = ms.pushName;
     const arg = texte ? texte.trim().split(/ +/).slice(1) : null;
     const verif_Cmd = texte ? texte.startsWith(prefixe) : false;
     const cmds = verif_Cmd ? texte.slice(prefixe.length).trim().split(/ +/).shift().toLowerCase() : false;
-    function groupe_Admin(membre_Groupe) {
-        let admin = [];
-        for (let m of membre_Groupe) {
-            if (m.admin != null) admin.push(m.id);
-        }
-        return admin;
-    }
+
+    const groupe_Admin = (participants) => participants.filter((m) => m.admin).map((m) => m.id);
     const mbre_membre = verif_Groupe ? await infos_Groupe.participants : '';
-    let admins = verif_Groupe ? groupe_Admin(mbre_membre) : '';
+    const admins = verif_Groupe ? groupe_Admin(mbre_membre) : '';
     const verif_Admin = verif_Groupe ? admins.includes(auteur_Message) : false;
     const verif_Ovl_Admin = verif_Groupe ? admins.includes(id_Bot) : false;
-   
+
     const Ainz = '22651463203';
     const Ainzbot = '22605463559';
-    const devNumbers = [ Ainz, Ainzbot ];
-    const premium_Users_id = [Ainz, Ainzbot, id_Bot_N, config.NUMERO_OWNER].map((s) => s.replace(/[^0-9]/g) + "@s.whatsapp.net");
+    const devNumbers = [Ainz, Ainzbot];
+    const premium_Users_id = [Ainz, Ainzbot, id_Bot_N, config.NUMERO_OWNER].map((s) => `${s.replace(/[^0-9]/g, "")}@s.whatsapp.net`);
     const prenium_id = premium_Users_id.includes(auteur_Message);
-    const dev_id = devNumbers.map((s) => s.replace(/[^0-9]/g) + "@s.whatsapp.net").includes(auteur_Message);
+    const dev_id = devNumbers.map((s) => `${s.replace(/[^0-9]/g, "")}@s.whatsapp.net`).includes(auteur_Message);
 
     const cmd_options = {
         verif_Groupe,
@@ -142,23 +135,22 @@ async function main() {
         groupe_Admin,
         msg_Repondu,
         auteur_Msg_Repondu,
-        ms, 
-        ms_org
-   };
+        ms,
+        ms_org,
+    };
 
-    console.log("{}=={} OVL-MD LOG-MESSAGES {}=={}");
+    console.log("=== OVL-MD LOG-MESSAGES ===");
     if (verif_Groupe) {
         console.log("Groupe: " + nom_Groupe);
     }
-    console.log("Auteur message: " + `${nom_Auteur_Message}\nNumero: ${auteur_Message.split("@s.whatsapp.net")[0]}`);
+    console.log(`Auteur message: ${nom_Auteur_Message}\nNumero: ${auteur_Message.split("@")[0]}`);
     console.log("Type: " + mtype);
     console.log("Message:");
     console.log(texte);
 
     function repondre(message) {
         ovl.sendMessage(ms_org, { text: message }, { quoted: ms });
-    }
-
+    } 
           //antilink
           const linkRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[^\s]+\.[^\s]+)/gi;
 
