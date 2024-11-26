@@ -132,11 +132,10 @@ ovlcmd(
 
     const membres = await infos_Groupe.participants;
     const admins = membres.filter((m) => m.admin).map((m) => m.id);
-    if (!verif_Ovl_Admin))
+    if (!verif_Ovl_Admin)
       return ovl.sendMessage(ms_org, { text: "Je dois être administrateur pour effectuer cette action." });
 
-    const membre = auteur_Msg_Repondu || (arg[0]?.includes("@") && `${arg[0].replace("@", "")}@s.whatsapp.net`);
-    if (!membre || !membres.find((m) => m.id === membre))
+     if (!membre || !membres.find((m) => m.id === membre))
       return ovl.sendMessage(ms_org, { text: "Membre introuvable dans ce groupe." });
     if (admins.includes(membre))
       return ovl.sendMessage(ms_org, { text: "Impossible d'exclure un administrateur du groupe." });
@@ -150,6 +149,96 @@ ovlcmd(
     }
   }
 );
+
+ovlcmd(
+  {
+    nom_cmd: "promote",
+    classe: "Groupe",
+    react: "⬆️",
+    desc: "Promouvoir un membre comme administrateur.",
+  },
+  async (ms_org, ovl, cmd_options) => {
+    const { verif_Groupe, auteur_Msg_Repondu, arg, infos_Groupe, verif_Admin, dev_id } = cmd_options;
+    if (!verif_Groupe) return ovl.sendMessage(ms_org, { text: "Commande utilisable uniquement dans les groupes." });
+    if (!verif_Admin || !dev_id) return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
+
+    const membres = await infos_Groupe.participants;
+    const admins = membres.filter((m) => m.admin).map((m) => m.id);
+    const membre = auteur_Msg_Repondu || (arg[0]?.includes("@") && `${arg[0].replace("@", "")}@s.whatsapp.net`);
+    if (!verif_Ovl_Admin)
+      return ovl.sendMessage(ms_org, { text: "Je dois être administrateur pour effectuer cette action." });
+    if (!membre) return ovl.sendMessage(ms_org, { text: "Veuillez mentionner un membre à promouvoir." });
+    if (!membres.find((m) => m.id === membre))
+      return ovl.sendMessage(ms_org, { text: "Membre introuvable dans ce groupe." });
+    if (admins.includes(membre))
+      return ovl.sendMessage(ms_org, { text: "ce membre est déjà un administrateur du groupe." });
+
+    try {
+      await ovl.groupParticipantsUpdate(ms_org, [membre], "promote");
+      ovl.sendMessage(ms_org, { text: `@${membre.split("@")[0]} a été promu administrateur.`, mentions: [membre] });
+    } catch (err) {
+      console.error("Erreur :", err);
+      ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de la promotion." });
+    }
+  }
+);
+
+ovlcmd(
+  {
+    nom_cmd: "demote",
+    classe: "Groupe",
+    react: "⬇️",
+    desc: "Retirer le rôle d'administrateur à un membre.",
+  },
+  async (ms_org, ovl, cmd_options) => {
+    const { verif_Groupe, auteur_Msg_Repondu, arg, infos_Groupe, verif_Admin, prenium_id, verif_Ovl_Admin } = cmd_options;
+    if (!verif_Groupe) return ovl.sendMessage(ms_org, { text: "Commande utilisable uniquement dans les groupes." });
+    if (!verif_Admin || !dev_id) return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
+
+    const membres = await infos_Groupe.participants;
+    const admins = membres.filter((m) => m.admin).map((m) => m.id);
+    const membre = auteur_Msg_Repondu || (arg[0]?.includes("@") && `${arg[0].replace("@", "")}@s.whatsapp.net`);
+    if (!verif_Ovl_Admin)
+      return ovl.sendMessage(ms_org, { text: "Je dois être administrateur pour effectuer cette action." });
+    if (!membre) return ovl.sendMessage(ms_org, { text: "Veuillez mentionner un membre à rétrograder." });
+    if (!membres.find((m) => m.id === membre))
+      return ovl.sendMessage(ms_org, { text: "Membre introuvable dans ce groupe." });
+    if (!admins.includes(membre))
+      return ovl.sendMessage(ms_org, { text: "ce membre n'est pas un administrateur du groupe." });
+
+    try {
+      await ovl.groupParticipantsUpdate(ms_org, [membre], "demote");
+      ovl.sendMessage(ms_org, { text: `@${membre.split("@")[0]} a été rétrogradé.`, mentions: [membre] });
+    } catch (err) {
+      console.error("Erreur :", err);
+      ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de la rétrogradation." });
+    }
+  }
+);
+
+ovlcmd(
+  {
+    nom_cmd: "del",
+    classe: "Groupe",
+    react: "🗑️",
+    desc: "Supprimer un message dans le groupe.",
+  },
+  async (ms_org, ovl, cmd_options) => {
+    const { verif_Groupe, msg_Repondu, verif_Admin, prenium_id, verif_Ovl_Admin, ms } = cmd_options;
+    if (!verif_Groupe) return ovl.sendMessage(ms_org, { text: "Commande utilisable uniquement dans les groupes." });
+    if (!verif_Admin || !prenium_id) return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
+    if(!verif_Ovl_Admin) return ovl.sendMessage(ms_org, { text: "Je dois être administrateur pour effectuer cette action." });
+    if (!msg_Repondu) return ovl.sendMessage(ms_org, { text: "Veuillez répondre à un message pour le supprimer." });
+
+    try { 
+        await ovl.sendMessage(ms_org, { delete: ms.key });
+          } catch (err) {
+      console.error("Erreur :", err);
+      ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de la suppression du message." });
+    }
+  }
+);
+
 
 ovlcmd(
   {
