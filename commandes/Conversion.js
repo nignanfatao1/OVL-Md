@@ -58,7 +58,7 @@ ovlcmd(
   {
     nom_cmd: "sticker",
     classe: "Conversion",
-    react: "📄",
+    react: "✍️",
     desc: "Crée un sticker à partir d'une image, vidéo ou GIF",
     alias: ["s", "stick"]
   },
@@ -161,9 +161,9 @@ ovlcmd(
   // Commande Write
 ovlcmd(
   {
-    nom_cmd: "ecrire",
+    nom_cmd: "write",
     classe: "Conversion",
-    react: "📝",
+    react: "✍️",
     desc: "Ajoute du texte à une image, vidéo ou sticker",
   },
   async (ms_org, ovl, cmd_options) => {
@@ -232,7 +232,7 @@ ovlcmd(
   {
     nom_cmd: "toimage",
     classe: "Conversion",
-    react: "🀄",
+    react: "✍️",
     desc: "Convertit un sticker en image",
     alias: ["toimg"],
   },
@@ -274,87 +274,3 @@ ovlcmd(
 );
 // tovideo
 
-ovlcmd(
-  {
-    nom_cmd: "tovideo",
-    classe: "Conversion",
-    react: "🎥",
-    desc: "Convertit un sticker animé en vidéo",
-    alias: ["tovid"]
-  },
-  async (ms_org, ovl, cmd_options) => {
-    const { msg_Repondu } = cmd_options;
-
-    if (!msg_Repondu || !msg_Repondu.stickerMessage) {
-      return ovl.sendMessage(ms_org, { text: "Répondez à un sticker animé." });
-    }
-
-    try {
-      const stickerBuffer = await ovl.dl_save_media_ms(msg_Repondu.stickerMessage);
-      const inputFileName = alea(".webp");
-      const outputFileName = alea(".mp4");
-
-      fs.writeFileSync(inputFileName, stickerBuffer);
-
-      const { execSync } = require("child_process");
-      execSync(`ffmpeg -i ${inputFileName} -movflags faststart -pix_fmt yuv420p ${outputFileName}`);
-
-      await ovl.sendMessage(
-        ms_org,
-        { video: fs.readFileSync(outputFileName) },
-        { quoted: ms_org }
-      );
-
-      fs.unlinkSync(inputFileName);
-      fs.unlinkSync(outputFileName);
-    } catch (error) {
-      console.error("Erreur lors de la conversion du sticker en vidéo :", error);
-      await ovl.sendMessage(ms_org, {
-        text: `Erreur lors de la conversion en vidéo : ${error.message}`,
-      });
-    }
-  }
-);
-
-//to audio
-
-ovlcmd(
-  {
-    nom_cmd: "toaudio",
-    classe: "Conversion",
-    react: "🎵",
-    desc: "Convertit une vidéo en fichier audio",
-    alias: ["toaud"],
-  },
-  async (ms_org, ovl, cmd_options) => {
-    const { msg_Repondu } = cmd_options;
-
-    if (!msg_Repondu || !msg_Repondu.videoMessage) {
-      return ovl.sendMessage(ms_org, { text: "Répondez à une vidéo pour la convertir en audio." });
-    }
-
-    try { 
-      const videoBuffer = await ovl.dl_save_media_ms(msg_Repondu.videoMessage);
-      const videoFileName = alea(".mp4");
-      const audioFileName = alea(".mp3");
-
-      fs.writeFileSync(videoFileName, videoBuffer);
-      const { execSync } = require("child_process");
-      execSync(`ffmpeg -i ${videoFileName} -q:a 0 -map a ${audioFileName}`);
-
-      await ovl.sendMessage(
-        ms_org,
-        { audio: { url: audioFileName }, mimetype: "audio/mpeg" },
-        { quoted: ms_org }
-      );
-
-      fs.unlinkSync(videoFileName);
-      fs.unlinkSync(audioFileName);
-    } catch (error) {
-      console.error("Erreur lors de la conversion de vidéo en audio :", error);
-      await ovl.sendMessage(ms_org, {
-        text: `Erreur lors de la conversion en audio : ${error.message}`,
-      });
-    }
-  }
-);
