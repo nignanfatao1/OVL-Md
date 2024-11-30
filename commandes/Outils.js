@@ -10,7 +10,7 @@ ovlcmd(
     },
     async (ms_org, ovl, cmd_options) => {
         try {
-            const mess = `\`\`\`🌐 Bienvenue sur *OVL-MD*, votre bot WhatsApp multi-device.🔍 Tapez *${prefixe}menu* pour voir toutes les commandes disponibles.\`\`\`\n> ©2024 OVL-MD By *AINZ*`;
+            const mess = `🌐 Bienvenue sur *OVL-MD*, votre bot WhatsApp multi-device.🔍 Tapez *${prefixe}menu* pour voir toutes les commandes disponibles.\n> ©2024 OVL-MD By *AINZ*`;
             const img = 'https://telegra.ph/file/8173c870f9de5570db8c3.jpg';
             await ovl.sendMessage(ms_org, { 
                 image: { url: img }, 
@@ -55,7 +55,7 @@ ovlcmd(
         try { 
             const seconds = process.uptime(); 
             var j = Math.floor(seconds / (60 * 60 * 24));
-            var h = Math.floor(seconds / (60*60));
+            var h = Math.floor(seconds / (60 * 60)) % 24;
             var m = Math.floor(seconds % (60*60) / 60);
             var s = Math.floor(seconds % 60);
             let uptime = '';
