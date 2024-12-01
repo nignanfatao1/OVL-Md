@@ -54,9 +54,10 @@ ovlcmd(
     async (ms_org, ovl, cmd_options) => {
         try { 
             const seconds = process.uptime(); 
-            var j = Math.floor(seconds / (60 * 60 * 24));
-            var h = Math.floor(seconds / (60 * 60)) % 24;
-            var m = Math.floor(seconds % (60*60) / 60);
+            var j = Math.floor(seconds / 86 400);
+            let h = Math.floor((seconds / 3600) % 24);
+            if (h < 0) { h = Math.floor(seconds / 3600);
+            var m = Math.floor(seconds % 3600 / 60);
             var s = Math.floor(seconds % 60);
             let uptime = '';
             if (j > 0) uptime += `${j}J `;
