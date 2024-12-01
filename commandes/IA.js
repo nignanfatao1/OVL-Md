@@ -14,7 +14,26 @@ ovlcmd(
             return ovl.sendMessage(ms_org, { text: "Veuillez entrer un texte à envoyer à l'IA." }, { quoted: ms });
         }
         const mess = arg.join(" ");
+
         const options = {
+  method: 'POST',
+  url: 'https://chatgpt-42.p.rapidapi.com/gpt4',
+  headers: {
+    'x-rapidapi-key': '66a4b7257cmsh2e35c611d4b6922p1d5949jsn2e4e9cf6a807',
+    'x-rapidapi-host': 'chatgpt-42.p.rapidapi.com',
+    'Content-Type': 'application/json'
+  },
+  data: {
+    messages: [
+      {
+        role: 'user',
+        content: mess,
+      }
+    ],
+    web_access: false
+  }
+};
+        /*const options = {
             method: "POST",
             url: "https://gpt-4o.p.rapidapi.com/chat/completions",
             headers: {
@@ -31,7 +50,7 @@ ovlcmd(
                     },
                 ],
             },
-        };
+        };*/
         try {
             const response = await axios.request(options);
             const replyContent = response.data;
