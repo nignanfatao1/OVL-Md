@@ -56,7 +56,7 @@ ovlcmd(
             const seconds = process.uptime(); 
             var j = Math.floor(seconds / 86 400);
             let h = Math.floor((seconds / 3600) % 24);
-            if (h < 0) { h = Math.floor(seconds / 3600);
+            if (h < 0) { h = Math.floor(seconds / 3600) };
             var m = Math.floor(seconds % 3600 / 60);
             var s = Math.floor(seconds % 60);
             let uptime = '';
