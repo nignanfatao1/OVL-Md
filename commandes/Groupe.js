@@ -235,7 +235,7 @@ ovlcmd(
   try { 
       const key = {
     remoteJid: ms_org,
-    id: ms.key.id
+    id: ms.key.id,
     participant: auteur_Msg_Repondu
       };
         await ovl.sendMessage(ms_org, { delete: msg_Repondu.key });
