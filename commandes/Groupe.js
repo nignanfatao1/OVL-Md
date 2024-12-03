@@ -227,7 +227,7 @@ ovlcmd(
     desc: "Supprimer un message dans le groupe.",
   },
   async (ms_org, ovl, cmd_options) => {
-    const { msg_Repondu, auteur_Msg_Repondu, verif_Admin, prenium_id, verif_Ovl_Admin, ms } = cmd_options;
+    const { msg_Repondu, auteur_Msg_Repondu, verif_Admin, prenium_id, verif_Ovl_Admin, verif_Groupe, ms } = cmd_options;
     if (!verif_Groupe) return ovl.sendMessage(ms_org, { text: "Commande utilisable uniquement dans les groupes." });
     if (verif_Admin || prenium_id) { 
     if(!verif_Ovl_Admin) return ovl.sendMessage(ms_org, { text: "Je dois être administrateur pour effectuer cette action." });
