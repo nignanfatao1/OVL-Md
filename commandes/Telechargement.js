@@ -47,8 +47,8 @@ ovlcmd(
 ⬡ Durée: ${videoInfo.duration}
 ╰───────────────────⬣`;
 
-            await ovl.sendMessage(ms_org, { image: { url: videoInfo.thumbnail }, caption: caption });
-                    const audioResponse = await axios.get(`https://ironman.koyeb.app/ironman/dl/yta?url=${videoInfo.url}?si=EmeS9fJvS_OkDk7p&apikey=ln5mhaiphf7je7n6aanq`, {
+            await ovl.sendMessage(ms_org, { image: { url: videoInfo.thumbnail }, caption: caption }); 
+                    const audioResponse = await axios.get(`https://api-znjo.onrender.com/api/v2/ytmp3?url=${videoInfo.url}?si=EmeS9fJvS_OkDk7p&apikey=ln5mhaiphf7je7n6aanq`, {
                         responseType: 'arraybuffer'
                     });
 
