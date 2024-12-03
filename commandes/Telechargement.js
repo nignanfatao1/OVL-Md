@@ -255,7 +255,6 @@ ovlcmd(
         try {
             const response = await axios.get(`https://api-znjo.onrender.com/api/v1/igdl?url=${url}&apikey=ln5mhaiphf7je7n6aanq`, {
                 responseType: 'arraybuffer'});
-              });
             const type = response.data.type || "media";
             if (type === "video") {
                 await ovl.sendMessage(ms_org, { video: { url: Buffer.from(response.data), }, caption: `\`\`\`Powered By OVL-MD\`\`\`` });
