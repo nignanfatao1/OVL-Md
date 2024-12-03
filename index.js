@@ -155,20 +155,10 @@ ovl.ev.on("messages.upsert", async (m) => {
 
 try {
     if (linkRegex.test(texte)) {
-        if (!verif_Groupe || !ms_org) {
-             return;
-        }
-
-        const settings = await Antilink.findOne({ where: { id: ms_org } });
-        if (!settings || settings.mode !== 'oui') {
-            return;
-        }
-
-        if (verif_Admin || !verif_Ovl_Admin) {
-             return;
-        }
-
-        switch (settings.type) {
+     const settings = await Antilink.findOne({ where: { id: ms_org } });
+        if (verif_Groupe && settings && settings.mode == 'oui') {
+        if (verif_Admin && verif_Ovl_Admin) {
+          switch (settings.type) {
             case 'supp':
                 await ovl.sendMessage(ms_org, {
                     text: `@${auteur_Message.split("@")[0]}, les liens ne sont pas autorisés ici.`,
@@ -220,8 +210,10 @@ try {
 
             default:
                 console.error(`Action inconnue : ${settings.type}`);
+        } 
+        } 
         }
-    }
+        }
 } catch (error) {
     console.error("Erreur dans le système Antilink :", error);
    }
