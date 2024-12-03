@@ -177,7 +177,7 @@ ovlcmd(
         const url = arg[0];
         try {
             const response = await axios.get(
-    `https://api-znjo.onrender.com/api/v1/igdl?url=${url}&apikey=ln5mhaiphf7je7n6aanq`,
+    `https://api-znjo.onrender.com/api/v1/tiktokv1?url=${url}&apikey=ln5mhaiphf7je7n6aanq`,
     { responseType: 'arraybuffer' }
 );
             await ovl.sendMessage(ms_org, { video: { url: Buffer.from(response.data) }, caption: `\`\`\`Powered By OVL-MD\`\`\``});
