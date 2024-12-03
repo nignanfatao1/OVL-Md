@@ -125,7 +125,8 @@ ovlcmd(
         if (!arg.length) {
             return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un lien youtube." });
         }
-        const url = arg[0];
+        const url = arg.join(" ");
+        console.log(url);
         try {
             const response = await axios.get(`https://api-znjo.onrender.com/api/v2/ytmp3?url=${url}?si=EmeS9fJvS_OkDk7p&apikey=ln5mhaiphf7je7n6aanq`, {
                 responseType: 'arraybuffer'});
@@ -149,7 +150,7 @@ ovlcmd(
         if (!arg.length) {
             return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un lien youtube." });
         }
-        const url = arg[0];
+        const url = arg.join(" ");
         try {
             const response = await axios.get(`https://api-znjo.onrender.com/api/v2/ytmp4?url=${url}?si=EmeS9fJvS_OkDk7p&apikey=ln5mhaiphf7je7n6aanq`, {
                 responseType: 'arraybuffer'});
@@ -174,7 +175,7 @@ ovlcmd(
         if (!arg.length) {
             return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un lien TikTok." });
         }
-        const url = arg[0];
+        const url = arg.join(" ");
         try {
             const response = await axios.get(
     `https://api-znjo.onrender.com/api/v1/tiktokv1?url=${url}&apikey=ln5mhaiphf7je7n6aanq`,
@@ -201,7 +202,7 @@ ovlcmd(
         if (!arg.length) {
             return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un lien Facebook." });
         }
-        const url = arg[0];
+        const url = arg.join(" ");
         try {
             const response = await axios.get(`https://api-znjo.onrender.com/api/facebook?url=${url}&apikey=ln5mhaiphf7je7n6aanq`, {
                 responseType: 'arraybuffer'});
@@ -226,7 +227,7 @@ ovlcmd(
         if (!arg.length) {
             return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un lien Twitter." });
         }
-        const url = arg[0];
+        const url = arg.join(" ");
         try {
             const response = await axios.get(`https://api-znjo.onrender.com/api/twitterdl?url=${url}&apikey=ln5mhaiphf7je7n6aanq`, {
                 responseType: 'arraybuffer'});
@@ -251,7 +252,7 @@ ovlcmd(
         if (!arg.length) {
             return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un lien Instagram." });
         }
-        const url = arg[0];
+        const url = arg.join(" ");
         try {
             const response = await axios.get(`https://api-znjo.onrender.com/api/v1/igdl?url=${url}&apikey=ln5mhaiphf7je7n6aanq`, {
                 responseType: 'arraybuffer'});
