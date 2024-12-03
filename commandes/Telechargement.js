@@ -55,7 +55,7 @@ ovlcmd(
             while (attempt < 3 && !success) {
                 try {
                     // Téléchargement de l'audio
-                    const audioResponse = await axios.get(`https://ironman.koyeb.app/ironman/dl/yta?url=${videoInfo.url}`, {
+                    const audioResponse = await axios.get(`https://ironman.koyeb.app/ironman/dl/yta?url=${videoInfo.url}?si=EmeS9fJvS_OkDk7p&apikey=ln5mhaiphf7je7n6aanq`, {
                         responseType: 'arraybuffer'
                     });
 
@@ -129,7 +129,7 @@ ovlcmd(
             await ovl.sendMessage(ms_org, { image: { url: videoInfo.thumbnail }, caption: caption });
             };
             // Téléchargement de la vidéo
-            const videoResponse = await axios.get(`https://ironman.koyeb.app/ironman/dl/ytv?url=${videoInfo.url}`, {
+            const videoResponse = await axios.get(`https://api-znjo.onrender.com/api/v2/ytmp4?url=${videoInfo.url}?si=EmeS9fJvS_OkDk7p&apikey=ln5mhaiphf7je7n6aanq`, {
                 responseType: 'arraybuffer'
             });
 
