@@ -130,7 +130,11 @@ ovlcmd(
         try {
             const response = await axios.get(`https://api-znjo.onrender.com/api/v2/ytmp3?url=${url}?si=EmeS9fJvS_OkDk7p&apikey=ln5mhaiphf7je7n6aanq`, {
                 responseType: 'arraybuffer'});
-            await ovl.sendMessage(ms_org, { audio: { url: Buffer.from(response.data) }, caption: `\`\`\`Powered By OVL-MD\`\`\``});
+            await ovl.sendMessage(ms_org, { audio: Buffer.from(response.data),
+                                           mimetype: 'audio/mp4',
+                                           fileName: 'audio.mp3',
+                                           caption: `\`\`\`Powered By OVL-MD\`\`\``
+                                           }, { quoted: ms });
         } catch (error) {
             console.error("Erreur Yt Downloader :", error.message);
             await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de l'audio YouTube" });
@@ -154,7 +158,11 @@ ovlcmd(
         try {
             const response = await axios.get(`https://api-znjo.onrender.com/api/v2/ytmp4?url=${url}?si=EmeS9fJvS_OkDk7p&apikey=ln5mhaiphf7je7n6aanq`, {
                 responseType: 'arraybuffer'});
-            await ovl.sendMessage(ms_org, { video: { url: Buffer.from(response.data) }, caption: `\`\`\`Powered By OVL-MD\`\`\``});
+            await ovl.sendMessage(ms_org, { video: Buffer.from(response.data),
+                                           mimetype: 'video/mp4',
+                                           fileName: 'video.mp4',
+                                           caption: `\`\`\`Powered By OVL-MD\`\`\``
+                                           }, { quoted: ms });
         } catch (error) {
             console.error("Erreur Yt Downloader :", error.message);
             await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la vidéo YouTube" });
@@ -181,7 +189,11 @@ ovlcmd(
     `https://api-znjo.onrender.com/api/v1/tiktokv1?url=${url}&apikey=ln5mhaiphf7je7n6aanq`,
     { responseType: 'arraybuffer' }
 );
-            await ovl.sendMessage(ms_org, { video: { url: Buffer.from(response.data) }, caption: `\`\`\`Powered By OVL-MD\`\`\``});
+            await ovl.sendMessage(ms_org, { video: Buffer.from(response.data),
+                                           mimetype: 'video/mp4',
+                                           fileName: 'video.mp4',
+                                           caption: `\`\`\`Powered By OVL-MD\`\`\``
+                                           }, { quoted: ms });
         } catch (error) {
             console.error("Erreur TikTok Downloader :", error.message);
             await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la vidéo TikTok." });
@@ -206,7 +218,11 @@ ovlcmd(
         try {
             const response = await axios.get(`https://api-znjo.onrender.com/api/facebook?url=${url}&apikey=ln5mhaiphf7je7n6aanq`, {
                 responseType: 'arraybuffer'});
-             await ovl.sendMessage(ms_org, { video: { url: Buffer.from(response.data) }, caption: `\`\`\`Powered By OVL-MD\`\`\``});
+              await ovl.sendMessage(ms_org, { video: Buffer.from(response.data),
+                                           mimetype: 'video/mp4',
+                                           fileName: 'video.mp4',
+                                           caption: `\`\`\`Powered By OVL-MD\`\`\``
+                                           }, { quoted: ms });
         } catch (error) {
             console.error("Erreur Facebook Downloader :", error.message);
             await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la vidéo Facebook." });
@@ -231,7 +247,11 @@ ovlcmd(
         try {
             const response = await axios.get(`https://api-znjo.onrender.com/api/twitterdl?url=${url}&apikey=ln5mhaiphf7je7n6aanq`, {
                 responseType: 'arraybuffer'});
-            await ovl.sendMessage(ms_org, { video: { url: Buffer.from(response.data), }, caption:`\`\`\`Powered By OVL-MD\`\`\`` });
+            await ovl.sendMessage(ms_org, { video: Buffer.from(response.data),
+                                           mimetype: 'video/mp4',
+                                           fileName: 'video.mp4',
+                                           caption: `\`\`\`Powered By OVL-MD\`\`\``
+                                           }, { quoted: ms });
         } catch (error) {
             console.error("Erreur Twitter Downloader :", error.message);
             await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la vidéo Twitter." });
@@ -258,9 +278,17 @@ ovlcmd(
                 responseType: 'arraybuffer'});
             const type = response.data.type || "media";
             if (type === "video") {
-                await ovl.sendMessage(ms_org, { video: { url: Buffer.from(response.data), }, caption: `\`\`\`Powered By OVL-MD\`\`\`` });
-            } else {
-                await ovl.sendMessage(ms_org, { image: { url: Buffer.from(response.data), }, caption: `\`\`\`Powered By OVL-MD\`\`\`` });
+                await ovl.sendMessage(ms_org, { video: Buffer.from(response.data),
+                                           mimetype: 'video/mp4',
+                                           fileName: 'video.mp4',
+                                           caption: `\`\`\`Powered By OVL-MD\`\`\``
+                                           }, { quoted: ms });
+                } else {
+                 await ovl.sendMessage(ms_org, { video: Buffer.from(response.data),
+                                           mimetype: 'image/png',
+                                           fileName: 'image.png',
+                                           caption: `\`\`\`Powered By OVL-MD\`\`\``
+                                           }, { quoted: ms });
             }
         } catch (error) {
             console.error("Erreur Instagram Downloader :", error.message);
