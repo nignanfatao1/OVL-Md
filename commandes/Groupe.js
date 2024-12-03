@@ -235,9 +235,9 @@ ovlcmd(
   try { 
       const key = {
     remoteJid: ms_org,
-    id: ms.key.id,
-    participant: auteur_Msg_Repondu
-      };
+    id: ms.message.extendedTextMessage.contextInfo.stanzaId,
+    participant: ms.message.extendedTextMessage.contextInfo.participant
+      };       
         await ovl.sendMessage(ms_org, { delete: msg_Repondu.key });
           } catch (err) {
       console.error("Erreur :", err);
