@@ -186,7 +186,7 @@ ovlcmd(
         const url = arg.join(" ");
         try {
             const response = await axios.get(
-    `https://api-znjo.onrender.com/api/v1/tiktokv2?url=${url}&apikey=ln5mhaiphf7je7n6aanq`,
+    `https://api-znjo.onrender.com/api/tiktokv2?url=${url}&apikey=ln5mhaiphf7je7n6aanq`,
     { responseType: 'arraybuffer' }
 );
             await ovl.sendMessage(ms_org, { video: Buffer.from(response.data),
