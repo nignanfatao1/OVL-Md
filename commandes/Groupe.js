@@ -238,7 +238,7 @@ ovlcmd(
     id: ms.message.extendedTextMessage.contextInfo.stanzaId,
     participant: ms.message.extendedTextMessage.contextInfo.participant
       };       
-        await ovl.sendMessage(ms_org, { delete: msg_Repondu.key });
+        await ovl.sendMessage(ms_org, { delete: key });
           } catch (err) {
       console.error("Erreur :", err);
       ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de la suppression du message." });
