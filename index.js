@@ -157,7 +157,7 @@ try {
     if (linkRegex.test(texte)) {
      const settings = await Antilink.findOne({ where: { id: ms_org } });
         if (verif_Groupe && settings && settings.mode == 'oui') {
-        if (verif_Admin && verif_Ovl_Admin) {
+        if (!verif_Admin && verif_Ovl_Admin) {
           switch (settings.type) {
             case 'supp':
                 await ovl.sendMessage(ms_org, {
