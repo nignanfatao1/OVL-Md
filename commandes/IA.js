@@ -116,7 +116,7 @@ ovlcmd(
     }
 );
 
-ovlcmd(
+/*ovlcmd(
     {
         nom_cmd: "bing",
         classe: "IA",
@@ -172,7 +172,7 @@ ovlcmd(
             return ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de l'appel à l'API." }, { quoted: ms });
         }
     }
-);
+);*/
 
 ovlcmd(
     {
@@ -194,6 +194,7 @@ ovlcmd(
         try {
             const result = await axios.post(apiUrl, {
                 messages: [{ role: "user", content: prompt }],
+                prompt: "Répondre à l'utilisateur.",
                 websearch: false,
                 stream: false,
                 markdown: false,
@@ -232,7 +233,7 @@ ovlcmd(
     }
 );
 
-ovlcmd(
+/*ovlcmd(
     {
         nom_cmd: "gemini",
         classe: "IA",
@@ -349,3 +350,4 @@ ovlcmd(
         }
     }
 );
+*/
