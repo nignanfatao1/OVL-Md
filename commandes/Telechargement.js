@@ -216,9 +216,8 @@ ovlcmd(
         }
         const url = arg.join(" ");
         try {
-            const response = await axios.get(`https://api-znjo.onrender.com/api/facebook?url=${url}&apikey=ln5mhaiphf7je7n6aanq`, {
-                responseType: 'arraybuffer'});
-              await ovl.sendMessage(ms_org, { video: Buffer.from(response.data.resultado.data),
+            const response = await axios.get(`https://api-znjo.onrender.com/api/facebook?url=${url}&apikey=ln5mhaiphf7je7n6aanq`);
+              await ovl.sendMessage(ms_org, { video: response.data.resultado.data,
                                            mimetype: 'video/mp4',
                                            fileName: 'video.mp4',
                                            caption: `\`\`\`Powered By OVL-MD\`\`\``
