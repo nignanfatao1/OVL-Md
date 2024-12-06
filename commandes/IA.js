@@ -81,7 +81,7 @@ ovlcmd(
         try {
             const result = await axios.post(apiUrl, {
                 prompt: prompt,
-                model: "dalle"
+                model: "dalle2"
             }, {
                 headers: { 'Content-Type': 'application/json' }
             });
