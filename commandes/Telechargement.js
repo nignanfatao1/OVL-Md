@@ -218,7 +218,7 @@ ovlcmd(
         try {
             const response = await axios.get(`https://api-znjo.onrender.com/api/facebook?url=${url}&apikey=ln5mhaiphf7je7n6aanq`, {
                 responseType: 'arraybuffer'});
-              await ovl.sendMessage(ms_org, { video: Buffer.from(response.data.data),
+              await ovl.sendMessage(ms_org, { video: Buffer.from(response.data.resultado.data),
                                            mimetype: 'video/mp4',
                                            fileName: 'video.mp4',
                                            caption: `\`\`\`Powered By OVL-MD\`\`\``
@@ -247,7 +247,7 @@ ovlcmd(
         try {
             const response = await axios.get(`https://api-znjo.onrender.com/api/twitterdl?url=${url}&apikey=ln5mhaiphf7je7n6aanq`, {
                 responseType: 'arraybuffer'});
-            await ovl.sendMessage(ms_org, { video: Buffer.from(response.data),
+            await ovl.sendMessage(ms_org, { video: Buffer.from(response.data.resultado.media.url),
                                            mimetype: 'video/mp4',
                                            fileName: 'video.mp4',
                                            caption: `\`\`\`Powered By OVL-MD\`\`\``
