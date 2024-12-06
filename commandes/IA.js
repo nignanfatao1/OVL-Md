@@ -48,7 +48,7 @@ ovlcmd(
                         return ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors du traitement de la requête." }, { quoted: ms });
                     case "completed":
                         data = false;
-                        return ovl.sendMessage(ms_org, { text: response.result || "Aucune réponse générée." }, { quoted: ms });
+                        return ovl.sendMessage(ms_org, { text: response.gpt || "Aucune réponse générée." }, { quoted: ms });
                     case "not_found":
                         data = false;
                         return ovl.sendMessage(ms_org, { text: "Tâche introuvable. Veuillez réessayer." }, { quoted: ms });
@@ -103,11 +103,7 @@ ovlcmd(
                         return ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de la génération de l'image." }, { quoted: ms });
                     case "completed":
                         data = false;
-                        if (response.result && response.result.url) {
-                            return ovl.sendMessage(ms_org, { image: { url: response.result.url }, caption: "Voici votre image générée." }, { quoted: ms });
-                        } else {
-                            return ovl.sendMessage(ms_org, { text: "Image générée mais aucun résultat disponible." }, { quoted: ms });
-                        }
+                            return ovl.sendMessage(ms_org, { image: { url: response.images[0] }, caption: `\`\`\`Powered By OVL-MD\`\`\`` }, { quoted: ms });
                     case "not_found":
                         data = false;
                         return ovl.sendMessage(ms_org, { text: "Tâche introuvable. Veuillez réessayer." }, { quoted: ms });
@@ -165,7 +161,7 @@ ovlcmd(
                         return ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors du traitement de la requête." }, { quoted: ms });
                     case "completed":
                         data = false;
-                        return ovl.sendMessage(ms_org, { text: response.result || "Aucune réponse générée." }, { quoted: ms });
+                        return ovl.sendMessage(ms_org, { text: response.message || "Aucune réponse générée." }, { quoted: ms });
                     case "not_found":
                         data = false;
                         return ovl.sendMessage(ms_org, { text: "Tâche introuvable. Veuillez réessayer." }, { quoted: ms });
@@ -223,7 +219,7 @@ ovlcmd(
                         return ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors du traitement de la requête." }, { quoted: ms });
                     case "completed":
                         data = false;
-                        return ovl.sendMessage(ms_org, { text: response.result || "Aucune réponse générée." }, { quoted: ms });
+                        return ovl.sendMessage(ms_org, { text: response.message || "Aucune réponse générée." }, { quoted: ms });
                     case "not_found":
                         data = false;
                         return ovl.sendMessage(ms_org, { text: "Tâche introuvable. Veuillez réessayer." }, { quoted: ms });
@@ -283,7 +279,7 @@ ovlcmd(
                         return ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors du traitement de la requête." }, { quoted: ms });
                     case "completed":
                         data = false;
-                        return ovl.sendMessage(ms_org, { text: response.result || "Aucune réponse générée." }, { quoted: ms });
+                        return ovl.sendMessage(ms_org, { text: response.message || "Aucune réponse générée." }, { quoted: ms });
                     case "not_found":
                         data = false;
                         return ovl.sendMessage(ms_org, { text: "Tâche introuvable. Veuillez réessayer." }, { quoted: ms });
@@ -338,14 +334,10 @@ ovlcmd(
                         return ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de la génération de l'image." }, { quoted: ms });
                     case "completed":
                         data = false;
-                        if (response.result) {
                             return ovl.sendMessage(ms_org, {
-                                image: { url: response.result },
-                                caption: "Voici l'image générée avec Midjourney."
+                                image: { url: response.images[0] },
+                                caption: `\`\`\`Powered By OVL-MD\`\`\``
                             }, { quoted: ms });
-                        } else {
-                            return ovl.sendMessage(ms_org, { text: "Aucune image générée." }, { quoted: ms });
-                        }
                     case "not_found":
                         data = false;
                         return ovl.sendMessage(ms_org, { text: "Tâche introuvable. Veuillez réessayer." }, { quoted: ms });
