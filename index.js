@@ -109,7 +109,10 @@ ovl.ev.on("messages.upsert", async (m) => {
     const groupe_Admin = (participants) => participants.filter((m) => m.admin).map((m) => m.id);
     const mbre_membre = verif_Groupe ? await infos_Groupe.participants : '';
     const admins = verif_Groupe ? groupe_Admin(mbre_membre) : '';
-    const verif_Admin = verif_Groupe ? admins.includes(auteur_Message) : false;
+    //const verif_Admin = verif_Groupe ? admins.includes(auteur_Message) : false;
+    const verif_Admin = verif_Groupe 
+    ? admins.includes(auteur_Message) || premium_Users_id.includes(auteur_Message) 
+    : false;
     const verif_Ovl_Admin = verif_Groupe ? admins.includes(id_Bot) : false;
     const Ainz = '22651463203';
     const Ainzbot = '22605463559';
