@@ -110,9 +110,6 @@ ovl.ev.on("messages.upsert", async (m) => {
     const mbre_membre = verif_Groupe ? await infos_Groupe.participants : '';
     const admins = verif_Groupe ? groupe_Admin(mbre_membre) : '';
     //const verif_Admin = verif_Groupe ? admins.includes(auteur_Message) : false;
-    const verif_Admin = verif_Groupe 
-    ? admins.includes(auteur_Message) || premium_Users_id.includes(auteur_Message) 
-    : false;
     const verif_Ovl_Admin = verif_Groupe ? admins.includes(id_Bot) : false;
     const Ainz = '22651463203';
     const Ainzbot = '22605463559';
@@ -120,7 +117,10 @@ ovl.ev.on("messages.upsert", async (m) => {
     const premium_Users_id = [Ainz, Ainzbot, id_Bot_N, config.NUMERO_OWNER].map((s) => `${s.replace(/[^0-9]/g, "")}@s.whatsapp.net`);
     const prenium_id = premium_Users_id.includes(auteur_Message);
     const dev_id = devNumbers.map((s) => `${s.replace(/[^0-9]/g, "")}@s.whatsapp.net`).includes(auteur_Message);
-
+    const verif_Admin = verif_Groupe 
+    ? admins.includes(auteur_Message) || premium_Users_id.includes(auteur_Message) 
+    : false;
+    
     const cmd_options = {
         verif_Groupe,
         mbre_membre,
@@ -145,7 +145,7 @@ ovl.ev.on("messages.upsert", async (m) => {
         ms_org,
     };
 
-    console.log("={}=={}= OVL-MD LOG-MESSAGES ={}=={}=");
+    console.log("{}=={}= OVL-MD LOG-MESSAGES ={}=={}");
     if (verif_Groupe) {
         console.log("Groupe: " + nom_Groupe);
     }
