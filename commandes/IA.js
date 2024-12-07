@@ -65,7 +65,7 @@ ovlcmd(
     {
         nom_cmd: "dalle",
         classe: "IA",
-        react: "🖼️",
+        react: "🎨",
         desc: "Génère des images avec DALLE-E."
     },
     async (ms_org, ovl, cmd_options) => {
@@ -116,7 +116,7 @@ ovlcmd(
     }
 );
 
-/*ovlcmd(
+ovlcmd(
     {
         nom_cmd: "bing",
         classe: "IA",
@@ -172,7 +172,7 @@ ovlcmd(
             return ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de l'appel à l'API." }, { quoted: ms });
         }
     }
-);*/
+);
 
 ovlcmd(
     {
@@ -233,7 +233,7 @@ ovlcmd(
     }
 );
 
-/*ovlcmd(
+ovlcmd(
     {
         nom_cmd: "gemini",
         classe: "IA",
@@ -293,7 +293,7 @@ ovlcmd(
     }
 );
 
-ovlcmd(
+/*ovlcmd(
     {
         nom_cmd: "midjourney",
         classe: "IA",
