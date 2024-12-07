@@ -300,8 +300,18 @@ try {
     console.error("Erreur dans le système Anti-Bot :", error);
 }
 // fin antibot
- 
-    if (verif_Cmd) { 
+
+ // quelque fonctions 
+ async function user_ban(userId) {
+    const ban = await Bans.findOne({ where: { id: userId, type: 'user' } });
+    return !!ban;
+}
+async function groupe_ban(groupId) {
+    const ban = await Bans.findOne({ where: { id: groupId, type: 'group' } });
+    return !!ban;
+}
+ //fin fonction    
+ if (verif_Cmd) { 
         const cd = evt.cmd.find((ovlcmd) => ovlcmd.nom_cmd === cmds || (ovlcmd.alias && ovlcmd.alias.includes(cmds)));
         
         if (cd) {
@@ -309,11 +319,21 @@ try {
                 if (config.MODE !== 'public' && !prenium_id) {
                     return 
                 }
+                if (!dev_id && ms_org === "120363314687943170@g.us") {
+                return;
+            }
+                if (!superUser) {
+                const user_bans = await user_ban(auteur_Message);
+                const groupe_bans = verif_Groupe ? groupe_ban(msg_org);
 
-                if (!dev_id && ms_org == "120363314687943170@g.us") {
-                    return
+                if (user_bans) {
+                     return;
                 }
-              
+
+                if (groupe_bans) {
+                     return;
+                }
+            } 
              if(cd.react) {
                 await ovl.sendMessage(ms_org, { react: { text: cd.react, key: ms.key } });
              } else { await ovl.sendMessage(ms_org, { react: { text: "🎐", key: ms.key } });
@@ -325,7 +345,68 @@ try {
             }
         }
     }
-}); //fin événement message 
+}); 
+         //fin événement message 
+
+ovl.ev.on('group-participants.update', async (data) => {
+    const parseID = (jid) => {
+        if (!jid) return jid;
+        if (/:\d+@/gi.test(jid)) {
+            let parsed = baileys.jidDecode(jid) || {};
+            return parsed.user && parsed.server ? `${parsed.user}@${parsed.server}` : jid;
+        } else {
+            return jid;
+        }
+    };
+
+    let groupPic;
+    try {
+        groupPic = await ovl.profilePictureUrl(data.id, 'image');
+    } catch {
+        groupPic = 'https://files.catbox.moe/54ip7g.jpg';
+    }
+
+    try {
+        const groupInfo = await ovl.groupMetadata(data.id);
+        const settings = await GroupSettings.findOne({ where: { id: data.id } });
+        if (!settings) return;
+
+        const { welcome, goodbye, antipromote, antidemote } = settings;
+
+        if (data.action === 'add' && welcome === 'oui') {
+            const newMembers = data.participants.map(m => `@${m.split("@")[0]}`).join('\n');
+            const message = `🎉 Bienvenue ! 🎉\n\n${newMembers}\n\n📜 *Description du groupe :* ${groupInfo.desc || "Aucune description"}`;
+            await ovl.sendMessage(data.id, { image: { url: groupPic }, caption: message, mentions: data.participants });
+        }
+
+        if (data.action === 'remove' && goodbye === 'oui') {
+            const leftMembers = data.participants.map(m => `@${m.split("@")[0]}`).join('\n');
+            await ovl.sendMessage(data.id, { text: `👋 Au revoir !\n\n${leftMembers}`, mentions: data.participants });
+        }
+
+        if (data.action === 'promote' && antipromote === 'oui') {
+            const target = data.participants[0];
+
+            await ovl.groupParticipantsUpdate(data.id, [target], "demote");
+            await ovl.sendMessage(data.id, {
+                text: `🚫 Promotion non autorisée !\n\n@${target.split("@")[0]} a été rétrogradé.`,
+                mentions: [target],
+            });
+        }
+
+        if (data.action === 'demote' && antidemote === 'oui') {
+            const target = data.participants[0];
+
+            await ovl.groupParticipantsUpdate(data.id, [target], "promote");
+            await ovl.sendMessage(data.id, {
+                text: `🚫 Rétrogradation non autorisée !\n\n@${target.split("@")[0]} a été promu à nouveau.`,
+                mentions: [target],
+            });
+        }
+    } catch (err) {
+        console.error(err);
+    }
+});
          
 ovl.ev.on("connection.update", async (con) => {
     const { connection, lastDisconnect } = con;
