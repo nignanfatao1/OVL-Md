@@ -1,6 +1,6 @@
 const { exec } = require("child_process");
 const { ovlcmd } = require("../framework/ovlcmd");
-const Bans = require('../DataBase/ban');
+const { Bans } = require('../DataBase/ban');
 
 ovlcmd(
   {
@@ -65,7 +65,7 @@ ovlcmd(
 ovlcmd(
   {
     nom_cmd: "ban",
-    classe: "Admin",
+    classe: "Owner",
     react: "🚫",
     desc: "Bannir ou débannir un utilisateur des commandes du bot",
   },
@@ -104,7 +104,7 @@ ovlcmd(
 ovlcmd(
   {
     nom_cmd: "bangroup",
-    classe: "Groupe",
+    classe: "Owner",
     react: "🚫",
     desc: "Bannir ou débannir un groupe des commandes du bot",
   },
