@@ -326,17 +326,13 @@ async function groupe_ban(groupId) {
                 return;
             }
                 if (!superUser) {
-                const user_bans = await user_ban(auteur_Message);
-                const groupe_bans = verif_Groupe ? groupe_ban(msg_org);
+                const userBanned = await user_ban(auteur_Message);
+                const groupBanned = verif_Groupe ? await groupe_ban(ms_org) : false;
 
-                if (user_bans) {
-                     return;
+                if (userBanned || groupBanned) {
+                    return;
                 }
-
-                if (groupe_bans) {
-                     return;
-                }
-            } 
+                };
              if(cd.react) {
                 await ovl.sendMessage(ms_org, { react: { text: cd.react, key: ms.key } });
              } else { await ovl.sendMessage(ms_org, { react: { text: "🎐", key: ms.key } });
