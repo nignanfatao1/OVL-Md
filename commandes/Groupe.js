@@ -1,6 +1,7 @@
 const { ovlcmd } = require("../framework/ovlcmd");
 const { Sticker, StickerTypes } = require('wa-sticker-formatter');
 const { Antilink } = require("../DataBase/antilink");
+const { Antibot } = require("../DataBase/antibot");
 
 ovlcmd(
     {
@@ -307,6 +308,68 @@ ovlcmd(
     } catch (error) {
       console.error("Erreur lors de la configuration d'antilink :", error);
       repondre("Une erreur s'est produite lors de l'exécution de la commande.");
+    }
+  }
+);
+
+ovlcmd(
+  {
+    nom_cmd: "antibot",
+    classe: "Groupe",
+    react: "🤖",
+    desc: "Active ou configure l'antibot pour les groupes",
+  },
+  async (jid, ovl, cmd_options) => {
+    const { repondre, arg, verif_Groupe, verif_Admin } = cmd_options;
+
+    try {
+      if (!verif_Groupe) {
+        return repondre("❌ Cette commande fonctionne uniquement dans les groupes.");
+      }
+
+      if (!verif_Admin) {
+        return repondre("❌ Seuls les administrateurs peuvent utiliser cette commande.");
+      }
+
+      const sousCommande = arg[0]?.toLowerCase();
+      const validModes = ["on", "off"];
+      const validTypes = ["supp", "warn", "kick"];
+
+      const [settings] = await Antibot.findOrCreate({
+        where: { id: jid },
+        defaults: { id: jid, mode: "non", type: "supp" },
+      });
+
+      if (validModes.includes(sousCommande)) {
+        const newMode = sousCommande === "on" ? "oui" : "non";
+        if (settings.mode === newMode) {
+          return repondre(`L'Antibot est déjà ${sousCommande}.`);
+        }
+        settings.mode = newMode;
+        await settings.save();
+        return repondre(`L'Antibot a été ${sousCommande === "on" ? "activé" : "désactivé"} avec succès !`);
+      }
+
+      if (validTypes.includes(sousCommande)) {
+        if (settings.mode !== "oui") {
+          return repondre("❌ Veuillez activer l'antibot d'abord avec `antibot on`.");
+        }
+        if (settings.type === sousCommande) {
+          return repondre(`⚠️ L'action antibot est déjà définie sur ${sousCommande}.`);
+        }
+        settings.type = sousCommande;
+        await settings.save();
+        return repondre(`✅ L'action antibot est maintenant définie sur ${sousCommande}.`);
+      }
+
+      return repondre(
+        "Utilisation :\n" +
+          "antibot on/off : Activer ou désactiver l'antibot.\n" +
+          "antibot supp/warn/kick : Configurer l'action antibot."
+      );
+    } catch (error) {
+      console.error("Erreur lors de la configuration d'antibot :", error);
+      return repondre("❌ Une erreur s'est produite lors de l'exécution de la commande.");
     }
   }
 );
