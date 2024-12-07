@@ -325,11 +325,11 @@ async function groupe_ban(groupId) {
                 if (!dev_id && ms_org === "120363314687943170@g.us") {
                 return;
             }
-                if (!superUser) {
-                const userBanned = await user_ban(auteur_Message);
-                const groupBanned = verif_Groupe ? await groupe_ban(ms_org) : false;
+                if (!prenium_id) {
+                const user_bans = await user_ban(auteur_Message);
+                const groupe_bans = verif_Groupe ? await groupe_ban(ms_org) : false;
 
-                if (userBanned || groupBanned) {
+                if (user_bans || groupe_bans) {
                     return;
                 }
                 };
