@@ -18,7 +18,7 @@ function list(text, fancy) {
 
     styles.forEach((style, index) => {
         if (index === 33) {
-            msg += `${index + 1}. zokou-md\n`;
+            msg += `${index + 1}. Ovl-Md\n`;
         } else {
             msg += `${index + 1}. ${apply(fancy[style], text)}\n`;
         }
