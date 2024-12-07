@@ -2,6 +2,7 @@ const { ovlcmd } = require("../framework/ovlcmd");
 const { Sticker, StickerTypes } = require('wa-sticker-formatter');
 const { Antilink } = require("../DataBase/antilink");
 const { Antibot } = require("../DataBase/antibot");
+const { GroupSettings } = require("../DataBase/events");
 
 ovlcmd(
     {
@@ -316,7 +317,7 @@ ovlcmd(
   {
     nom_cmd: "antibot",
     classe: "Groupe",
-    react: "🤖",
+    react: "🔗",
     desc: "Active ou configure l'antibot pour les groupes",
   },
   async (jid, ovl, cmd_options) => {
@@ -373,4 +374,74 @@ ovlcmd(
     }
   }
 );
+
+const commands = [
+  {
+    nom_cmd: "welcome",
+    react: "👋",
+    desc: "Active ou désactive les messages de bienvenue",
+  },
+  {
+    nom_cmd: "goodbye",
+    react: "👋",
+    desc: "Active ou désactive les messages d'adieu",
+  },
+  {
+    nom_cmd: "antipromote",
+    react: "🛑",
+    desc: "Active ou désactive l'antipromotion",
+  },
+  {
+    nom_cmd: "antidemote",
+    react: "🛑",
+    desc: "Active ou désactive l'antidémotion",
+  },
+];
+
+commands.forEach(({ nom_cmd, react, desc }) => {
+  ovlcmd(
+    {
+      nom_cmd,
+      classe: "Groupe",
+      react,
+      desc,
+    },
+    async (jid, ovl, cmd_options) => {
+      const { repondre, arg, verif_Groupe, verif_Admin } = cmd_options;
+
+      try {
+        if (!verif_Groupe) {
+          return repondre("❌ Cette commande fonctionne uniquement dans les groupes.");
+        }
+
+        if (!verif_Admin) {
+          return repondre("❌ Seuls les administrateurs peuvent utiliser cette commande.");
+        }
+
+        const sousCommande = arg[0]?.toLowerCase();
+        const validModes = ["on", "off"];
+
+        const [settings] = await GroupSettings.findOrCreate({
+          where: { id: jid },
+          defaults: { id: jid, [nom_cmd]: "non" },
+        });
+
+        if (validModes.includes(sousCommande)) {
+          const newMode = sousCommande === "on" ? "oui" : "non";
+          if (settings[nom_cmd] === newMode) {
+            return repondre(`${nom_cmd} est déjà ${sousCommande}.`);
+          }
+          settings[nom_cmd] = newMode;
+          await settings.save();
+          return repondre(`${nom_cmd} ${sousCommande === "on" ? "activé" : "désactivé"} avec succès !`);
+        }
+
+        return repondre(`Utilisation :\n${nom_cmd} on/off : ${desc.toLowerCase()}.`);
+      } catch (error) {
+        console.error(`Erreur lors de la configuration de ${nom_cmd} :`, error);
+        return repondre("❌ Une erreur s'est produite lors de l'exécution de la commande.");
+      }
+    }
+  );
+});
 
