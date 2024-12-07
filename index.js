@@ -348,14 +348,13 @@ async function groupe_ban(groupId) {
          //fin événement message 
 
 ovl.ev.on('group-participants.update', async (data) => {
-    const parseID = (jid) => {
+     const parseID = (jid) => {
         if (!jid) return jid;
         if (/:\d+@/gi.test(jid)) {
-            let parsed = baileys.jidDecode(jid) || {};
-            return parsed.user && parsed.server ? `${parsed.user}@${parsed.server}` : jid;
-        } else {
-            return jid;
+            const decode = jidDecode(jid) || {};
+            return (decode.user && decode.server && `${decode.user}@${decode.server}`) || jid;
         }
+        return jid;
     };
 
     let groupPic;
