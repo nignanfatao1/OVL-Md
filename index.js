@@ -10,6 +10,10 @@ let evt = require(__dirname + "/framework/ovlcmd");
 const FileType = require('file-type')
 const prefixe = config.PREFIXE;
 const { Antilink, Antilink_warnings } = require("./DataBase/antilink");
+const { Antibot, AntibotWarnings } = require("./DataBase/antibot");
+const { Bans } = require("./DataBase/ban");
+const { GroupSettings } = require("./DataBase/events");
+
 
  async function ovlAuth(session) {
     let sessionId;
