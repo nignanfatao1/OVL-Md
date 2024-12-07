@@ -4,6 +4,8 @@ const fs = require("fs");
 const { Canvas, loadImage, createCanvas } = require("@napi-rs/canvas");
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
 const { execSync } = require("child_process");
+const config = require("../set");
+const fancy = require("../framework/style");
 const catbox = new Catbox();
 
 async function uploadToCatbox(filePath) {
@@ -272,5 +274,40 @@ ovlcmd(
     }
   }
 );
-// tovideo
+// fancy
 
+ovlcmd(
+  {
+    nom_cmd: "fancy",
+    classe: "Conversion",
+    react: "✍️",
+    desc: "Applique un style fancy au texte",
+    alias: ["f"],
+  },
+  async (ms_org, ovl, cmd_options) => {
+    const { arg, repondre } = cmd_options;
+    const id = parseInt(arg[0], 10);
+    const text = arg.slice(1).join(" ");
+    const prefixe = config.PREFIXE;
+
+    if (isNaN(id) || !text) {
+      return await repondre(
+        `\nExemple : ${prefixe}fancy 10 OVL-MD\n` +
+          String.fromCharCode(8206).repeat(4001) +
+          fancy.list("ovl-md", fancy)
+      );
+    }
+
+    try {
+      const selectedStyle = fancy[id - 1];
+      if (selectedStyle) {
+        return await repondre(fancy.apply(selectedStyle, text));
+      } else {
+        return await repondre(`_Style introuvable pour l'ID : ${id}_`);
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'application du style :", error);
+      return await repondre("_Une erreur s'est produite :(_");
+    }
+  }
+);
