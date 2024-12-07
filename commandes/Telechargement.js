@@ -41,7 +41,7 @@ ovlcmd(
 ╰───────────────────⬣`;
 
             await ovl.sendMessage(ms_org, { image: { url: videoInfo.thumbnail }, caption: caption }); 
-                    const audioResponse = await axios.get(`https://api-znjo.onrender.com/api/v2/ytmp3?url=${videoInfo.url}?si=EmeS9fJvS_OkDk7p&apikey=ln5mhaiphf7je7n6aanq`, {
+                    const audioResponse = await axios.get(`https://api-rv21.onrender.com/api/v2/ytmp3?url=${videoInfo.url}?si=EmeS9fJvS_OkDk7p&apikey=9zue2v4aembd292lhfrwqo`, {
                         responseType: 'arraybuffer'
                     });
 
@@ -96,7 +96,7 @@ ovlcmd(
 
             await ovl.sendMessage(ms_org, { image: { url: videoInfo.thumbnail }, caption: caption });
                  // Téléchargement de la vidéo
-            const videoResponse = await axios.get(`https://api-znjo.onrender.com/api/v2/ytmp4?url=${videoInfo.url}?si=EmeS9fJvS_OkDk7p&apikey=ln5mhaiphf7je7n6aanq`, {
+            const videoResponse = await axios.get(`https://api-rv21.onrender.com/api/v2/ytmp4?url=${videoInfo.url}?si=EmeS9fJvS_OkDk7p&apikey=9zue2v4aembd292lhfrwqo`, {
                 responseType: 'arraybuffer'
             });
 
@@ -128,7 +128,7 @@ ovlcmd(
         const url = arg.join(" ");
         console.log(url);
         try {
-            const response = await axios.get(`https://api-znjo.onrender.com/api/v2/ytmp3?url=${url}?si=EmeS9fJvS_OkDk7p&apikey=ln5mhaiphf7je7n6aanq`, {
+            const response = await axios.get(`https://api-rv21.onrender.com/api/v2/ytmp3?url=${url}?si=EmeS9fJvS_OkDk7p&apikey=9zue2v4aembd292lhfrwqo`, {
                 responseType: 'arraybuffer'});
             await ovl.sendMessage(ms_org, { audio: Buffer.from(response.data),
                                            mimetype: 'audio/mp4',
@@ -156,7 +156,7 @@ ovlcmd(
         }
         const url = arg.join(" ");
         try {
-            const response = await axios.get(`https://api-znjo.onrender.com/api/v2/ytmp4?url=${url}?si=EmeS9fJvS_OkDk7p&apikey=ln5mhaiphf7je7n6aanq`, {
+            const response = await axios.get(`https://api-rv21.onrender.com/api/v2/ytmp4?url=${url}?si=EmeS9fJvS_OkDk7p&apikey=9zue2v4aembd292lhfrwqo`, {
                 responseType: 'arraybuffer'});
             await ovl.sendMessage(ms_org, { video: Buffer.from(response.data),
                                            mimetype: 'video/mp4',
@@ -186,7 +186,7 @@ ovlcmd(
         const url = arg.join(" ");
         try {
             const response = await axios.get(
-    `https://api-znjo.onrender.com/api/tiktokv2?url=${url}&apikey=ln5mhaiphf7je7n6aanq`,
+    `https://api-rv21.onrender.com/api/tiktokv2?url=${url}&apikey=9zue2v4aembd292lhfrwqo`,
     { responseType: 'arraybuffer' }
 );
             await ovl.sendMessage(ms_org, { video: Buffer.from(response.data),
@@ -216,7 +216,7 @@ ovlcmd(
         }
         const url = arg.join(" ");
         try {
-            const response = await axios.get(`https://api-znjo.onrender.com/api/facebook?url=${url}&apikey=ln5mhaiphf7je7n6aanq`);
+            const response = await axios.get(`https://api-rv21.onrender.com/api/facebook?url=${url}&apikey=9zue2v4aembd292lhfrwqo`);
               await ovl.sendMessage(ms_org, { video: response.data.resultado.data,
                                            mimetype: 'video/mp4',
                                            fileName: 'video.mp4',
@@ -244,7 +244,7 @@ ovlcmd(
         }
         const url = arg.join(" ");
         try {
-            const response = await axios.get(`https://api-znjo.onrender.com/api/twitterdl?url=${url}&apikey=ln5mhaiphf7je7n6aanq`, {
+            const response = await axios.get(`https://api-rv21.onrender.com/api/twitterdl?url=${url}&apikey=9zue2v4aembd292lhfrwqo`, {
                 responseType: 'arraybuffer'});
             await ovl.sendMessage(ms_org, { video: Buffer.from(response.data.resultado.media.url),
                                            mimetype: 'video/mp4',
@@ -273,7 +273,7 @@ ovlcmd(
         }
         const url = arg.join(" ");
         try {
-            const response = await axios.get(`https://api-znjo.onrender.com/api/v1/igdl?url=${url}&apikey=ln5mhaiphf7je7n6aanq`, {
+            const response = await axios.get(`https://api-rv21.onrender.com/api/v1/igdl?url=${url}&apikey=9zue2v4aembd292lhfrwqo`, {
                 responseType: 'arraybuffer'});
             const type = response.data.type || "media";
             if (type === "video") {
