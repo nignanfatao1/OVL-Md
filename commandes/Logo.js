@@ -88,7 +88,7 @@ async function maker(url, text) {
 
             "Referer": url,
 
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188"
+            "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
 
          }
 
@@ -180,7 +180,7 @@ async function maker(url, text) {
 
             "Referer": url,
 
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188", 
+            "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
 
             "Cookie": a.headers.get("set-cookie").join("; "),
 
@@ -210,14 +210,14 @@ async function maker(url, text) {
 
             "Referer": url,
 
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188",
+            "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
 
             "Cookie": a.headers.get("set-cookie").join("; ")
 
          }
 
       })
-       console.log(c);
+ //      console.log(c);
 
 
 
@@ -248,6 +248,8 @@ ovlcmd(
             desc: ''
         },
         async (ms_org, ovl, cmd_options) => {
-            maker("https://textpro.me/create-a-metallic-text-effect-free-online-1041.html", "hey");
+            let a = maker("https://textpro.me/create-a-metallic-text-effect-free-online-1041.html", "hey");
+console.log(a);
+
         }
     );
