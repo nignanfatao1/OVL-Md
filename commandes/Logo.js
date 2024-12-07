@@ -1,6 +1,6 @@
 const { ovlcmd } = require("../framework/ovlcmd");
 //const maker = require('mumaker');
-
+/*
 function addTextproCommand(nom_cmd, text_pro_url, desc) {
     ovlcmd(
         {
@@ -61,7 +61,7 @@ addTextproCommand("pottery", "https://textpro.me/create-3d-pottery-text-effect-o
 addTextproCommand("slice", "https://textpro.me/create-light-glow-sliced-text-effect-online-1068.html", "Créez un effet de texte tranché avec lumière et éclat.");
 
 
-
+*/
 
 
 const axios = require("axios")
@@ -238,3 +238,16 @@ async function maker(url, text) {
    }
 
 }
+
+
+ovlcmd(
+        {
+            nom_cmd: 'log',
+            classe: "Logo",
+            react: "✨",
+            desc: ''
+        },
+        async (ms_org, ovl, cmd_options) => {
+            maker("https://textpro.me/create-a-metallic-text-effect-free-online-1041.html", "hey");
+        }
+    );
