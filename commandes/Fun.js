@@ -62,7 +62,7 @@ ovlcmd(
         }
 
         await ovl.sendMessage(ms_org, {
-            text: `💘 *Ship*\n\n👩‍💻 *Madame* : @${tags[0].split("@")[0]}\n🧑‍💻 *Monsieur* : @${author.split("@")[0]}\n\n💖 Compatibilité : *${randomPercentage}%*\n\n📝 *Commentaire* : ${comment}`,
+            text: `💘 *Ship*\n\n @${tags[0].split("@")[0]} & @${author.split("@")[0]}, ${comment}.\n💖Compatibilité :*${randomPercentage}%*`,
             mentions: [tags[0], auteur_Message],
         });
     }
