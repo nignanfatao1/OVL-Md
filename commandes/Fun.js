@@ -131,3 +131,53 @@ ovlcmd(
   }
 );
 
+ovlcmd(
+    {
+        nom_cmd: "blague",
+        classe: "Funn",
+        react: "😂",
+        desc: "Renvoie une blague"
+    },
+    async (ms_org, ovl) => {
+        try {
+            let apiUrl = `https://v2.jokeapi.dev/joke/Any?lang=fr`;
+            let response = await axios.get(apiUrl);
+            let data = response.data;
+
+            if (data.type === 'single') {
+                ovl.sendMessage(ms_org, { text: `*Blague du jour :* ${data.joke}` });
+            } else if (data.type === 'twopart') {
+                ovl.sendMessage(ms_org, { text: `*Blague du jour :* ${data.setup}\n\n*Réponse :* ${data.delivery}` });
+            } else {
+                ovl.sendMessage(ms_org, { text: "Désolé, je n'ai pas trouvé de blague à vous raconter." });
+            }
+        } catch (error) {
+            ovl.sendMessage(ms_org, { text: "Une erreur s'est produite lors de la récupération de la blague." });
+        }
+    }
+);
+
+ovlcmd(
+    {
+        nom_cmd: "citation",
+        classe: "Fun",
+        react: "💬",
+        desc: "Renvoie une citation"
+    },
+    async (ms_org, ovl) => {
+        try {
+            let apiUrl = `https://api.frankfurter.app/citations/random`;
+            let response = await axios.get(apiUrl);
+            let data = response.data;
+
+            if (data.quote) {
+                ovl.sendMessage(ms_org, { text: `*Citation du jour :*\n"${data.quote}"\n\n*Auteur :* ${data.author}` });
+            } else {
+                ovl.sendMessage(ms_org, { text: "Désolé, je n'ai pas trouvé de citation à vous donner." });
+            }
+        } catch (error) {
+            ovl.sendMessage(ms_org, { text: "Une erreur s'est produite lors de la récupération de la citation." });
+        }
+    }
+);
+
