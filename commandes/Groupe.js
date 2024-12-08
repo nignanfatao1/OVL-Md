@@ -426,14 +426,14 @@ ovlcmd(
   async (jid, ovl, cmd_options) => {
     const { prenium_id } = cmd_options;
     if (!prenium_id) {
-      return ovl.sendMessage(jid, { text: `Vous n'avez pas les permissions requises pour quitter ce groupe.` });
+      return ovl.sendMessage(jid, { text: "Vous n'avez pas les permissions requises pour quitter ce groupe." });
     }
-    await ovl.sendMessage(jid, { text: 'Sayonara' });
+    await ovl.sendMessage(jid, { text: "Sayonara" });
     await ovl.groupLeave(jid);
   }
 );
 
-/*ovlcmd(
+ovlcmd(
   {
     nom_cmd: "link",
     classe: "Groupe",
@@ -480,7 +480,7 @@ ovlcmd(
   }
 );
 
-*/ovlcmd(
+ovlcmd(
   {
     nom_cmd: "join",
     classe: "Groupe",
