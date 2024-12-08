@@ -126,7 +126,7 @@ ovlcmd(
 ovlcmd(
     {
         nom_cmd: "ping",
-        classe: "Info",
+        classe: "Outils",
         react: "🏓",
         desc: "Mesure la latence du bot.",
     },
@@ -142,7 +142,7 @@ ovlcmd(
 ovlcmd(
     {
         nom_cmd: "uptime",
-        classe: "Info",
+        classe: "Outils",
         react: "⏱️",
         desc: "Affiche le temps de fonctionnement du bot.",
         alias: ["upt"],
@@ -165,7 +165,7 @@ ovlcmd(
 ovlcmd(
     {
         nom_cmd: "translate",
-        classe: "Utilitaire",
+        classe: "Outils",
         react: "🌍",
         desc: "Traduit un texte dans la langue spécifiée.",
         alias: ["trad"],
@@ -188,6 +188,7 @@ ovlcmd(
             const result = await translate(text, { to: lang });
             await ovl.sendMessage(ms_org, { text: `🌐Traduction (${lang}) :\n${result.text}` }, { quoted: ms });
         } catch (error) {
+            console.error("Erreur lors de la traduction:", error);
             await ovl.sendMessage(ms_org, { text: "Erreur lors de la traduction. Vérifiez la langue et le texte fournis." });
         }
     }
