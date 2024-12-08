@@ -390,7 +390,7 @@ ovlcmd(
     }
   }
 );
-
+/*
 ovlcmd(
   {
     nom_cmd: "leave",
@@ -535,7 +535,7 @@ ovlcmd(
     await ovl.updateProfilePicture(jid, { url: url })
   }}
 );
-
+*/
 ovlcmd(
   {
     nom_cmd: "antilink",
