@@ -52,12 +52,7 @@ async function main() {
             creds: state.creds,
             keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "silent" }).child({ level: "silent" }))
         },
-           fireInitQueries: false,
-           shouldSyncHistoryMessage: true,
-           downloadHistory: true,
-           syncFullHistory: true,
-           markOnlineOnConnect: false,
-           getMessage: async (key) => {
+            getMessage: async (key) => {
                     const msg = await store.loadMessage(key.remoteJid, key.id);
                     return msg.message;
            }
