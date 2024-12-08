@@ -1,4 +1,5 @@
 const { ovlcmd, cmd } = require("../framework/ovlcmd");
+const axios = require('axios');
 const gis = require("g-i-s");
 
 ovlcmd(
@@ -39,7 +40,38 @@ ovlcmd(
         });
     }
 );
+/*
+ovlcmd(
+    {
+        nom_cmd: "google",
+        classe: "Recherche",
+        desc: "Recherche sur Google et renvoie un lien avec les résultats.",
+        alias: ["search"],
+    },
+    async (ms_org, ovl, cmd_options) => {
+        const { arg } = cmd_options;
+        if (!arg[0]) {
+            return await ovl.sendMessage(ms_org, { text: "❗ Entrez un terme à rechercher sur Google." });
+        }
 
+        const searchTerm = arg.join(" ");
+        try {
+            const { data } = await axios.get(`https://www.googleapis.com/customsearch/v1?q=${searchTerm}&key=YOUR_API_KEY&cx=YOUR_SEARCH_ENGINE_ID`);
+            const results = data.items.slice(0, 3);  // Limiter à 3 résultats
+
+            let searchResultsMsg = `🔍 *Résultats de recherche pour : ${searchTerm}*\n\n`;
+            results.forEach((result, index) => {
+                searchResultsMsg += `${index + 1}. ${result.title}\n${result.link}\n\n`;
+            });
+
+            await ovl.sendMessage(ms_org, { text: searchResultsMsg });
+        } catch (error) {
+            console.error("Erreur dans la recherche Google :", error);
+            await ovl.sendMessage(ms_org, { text: "❗ Une erreur est survenue lors de la recherche sur Google. Veuillez réessayer." });
+        }
+    }
+);
+*/
 ovlcmd(
     {
         nom_cmd: "horo",
@@ -139,54 +171,3 @@ ovlcmd(
         }
     }
 );
-
-ovlcmd(
-    {
-        nom_cmd: "blague",
-        classe: "fun",
-        react: "😂",
-        desc: "Renvoie une blague"
-    },
-    async (ms_org, ovl) => {
-        try {
-            let apiUrl = `https://v2.jokeapi.dev/joke/Any?lang=fr`;
-            let response = await axios.get(apiUrl);
-            let data = response.data;
-
-            if (data.type === 'single') {
-                ovl.sendMessage(ms_org, { text: `*Blague du jour :* ${data.joke}` });
-            } else if (data.type === 'twopart') {
-                ovl.sendMessage(ms_org, { text: `*Blague du jour :* ${data.setup}\n\n*Réponse :* ${data.delivery}` });
-            } else {
-                ovl.sendMessage(ms_org, { text: "Désolé, je n'ai pas trouvé de blague à vous raconter." });
-            }
-        } catch (error) {
-            ovl.sendMessage(ms_org, { text: "Une erreur s'est produite lors de la récupération de la blague." });
-        }
-    }
-);
-
-ovlcmd(
-    {
-        nom_cmd: "citation",
-        classe: "fun",
-        react: "💬",
-        desc: "Renvoie une citation"
-    },
-    async (ms_org, ovl) => {
-        try {
-            let apiUrl = `https://api.frankfurter.app/citations/random`;
-            let response = await axios.get(apiUrl);
-            let data = response.data;
-
-            if (data.quote) {
-                ovl.sendMessage(ms_org, { text: `*Citation du jour :*\n"${data.quote}"\n\n*Auteur :* ${data.author}` });
-            } else {
-                ovl.sendMessage(ms_org, { text: "Désolé, je n'ai pas trouvé de citation à vous donner." });
-            }
-        } catch (error) {
-            ovl.sendMessage(ms_org, { text: "Une erreur s'est produite lors de la récupération de la citation." });
-        }
-    }
-);
-
