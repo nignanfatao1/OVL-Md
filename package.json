@@ -30,6 +30,7 @@
     "pm2": "^5.4.2",
     "pino": "^8.1.0",
     "sequelize": "^6.37.5",
+    "@vitalets/google-translate-api": "^9.2.0",
     "wa-sticker-formatter": "^4.4.4"
   }
 }
