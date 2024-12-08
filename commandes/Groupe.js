@@ -480,7 +480,7 @@ ovlcmd(
   }
 );
 
-ovlcmd(
+/*ovlcmd(
   {
     nom_cmd: "join",
     classe: "Groupe",
@@ -560,7 +560,7 @@ ovlcmd(
     await ovl.updateProfilePicture(jid, { url: url })
   }}
 );
-
+*/
 ovlcmd(
   {
     nom_cmd: "antilink",
