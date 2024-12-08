@@ -256,9 +256,8 @@ ovlcmd(
         }
         const url = arg.join(" ");
         try {
-            const response = await axios.get(`https://api-rv21.onrender.com/api/twitterdl?url=${url}&apikey=9zue2v4aembd292lhfrwqo`, {
-                responseType: 'arraybuffer'});
-            await ovl.sendMessage(ms_org, { video: Buffer.from(response.data.resultado.media.url),
+            const response = await axios.get(`https://api-rv21.onrender.com/api/twitterdl?url=${url}&apikey=9zue2v4aembd292lhfrwqo`);
+            await ovl.sendMessage(ms_org, { video: { url: response.data.resultado.media.url },
                                            mimetype: 'video/mp4',
                                            fileName: 'video.mp4',
                                            caption: `\`\`\`Powered By OVL-MD\`\`\``
