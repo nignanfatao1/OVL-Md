@@ -221,7 +221,7 @@ ovlcmd(
   }
 );
 
-ovlcmd(
+/*ovlcmd(
   {
     nom_cmd: "del",
     classe: "Groupe",
@@ -433,7 +433,7 @@ ovlcmd(
   }
 );
 
-/*ovlcmd(
+ovlcmd(
   {
     nom_cmd: "link",
     classe: "Groupe",
@@ -448,7 +448,7 @@ ovlcmd(
       await ovl.sendMessage(jid, { text: `Lien d'invitation: ${code}` });
     }
   }
-);*/
+);
 
 ovlcmd(
   {
@@ -559,7 +559,7 @@ ovlcmd(
       const url = arg.join(' ');
     await ovl.updateProfilePicture(jid, { url: url })
   }}
-);
+);*/
 
 ovlcmd(
   {
