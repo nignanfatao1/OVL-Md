@@ -450,7 +450,7 @@ ovlcmd(
     desc: "Affiche les informations du groupe",
   },
   async (jid, ovl, cmd_options) => {
-    const metadata = await sock.groupMetadata(jid);
+    const metadata = await ovl.groupMetadata(jid);
     await ovl.sendMessage(jid, { text: `ID: ${metadata.id}\nNom: ${metadata.subject}\nDescription: ${metadata.desc}` });
   }
 );
