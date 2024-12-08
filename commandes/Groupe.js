@@ -255,7 +255,7 @@ ovlcmd(
   {
     nom_cmd: "gcreate",
     classe: "Groupe",
-    react: "⚡",
+    react: "✅",
     desc: "Permet de créer un groupe et d'y ajouter des membres mentionnés.",
   },
   async (jid, ovl, cmd_options) => {
@@ -304,7 +304,7 @@ ovlcmd(
   {
     nom_cmd: "gdesc",
     classe: "Groupe",
-    react: "⚡",
+    react: "🔤",
     desc: "Permet de changer la description d'un groupe",
   },
   async (jid, ovl, cmd_options) => {
@@ -331,7 +331,7 @@ ovlcmd(
   {
     nom_cmd: "gname",
     classe: "Groupe",
-    react: "⚡",
+    react: "🔤",
     desc: "Permet de changer le nom d'un groupe",
   },
   async (jid, ovl, cmd_options) => {
@@ -358,7 +358,7 @@ ovlcmd(
   {
     nom_cmd: "gset",
     classe: "Groupe",
-    react: "⚡",
+    react: "✅",
     desc: "Permet de modifier les paramètres du groupe",
   },
   async (jid, ovl, cmd_options) => {
@@ -395,58 +395,87 @@ ovlcmd(
 
 ovlcmd(
   {
-    nom_cmd: "",
-    classe: "",
-    react: "",
-    desc: "",
+    nom_cmd: "leave",
+    classe: "Groupe",
+    react: "😐",
+    desc: "Commande pour quitter un groupe",
   },
   async (jid, ovl, cmd_options) => {
-      
-  });
+    const { prenium_id } = cmd_options;
+    if (!prenium_id) {
+      return ovl.sendMessage(jid, { text: `Vous n'avez pas les permissions requises pour quitter ce groupe.` });
+    }
+    await ovl.sendMessage(jid, { text: 'Sayonara' });
+    await ovl.groupLeave(jid);
+  }
+);
 
 ovlcmd(
   {
-    nom_cmd: "",
-    classe: "",
-    react: "",
-    desc: "",
+    nom_cmd: "link",
+    classe: "Groupe",
+    react: "🔗",
+    desc: "Permet d'obtenir le lien d'invitation d'un groupe",
   },
   async (jid, ovl, cmd_options) => {
-      
-  });
+    const { verif_Groupe, verif_Admin, verif_Ovl_Admin } = cmd_options;
+    if (!verif_Groupe) return ovl.sendMessage(jid, { text: "Commande utilisable uniquement dans les groupes." });
+    if (verif_Admin && verif_Ovl_Admin) {
+      const code = await ovl.groupInviteCode(jid);
+      await ovl.sendMessage(jid, { text: `Lien d'invitation: ${code}` });
+    }
+  }
+);
 
 ovlcmd(
   {
-    nom_cmd: "",
-    classe: "",
-    react: "",
-    desc: "",
+    nom_cmd: "revoke",
+    classe: "Groupe",
+    react: "🔗",
+    desc: "Réinitialise le lien d'invitation d'un groupe",
   },
   async (jid, ovl, cmd_options) => {
-      
-  });
+    const { verif_Groupe, verif_Admin, verif_Ovl_Admin } = cmd_options;
+    if (!verif_Groupe) return ovl.sendMessage(jid, { text: "Commande utilisable uniquement dans les groupes." });
+    if (verif_Admin && verif_Ovl_Admin) {
+      await ovl.groupRevokeInvite(jid);
+      await ovl.sendMessage(jid, { text: 'Le lien d\'invitation a été Réinitialisé.' });
+    }
+  }
+);
 
 ovlcmd(
   {
-    nom_cmd: "",
-    classe: "",
-    react: "",
-    desc: "",
+    nom_cmd: "ginfo",
+    classe: "Groupe",
+    react: "🔎",
+    desc: "Affiche les informations du groupe",
   },
   async (jid, ovl, cmd_options) => {
-      
-  });
+    const metadata = await sock.groupMetadata(jid);
+    await ovl.sendMessage(jid, { text: `ID: ${metadata.id}\nNom: ${metadata.subject}\nDescription: ${metadata.desc}` });
+  }
+);
 
 ovlcmd(
   {
-    nom_cmd: "",
-    classe: "",
-    react: "",
-    desc: "",
+    nom_cmd: "join",
+    classe: "Groupe",
+    react: "😶‍🌫",
+    desc: "Permet de rejoindre un groupe via un lien d'invitation",
   },
   async (jid, ovl, cmd_options) => {
-      
-  });
+    const { prenium_id, arg } = cmd_options;
+    if (!prenium_id) {
+      return ovl.sendMessage(jid, { text: `Vous n'avez pas les permissions requises pour rejoindre un groupe.` });
+    }
+    if (!arg) return ovl.sendMessage(jid, { text: 'Veuillez fournir le lien d\'invitation du groupe.' });
+    const invite = arg.join("");
+    const code = invite.split('/')[3];
+    await sock.groupAcceptInvite(code);
+    await ovl.sendMessage(jid, { text: 'Vous avez rejoint le groupe avec succès.' });
+  }
+);
 
 ovlcmd(
   {
