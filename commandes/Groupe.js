@@ -229,28 +229,26 @@ ovlcmd(
     desc: "Supprimer un message dans le groupe.",
   },
   async (ms_org, ovl, cmd_options) => {
-    const { msg_Repondu, auteur_Msg_Repondu, verif_Admin, prenium_id, verif_Ovl_Admin, verif_Groupe, ms } = cmd_options;
+    const { msg_Repondu, verif_Admin, prenium_id, verif_Ovl_Admin, verif_Groupe } = cmd_options;
     if (!verif_Groupe) return ovl.sendMessage(ms_org, { text: "Commande utilisable uniquement dans les groupes." });
-    if (verif_Admin || prenium_id) { 
-    if(!verif_Ovl_Admin) return ovl.sendMessage(ms_org, { text: "Je dois être administrateur pour effectuer cette action." });
     if (!msg_Repondu) return ovl.sendMessage(ms_org, { text: "Veuillez répondre à un message pour le supprimer." });
-  try { 
+    if (!verif_Admin && !prenium_id) return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
+    if (!verif_Ovl_Admin) return ovl.sendMessage(ms_org, { text: "Je dois être administrateur pour effectuer cette action." });
+
+    try {
+      const contextInfo = msg_Repondu.extendedTextMessage?.contextInfo;
       const key = {
-    remoteJid: ms_org,
-    id: ms.message.extendedTextMessage.contextInfo.stanzaId,
-    participant: ms.message.extendedTextMessage.contextInfo.participant
-      };       
-        await ovl.sendMessage(ms_org, { delete: key });
-          } catch (err) {
-      console.error("Erreur :", err);
+        remoteJid: ms_org,
+        id: contextInfo.stanzaId,
+        participant: contextInfo.participant,
+      };
+      await ovl.sendMessage(ms_org, { delete: key });
+    } catch (err) {
       ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de la suppression du message." });
     }
-    } else { return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
-           }
   }
 );
 
-//
 ovlcmd(
   {
     nom_cmd: "gcreate",
