@@ -3,7 +3,7 @@ const { Catbox } = require('node-catbox');
 const fs = require("fs");
 const { Canvas, loadImage, createCanvas } = require("@napi-rs/canvas");
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
-const { execSync, exec } = require(
+const { execSync, exec } = require("child_process");
 const path = require('path');
 const catbox = new Catbox();
 
