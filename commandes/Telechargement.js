@@ -257,11 +257,16 @@ ovlcmd(
         const url = arg.join(" ");
         try {
             const response = await axios.get(`https://api-rv21.onrender.com/api/twitterdl?url=${url}&apikey=9zue2v4aembd292lhfrwqo`);
-            await ovl.sendMessage(ms_org, { video: { url: response.data.resultado.media.url },
-                                           mimetype: 'video/mp4',
-                                           fileName: 'video.mp4',
-                                           caption: `\`\`\`Powered By OVL-MD\`\`\``
-                                           }, { quoted: ms });
+            const media = response.data.resultado.media.find(item => item.type === 'video');
+            if (!media) {
+                return await ovl.sendMessage(ms_org, { text: "Aucune vidéo trouvée dans le lien fourni." });
+            }
+            await ovl.sendMessage(ms_org, {
+                video: { url: media.url },
+                mimetype: 'video/mp4',
+                fileName: 'video.mp4',
+                caption: `\`\`\`Powered By OVL-MD\`\`\``
+            }, { quoted: ms });
         } catch (error) {
             console.error("Erreur Twitter Downloader :", error.message);
             await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la vidéo Twitter." });
@@ -269,7 +274,8 @@ ovlcmd(
     }
 );
 
-ovlcmd(
+
+/*ovlcmd(
     {
         nom_cmd: "instagramdl",
         classe: "Téléchargement",
@@ -305,4 +311,4 @@ ovlcmd(
             await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement du média Instagram." });
         }
     }
-);
+);*/
