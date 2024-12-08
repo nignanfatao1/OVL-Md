@@ -1,6 +1,8 @@
 const { ovlcmd, cmd } = require("../framework/ovlcmd");
 const config = require("../set");
+const translate = require('@vitalets/google-translate-api');
 const prefixe = config.PREFIXE;
+
 ovlcmd(
     {
         nom_cmd: "test",
@@ -168,7 +170,7 @@ ovlcmd(
         classe: "Outils",
         react: "🌍",
         desc: "Traduit un texte dans la langue spécifiée.",
-        alias: ["trad"],
+        alias: ["trt"],
     },
     async (ms_org, ovl, cmd_options) => {
         const { arg, ms, msg_Repondu } = cmd_options;
