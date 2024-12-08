@@ -1,6 +1,6 @@
 const { ovlcmd, cmd } = require("../framework/ovlcmd");
 const config = require("../set");
-const translate = require('@vitalets/google-translate-api');
+const { translate } = require('@vitalets/google-translate-api');
 const prefixe = config.PREFIXE;
 
 ovlcmd(
