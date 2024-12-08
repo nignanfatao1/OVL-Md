@@ -211,20 +211,32 @@ ovlcmd(
     },
     async (ms_org, ovl, cmd_options) => {
         const { arg, ms } = cmd_options;
+
         if (!arg.length) {
             return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un lien Facebook." });
         }
+
         const url = arg.join(" ");
         try {
             const response = await axios.get(`https://api-rv21.onrender.com/api/facebook?url=${url}&apikey=9zue2v4aembd292lhfrwqo`);
-              await ovl.sendMessage(ms_org, { video: response.data.resultado.data,
-                                           mimetype: 'video/mp4',
-                                           fileName: 'video.mp4',
-                                           caption: `\`\`\`Powered By OVL-MD\`\`\``
-                                           }, { quoted: ms });
+            const videoUrl = response?.data?.resultado?.data;
+            if (!videoUrl || typeof videoUrl !== "string") {
+                throw new Error("Réponse inattendue de l'API. Lien vidéo manquant.");
+            }
+
+            await ovl.sendMessage(
+                ms_org,
+                {
+                    video: { url: videoUrl },
+                    mimetype: 'video/mp4',
+                    fileName: 'video.mp4',
+                    caption: "```Powered By OVL-MD```",
+                },
+                { quoted: ms }
+            );
         } catch (error) {
             console.error("Erreur Facebook Downloader :", error.message);
-            await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la vidéo Facebook." });
+            await ovl.sendMessage(ms_org, { text: `Erreur lors du téléchargement de la vidéo Facebook : ${error.message}` });
         }
     }
 );
