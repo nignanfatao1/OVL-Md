@@ -250,6 +250,155 @@ ovlcmd(
   }
 );
 
+//
+ovlcmd(
+  {
+    nom_cmd: "gcreate",
+    classe: "Groupe",
+    react: "⚡",
+    desc: "Permet de créer un groupe et d'y ajouter des membres mentionnés.",
+  },
+  async (jid, ovl, cmd_options) => {
+    const { arg, prenium_id, auteur_Msg_Repondu } = cmd_options;
+
+    if (!prenium_id) {
+      return ovl.sendMessage(jid, { text: `Vous n'avez pas les permissions requises pour créer un groupe.` });
+    }
+
+    if (arg.length === 0 && !auteur_Msg_Repondu) {
+      return ovl.sendMessage(jid, { text: `Veuillez fournir un nom pour le groupe et mentionner des membres ou répondre à un message contenant des tags.` });
+    }
+
+    const name = arg[0];
+    const membres = [];
+
+    if (arg.length > 1) {
+      arg.slice(1).forEach((tag) => {
+        if (tag.startsWith("@")) {
+          membres.push(`${tag.replace("@", "")}@s.whatsapp.net`);
+        }
+      });
+    }
+
+    if (membres.length === 0 && auteur_Msg_Repondu) {
+      auteur_Msg_Repondu.mentions.forEach((mention) => {
+        membres.push(mention);
+      });
+    }
+
+    if (membres.length === 0) {
+      return ovl.sendMessage(jid, { text: `Aucun membre mentionné ou tagué trouvé pour ajouter au groupe.` });
+    }
+
+    try {
+      const group = await ovl.groupCreate(name, membres);
+      await ovl.sendMessage(group.id, { text: `Groupe "${name}" créé avec succès ! 🎉` });
+    } catch (err) {
+      console.error("Erreur lors de la création du groupe :", err);
+      await ovl.sendMessage(jid, { text: `Une erreur est survenue lors de la création du groupe. Veuillez réessayer.` });
+    }
+  }
+);
+
+
+ovlcmd(
+  {
+    nom_cmd: "gdesc",
+    classe: "Groupe",
+    react: "⚡",
+    desc: `Permet de changer la description d'un groupe`,
+  },
+  async (jid, ovl, cmd_options) => {
+      
+  });
+
+ovlcmd(
+  {
+    nom_cmd: "",
+    classe: "",
+    react: "",
+    desc: "",
+  },
+  async (jid, ovl, cmd_options) => {
+      
+  });
+
+ovlcmd(
+  {
+    nom_cmd: "",
+    classe: "",
+    react: "",
+    desc: "",
+  },
+  async (jid, ovl, cmd_options) => {
+      
+  });
+
+ovlcmd(
+  {
+    nom_cmd: "",
+    classe: "",
+    react: "",
+    desc: "",
+  },
+  async (jid, ovl, cmd_options) => {
+      
+  });
+
+ovlcmd(
+  {
+    nom_cmd: "",
+    classe: "",
+    react: "",
+    desc: "",
+  },
+  async (jid, ovl, cmd_options) => {
+      
+  });
+
+ovlcmd(
+  {
+    nom_cmd: "",
+    classe: "",
+    react: "",
+    desc: "",
+  },
+  async (jid, ovl, cmd_options) => {
+      
+  });
+
+ovlcmd(
+  {
+    nom_cmd: "",
+    classe: "",
+    react: "",
+    desc: "",
+  },
+  async (jid, ovl, cmd_options) => {
+      
+  });
+
+ovlcmd(
+  {
+    nom_cmd: "",
+    classe: "",
+    react: "",
+    desc: "",
+  },
+  async (jid, ovl, cmd_options) => {
+      
+  });
+
+ovlcmd(
+  {
+    nom_cmd: "",
+    classe: "",
+    react: "",
+    desc: "",
+  },
+  async (jid, ovl, cmd_options) => {
+      
+  });
 
 ovlcmd(
   {
