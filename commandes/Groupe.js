@@ -229,25 +229,50 @@ ovlcmd(
     desc: "Supprimer un message dans le groupe.",
   },
   async (ms_org, ovl, cmd_options) => {
-    const { msg_Repondu, verif_Admin, prenium_id, verif_Ovl_Admin, verif_Groupe } = cmd_options;
-    if (!verif_Groupe) return ovl.sendMessage(ms_org, { text: "Commande utilisable uniquement dans les groupes." });
-    if (!msg_Repondu) return ovl.sendMessage(ms_org, { text: "Veuillez répondre à un message pour le supprimer." });
-    if (!verif_Admin && !prenium_id) return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
-    if (!verif_Ovl_Admin) return ovl.sendMessage(ms_org, { text: "Je dois être administrateur pour effectuer cette action." });
+    const {
+      auteur_Msg_Repondu,
+      id_Bot,
+      msg_Repondu,
+      verif_Admin,
+      verif_Ovl_Admin,
+      verif_Groupe,
+    } = cmd_options;
+
+    if (!verif_Groupe) {
+      return ovl.sendMessage(ms_org, { text: "Commande utilisable uniquement dans les groupes." });
+    }
+
+    if (!msg_Repondu) {
+      return ovl.sendMessage(ms_org, { text: "Veuillez répondre à un message pour le supprimer." });
+    }
+
+    if (!verif_Admin) {
+      return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
+    }
+
+    if (!verif_Ovl_Admin) {
+      return ovl.sendMessage(ms_org, { text: "Je dois être administrateur pour effectuer cette action." });
+    }
 
     try {
-      const contextInfo = msg_Repondu.extendedTextMessage?.contextInfo;
+      const stanzaId = msg_Repondu.key.id;
+      const participant = msg_Repondu.key.participant || msg_Repondu.key.remoteJid;
+      const fromMe = msg_Repondu.key.fromMe;
+
       const key = {
         remoteJid: ms_org,
-        id: contextInfo.stanzaId,
-        participant: contextInfo.participant,
+        id: stanzaId,
+        fromMe: auteur_Msg_Repondu === id_Bot, // Vérifie si c'est le message du bot.
+        participant: fromMe ? undefined : participant, // `participant` est requis pour les messages qui ne viennent pas du bot.
       };
+
       await ovl.sendMessage(ms_org, { delete: key });
     } catch (err) {
       ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de la suppression du message." });
     }
   }
 );
+
 
 ovlcmd(
   {
@@ -390,7 +415,7 @@ ovlcmd(
     }
   }
 );
-/*
+
 ovlcmd(
   {
     nom_cmd: "leave",
@@ -470,7 +495,7 @@ ovlcmd(
     if (!arg) return ovl.sendMessage(jid, { text: 'Veuillez fournir le lien d\'invitation du groupe.' });
     const invite = arg.join("");
     const code = invite.split('/')[3];
-    await sock.groupAcceptInvite(code);
+    await ovl.groupAcceptInvite(code);
     await ovl.sendMessage(jid, { text: 'Vous avez rejoint le groupe avec succès.' });
   }
 );
@@ -535,7 +560,7 @@ ovlcmd(
     await ovl.updateProfilePicture(jid, { url: url })
   }}
 );
-*/
+
 ovlcmd(
   {
     nom_cmd: "antilink",
