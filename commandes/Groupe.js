@@ -300,39 +300,98 @@ ovlcmd(
   }
 );
 
-
 ovlcmd(
   {
     nom_cmd: "gdesc",
     classe: "Groupe",
     react: "⚡",
-    desc: `Permet de changer la description d'un groupe`,
+    desc: "Permet de changer la description d'un groupe",
   },
   async (jid, ovl, cmd_options) => {
-      
-  });
+    const { verif_Groupe, verif_Admin, verif_Ovl_Admin, msg_Repondu, arg } = cmd_options;
+
+    if (!verif_Groupe) return ovl.sendMessage(jid, { text: "Commande utilisable uniquement dans les groupes." });
+
+    if (verif_Admin && verif_Ovl_Admin) {
+      let desc;
+      if (msg_Repondu) {
+        desc = msg_Repondu.conversation || msg_Repondu.extendedTextMessage?.text;
+      } else if (arg) {
+        desc = arg.join(' ');
+      } else {
+        return ovl.sendMessage(jid, { text: "Entrez la nouvelle description." });
+      }
+
+      await ovl.groupUpdateDescription(jid, desc);
+    } else { ovl.sendMessage(jid, { text: 'je n\'ai pas les droits requis pour exécuter cette commande' }); }
+  }
+);
 
 ovlcmd(
   {
-    nom_cmd: "",
-    classe: "",
-    react: "",
-    desc: "",
+    nom_cmd: "gname",
+    classe: "Groupe",
+    react: "⚡",
+    desc: "Permet de changer le nom d'un groupe",
   },
   async (jid, ovl, cmd_options) => {
-      
-  });
+    const { verif_Groupe, verif_Admin, verif_Ovl_Admin, msg_Repondu, arg } = cmd_options;
+
+    if (!verif_Groupe) return ovl.sendMessage(jid, { text: "Commande utilisable uniquement dans les groupes." });
+
+    if (verif_Admin && verif_Ovl_Admin) {
+      let name;
+      if (msg_Repondu) {
+        name = msg_Repondu.conversation || msg_Repondu.extendedTextMessage?.text;
+      } else if (arg) {
+        name = arg.join(' ');
+      } else {
+        return ovl.sendMessage(jid, { text: "Entrez un nouveau nom" });
+      }
+
+      await ovl.groupUpdateSubject(jid, name);
+    } else { ovl.sendMessage(jid, { text: 'je n\'ai pas les droits requis pour exécuter cette commande' }); }
+  }
+);
 
 ovlcmd(
   {
-    nom_cmd: "",
-    classe: "",
-    react: "",
-    desc: "",
+    nom_cmd: "gset",
+    classe: "Groupe",
+    react: "⚡",
+    desc: "Permet de modifier les paramètres du groupe",
   },
   async (jid, ovl, cmd_options) => {
-      
-  });
+    const { verif_Groupe, verif_Admin, verif_Ovl_Admin, arg } = cmd_options;
+
+    if (!verif_Groupe) return ovl.sendMessage(jid, { text: "Commande utilisable uniquement dans les groupes." });
+
+    if (verif_Admin && verif_Ovl_Admin) {
+      if (!arg) return ovl.sendMessage(jid, { text: 'Mode d\'emploi:\n\n gset 1 (seuls les admins peuvent envoyer des messages),\ngset 2 (tout le monde peut envoyer des messages),\ngset 3 (tout le monde peut modifier les paramètres du groupe),\ngset 4 (seuls les admins peuvent modifier les paramètres du groupe).' });
+
+      const mode = arg.join(' ');
+
+      switch (mode) {
+        case '1':
+          await ovl.groupSettingUpdate(jid, 'announcement');
+          break;
+        case '2':
+          await ovl.groupSettingUpdate(jid, 'not_announcement');
+          break;
+        case '3':
+          await ovl.groupSettingUpdate(jid, 'unlocked');
+          break;
+        case '4':
+          await ovl.groupSettingUpdate(jid, 'locked');
+          break;
+        default:
+          return ovl.sendMessage(jid, { text: 'Mode inconnu. Utilisez gset 1 pour "announcements", gset 2 pour "not announcements", gset 3 pour "unlocked", ou gset 4 pour "locked".' });
+      }
+    } else {
+      return ovl.sendMessage(jid, { text: "Je n'ai pas les droits requis pour exécuter cette commande." });
+    }
+  }
+);
 
 ovlcmd(
   {
