@@ -128,7 +128,7 @@ ovlcmd(
 ovlcmd(
     {
         nom_cmd: "vv",
-        classe: "WhatsApp",
+        classe: "Outils",
         react: "👀",
         desc: "Affiche un message envoyé en vue unique",
     },
