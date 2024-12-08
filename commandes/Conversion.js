@@ -3,8 +3,9 @@ const { Catbox } = require('node-catbox');
 const fs = require("fs");
 const { Canvas, loadImage, createCanvas } = require("@napi-rs/canvas");
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
-const { execSync } = require("child_process");
+const { execSync, exec } = require("child_process");
 const config = require("../set");
+const path = require('path');
 const catbox = new Catbox();
 
 async function uploadToCatbox(filePath) {
@@ -272,4 +273,115 @@ ovlcmd(
       });
     }
   }
+);
+
+ovlcmd(
+    {
+        nom_cmd: "stovideo",
+        classe: "Conversion",
+        desc: "Convertit un sticker animé en vidéo.",
+        alias: ["stovid"],
+    },
+    async (ms_org, ovl, cmd_options) => {
+        const { media } = cmd_options;
+        if (!media) {
+            return await ovl.sendMessage(ms_org, { text: "❗ Veuillez fournir un sticker animé à convertir." });
+        }
+
+        const directory = path.join(__dirname, '../../.temp');
+        const webpFilePath = path.join(directory, Math.random().toString(36).slice(2) + ".webp");
+        const mp4FilePath = path.join(directory, Math.random().toString(36).slice(2) + ".mp4");
+
+        try {
+            fs.writeFileSync(webpFilePath, media);
+            const ffmpegCommand = `ffmpeg -y -i ${webpFilePath} -movflags faststart -pix_fmt yuv420p -vf "scale=720:720" ${mp4FilePath}`;
+            await new Promise((resolve, reject) => {
+                exec(ffmpegCommand, (error) => {
+                    if (error) return reject(error);
+                    resolve();
+                });
+            });
+
+            const videoBuffer = fs.readFileSync(mp4FilePath);
+            await ovl.sendMessage(ms_org, { video: videoBuffer, caption: "🎥 Voici votre vidéo convertie." });
+            fs.unlinkSync(webpFilePath);
+            fs.unlinkSync(mp4FilePath);
+        } catch {
+            await ovl.sendMessage(ms_org, { text: "❗ Une erreur est survenue lors de la conversion du sticker." });
+        }
+    }
+);
+
+ovlcmd(
+    {
+        nom_cmd: "tovideo",
+        classe: "Conversion",
+        desc: "Convertit un fichier audio en une vidéo avec fond noir.",
+        alias: ["tovid"],
+    },
+    async (ms_org, ovl, cmd_options) => {
+        const { media } = cmd_options;
+        if (!media) {
+            return await ovl.sendMessage(ms_org, { text: "❗ Veuillez fournir un fichier audio à convertir." });
+        }
+
+        const directory = path.join(__dirname, '../../.temp');
+        const audioPath = path.join(directory, Math.random().toString(36).slice(2) + ".mp3");
+        const videoPath = path.join(directory, Math.random().toString(36).slice(2) + ".mp4");
+
+        try {
+            fs.writeFileSync(audioPath, media);
+            const ffmpegCommand = `ffmpeg -y -f lavfi -i color=c=black:s=720x720:d=10 -i ${audioPath} -shortest -c:v libx264 -c:a aac -strict experimental ${videoPath}`;
+            await new Promise((resolve, reject) => {
+                exec(ffmpegCommand, (error) => {
+                    if (error) return reject(error);
+                    resolve();
+                });
+            });
+
+            const videoBuffer = fs.readFileSync(videoPath);
+            await ovl.sendMessage(ms_org, { video: videoBuffer, caption: "🎥 Voici votre vidéo générée." });
+            fs.unlinkSync(audioPath);
+            fs.unlinkSync(videoPath);
+        } catch {
+            await ovl.sendMessage(ms_org, { text: "❗ Une erreur est survenue lors de la conversion de l'audio." });
+        }
+    }
+);
+
+ovlcmd(
+    {
+        nom_cmd: "toaudio",
+        classe: "Conversion",
+        desc: "Extrait l'audio d'une vidéo et le convertit en MP3.",
+        alias: ["toaud"],
+    },
+    async (ms_org, ovl, cmd_options) => {
+        const { media } = cmd_options;
+        if (!media) {
+            return await ovl.sendMessage(ms_org, { text: "❗ Veuillez fournir une vidéo pour extraire l'audio." });
+        }
+
+        const directory = path.join(__dirname, '../../.temp');
+        const videoPath = path.join(directory, Math.random().toString(36).slice(2) + ".mp4");
+        const audioPath = path.join(directory, Math.random().toString(36).slice(2) + ".mp3");
+
+        try {
+            fs.writeFileSync(videoPath, media);
+            const ffmpegCommand = `ffmpeg -y -i ${videoPath} -q:a 0 -map a ${audioPath}`;
+            await new Promise((resolve, reject) => {
+                exec(ffmpegCommand, (error) => {
+                    if (error) return reject(error);
+                    resolve();
+                });
+            });
+
+            const audioBuffer = fs.readFileSync(audioPath);
+            await ovl.sendMessage(ms_org, { audio: audioBuffer, mimetype: "audio/mp3", caption: "🎵 Voici votre audio extrait." });
+            fs.unlinkSync(videoPath);
+            fs.unlinkSync(audioPath);
+        } catch {
+            await ovl.sendMessage(ms_org, { text: "❗ Une erreur est survenue lors de l'extraction de l'audio." });
+        }
+    }
 );
