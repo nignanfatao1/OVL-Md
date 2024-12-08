@@ -3,8 +3,7 @@ const { Catbox } = require('node-catbox');
 const fs = require("fs");
 const { Canvas, loadImage, createCanvas } = require("@napi-rs/canvas");
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
-const { execSync, exec } = require("child_process");
-const config = require("../set");
+const { execSync, exec } = require(
 const path = require('path');
 const catbox = new Catbox();
 
@@ -283,11 +282,11 @@ ovlcmd(
         alias: ["stovid"],
     },
     async (ms_org, ovl, cmd_options) => {
-        const { media } = cmd_options;
-        if (!media) {
-            return await ovl.sendMessage(ms_org, { text: "❗ Veuillez fournir un sticker animé à convertir." });
-        }
-
+        const { msg_Repondu } = cmd_options;
+    if (!msg_Repondu || !msg_Repondu.stickerMessage) {
+      return ovl.sendMessage(ms_org, { text: "Répondez à un sticker." });
+    }
+        const media = await ovl.dl_save_media_ms(msg_Repondu.stickerMessage);
         const directory = path.join(__dirname, '../../.temp');
         const webpFilePath = path.join(directory, Math.random().toString(36).slice(2) + ".webp");
         const mp4FilePath = path.join(directory, Math.random().toString(36).slice(2) + ".mp4");
@@ -320,11 +319,11 @@ ovlcmd(
         alias: ["tovid"],
     },
     async (ms_org, ovl, cmd_options) => {
-        const { media } = cmd_options;
-        if (!media) {
-            return await ovl.sendMessage(ms_org, { text: "❗ Veuillez fournir un fichier audio à convertir." });
-        }
-
+     const { msg_Repondu } = cmd_options;
+    if (!msg_Repondu || !msg_Repondu.audioMessage) {
+        return ovl.sendMessage(ms_org, { text: "Répondez à un sticker." });
+    }
+        const media = await ovl.dl_save_media_ms(msg_Repondu.audioMessage);
         const directory = path.join(__dirname, '../../.temp');
         const audioPath = path.join(directory, Math.random().toString(36).slice(2) + ".mp3");
         const videoPath = path.join(directory, Math.random().toString(36).slice(2) + ".mp4");
@@ -357,11 +356,11 @@ ovlcmd(
         alias: ["toaud"],
     },
     async (ms_org, ovl, cmd_options) => {
-        const { media } = cmd_options;
-        if (!media) {
-            return await ovl.sendMessage(ms_org, { text: "❗ Veuillez fournir une vidéo pour extraire l'audio." });
-        }
-
+        const { msg_Repondu } = cmd_options;
+    if (!msg_Repondu || !msg_Repondu.videoMessage) {
+       return ovl.sendMessage(ms_org, { text: "Répondez à un sticker." });
+    }
+        const media = await ovl.dl_save_media_ms(msg_Repondu.videoMessage);
         const directory = path.join(__dirname, '../../.temp');
         const videoPath = path.join(directory, Math.random().toString(36).slice(2) + ".mp4");
         const audioPath = path.join(directory, Math.random().toString(36).slice(2) + ".mp3");
