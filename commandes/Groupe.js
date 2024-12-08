@@ -521,14 +521,20 @@ ovlcmd(
 
 ovlcmd(
   {
-    nom_cmd: "",
-    classe: "",
-    react: "",
-    desc: "",
+    nom_cmd: "gpp",
+    classe: "Groupe",
+    react: "🎨",
+    desc: "Commande pour changer la pp d'un groupe",
   },
   async (jid, ovl, cmd_options) => {
-      
-  });
+    const { arg, verif_Groupe } = cmd_options;
+    if (!verif_Groupe) {
+      return ovl.sendMessage(jid, { text: `Vous n'avez pas les permissions requises pour quitter ce groupe.` });
+    } if(!arg) (ovl.sendMessage(jid, { text: `Mentionnez un lien` });
+      const url = arg.join(' ');
+    await ovl.updateProfilePicture(jid, { url: url })
+  }
+);
 
 ovlcmd(
   {
