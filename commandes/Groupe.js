@@ -321,7 +321,7 @@ ovlcmd(
       }
 
       await ovl.groupUpdateDescription(jid, desc);
-    } else { ovl.sendMessage(jid, { text: 'je n\'ai pas les droits requis pour exécuter cette commande' }); }
+    } else { ovl.sendMessage(jid, { text: 'je n\'ai pas les droits requis pour exécuter cette commande' }) }
   }
 );
 
@@ -348,7 +348,7 @@ ovlcmd(
       }
 
       await ovl.groupUpdateSubject(jid, name);
-    } else { ovl.sendMessage(jid, { text: 'je n\'ai pas les droits requis pour exécuter cette commande' }); }
+    } else { ovl.sendMessage(jid, { text: 'je n\'ai pas les droits requis pour exécuter cette commande' }) }
   }
 );
 
