@@ -433,7 +433,7 @@ ovlcmd(
   }
 );
 
-ovlcmd(
+/*ovlcmd(
   {
     nom_cmd: "link",
     classe: "Groupe",
@@ -448,9 +448,9 @@ ovlcmd(
       await ovl.sendMessage(jid, { text: `Lien d'invitation: ${code}` });
     }
   }
-);
+);*/
 
-/*ovlcmd(
+ovlcmd(
   {
     nom_cmd: "revoke",
     classe: "Groupe",
@@ -498,7 +498,7 @@ ovlcmd(
     await ovl.groupAcceptInvite(code);
     await ovl.sendMessage(jid, { text: 'Vous avez rejoint le groupe avec succès.' });
   }
-);*/
+);
 
 ovlcmd(
   {
