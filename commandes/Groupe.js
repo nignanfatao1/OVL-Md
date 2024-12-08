@@ -477,6 +477,50 @@ ovlcmd(
 
 ovlcmd(
   {
+    nom_cmd: "acceptall",
+    classe: "Groupe",
+    react: "👨🏿‍💻",
+    desc: "Accepter toutes les demandes en attente d'un groupe",
+  },
+  async (jid, ovl, cmd_options) => {
+    const { verif_Admin, prenium_id, verif_Ovl_Admin, verif_Groupe } = cmd_options;
+    if (!verif_Groupe) return ovl.sendMessage(jid, { text: "Commande réservée aux groupes uniquement." });
+    if (!verif_Admin && !prenium_id) return ovl.sendMessage(jid, { text: "Vous n'avez pas les permissions pour utiliser cette commande." });
+    if (!verif_Ovl_Admin) return ovl.sendMessage(jid, { text: "Je dois être administrateur pour effectuer cette action." });
+
+    try {
+      await ovl.groupRequestParticipantsUpdate(jid, "approve");
+      ovl.sendMessage(jid, { text: "Toutes les demandes ont été acceptées." });
+    } catch (err) {
+      ovl.sendMessage(jid, { text: "Une erreur est survenue lors de l'acceptation des demandes." });
+    }
+  }
+);
+
+ovlcmd(
+  {
+    nom_cmd: "rejectall",
+    classe: "Groupe",
+    react: "👨🏿‍💻",
+    desc: "Rejeter toutes les demandes en attente d'un groupe",
+  },
+  async (jid, ovl, cmd_options) => {
+    const { verif_Admin, prenium_id, verif_Ovl_Admin, verif_Groupe } = cmd_options;
+    if (!verif_Groupe) return ovl.sendMessage(jid, { text: "Commande réservée aux groupes uniquement." });
+    if (!verif_Admin && !prenium_id) return ovl.sendMessage(jid, { text: "Vous n'avez pas les permissions pour utiliser cette commande." });
+    if (!verif_Ovl_Admin) return ovl.sendMessage(jid, { text: "Je dois être administrateur pour effectuer cette action." });
+
+    try {
+      await ovl.groupRequestParticipantsUpdate(jid, "reject");
+      ovl.sendMessage(jid, { text: "Toutes les demandes ont été rejetées." });
+    } catch (err) {
+      ovl.sendMessage(jid, { text: "Une erreur est survenue lors du rejet des demandes." });
+    }
+  }
+);
+
+ovlcmd(
+  {
     nom_cmd: "",
     classe: "",
     react: "",
