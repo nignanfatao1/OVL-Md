@@ -530,10 +530,10 @@ ovlcmd(
     const { arg, verif_Groupe } = cmd_options;
     if (!verif_Groupe) {
       return ovl.sendMessage(jid, { text: `Vous n'avez pas les permissions requises pour quitter ce groupe.` });
-    } if(!arg) (ovl.sendMessage(jid, { text: `Mentionnez un lien` });
+    }; if(!arg) { (ovl.sendMessage(jid, { text: `Mentionnez un lien` });
       const url = arg.join(' ');
     await ovl.updateProfilePicture(jid, { url: url })
-  }
+  }}
 );
 
 ovlcmd(
