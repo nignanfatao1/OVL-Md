@@ -267,8 +267,8 @@ ovlcmd(
       };
 
       await ovl.sendMessage(ms_org, { delete: key });
-    } catch (err) {
-      ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de la suppression du message." });
+    } catch (error) {
+      ovl.sendMessage(ms_org, { text: `Une erreur est survenue lors de la suppression du message: ${error.message}` });
     }
   }
 );
@@ -445,7 +445,7 @@ ovlcmd(
     if (!verif_Groupe) return ovl.sendMessage(jid, { text: "Commande utilisable uniquement dans les groupes." });
     if (verif_Admin && verif_Ovl_Admin) {
       const code = await ovl.groupInviteCode(jid);
-      await ovl.sendMessage(jid, { text: `Lien d'invitation: ${code}` });
+      await ovl.sendMessage(jid, { text: `Lien d'invitation: https://chat.whatsapp.com/${code}` });
     }
   }
 );
@@ -557,7 +557,11 @@ ovlcmd(
       return ovl.sendMessage(jid, { text: `Vous n'avez pas les permissions requises pour quitter ce groupe.` });
     }; if(!arg) { ovl.sendMessage(jid, { text: `Mentionnez un lien` });
       const url = arg.join(' ');
+                 try {
     await ovl.updateProfilePicture(jid, { url: url })
+                 } catch (error) {
+                     console.error(error);
+                }
   }}
 );
 
