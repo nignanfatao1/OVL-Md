@@ -283,16 +283,18 @@ ovlcmd(
     },
     async (ms_org, ovl, cmd_options) => {
         const { msg_Repondu } = cmd_options;
-    if (!msg_Repondu || !msg_Repondu.stickerMessage) {
-      return ovl.sendMessage(ms_org, { text: "Répondez à un sticker." });
-    }
+        if (!msg_Repondu || !msg_Repondu.stickerMessage) {
+            return ovl.sendMessage(ms_org, { text: "Répondez à un sticker." });
+        }
+
         const media = await ovl.dl_save_media_ms(msg_Repondu.stickerMessage);
         const directory = path.join(__dirname, '../../.temp');
 if (!fs.existsSync(directory)) {
     fs.mkdirSync(directory, { recursive: true });
-};
- const webpFilePath = path.join(directory, Math.random().toString(36).slice(2) + ".webp");
-        const mp4FilePath = path.join(directory, Math.random().toString(36).slice(2) + ".mp4");
+}
+
+        const webpFilePath = path.join(directory, `${Math.random().toString(36).slice(2)}.webp`);
+        const mp4FilePath = path.join(directory, `${Math.random().toString(36).slice(2)}.mp4`);
 
         try {
             fs.writeFileSync(webpFilePath, media);
@@ -306,14 +308,16 @@ if (!fs.existsSync(directory)) {
 
             const videoBuffer = fs.readFileSync(mp4FilePath);
             await ovl.sendMessage(ms_org, { video: videoBuffer, caption: "🎥 Voici votre vidéo convertie." });
-            fs.unlinkSync(webpFilePath);
-            fs.unlinkSync(mp4FilePath);
-        } catch {
-            await ovl.sendMessage(ms_org, { text: "❗ Une erreur est survenue lors de la conversion du sticker." });
+        } catch (error) {
+            await ovl.sendMessage(ms_org, { text: `❗ Une erreur est survenue lors de la conversion du sticker : ${error.message}` });
+        } finally {
+            if (fs.existsSync(webpFilePath)) fs.unlinkSync(webpFilePath);
+            if (fs.existsSync(mp4FilePath)) fs.unlinkSync(mp4FilePath);
         }
     }
 );
 
+// Conversion audio en vidéo
 ovlcmd(
     {
         nom_cmd: "tovideo",
@@ -322,17 +326,15 @@ ovlcmd(
         alias: ["tovid"],
     },
     async (ms_org, ovl, cmd_options) => {
-     const { msg_Repondu } = cmd_options;
-    if (!msg_Repondu || !msg_Repondu.audioMessage) {
-        return ovl.sendMessage(ms_org, { text: "Répondez à un sticker." });
-    }
+        const { msg_Repondu } = cmd_options;
+        if (!msg_Repondu || !msg_Repondu.audioMessage) {
+            return ovl.sendMessage(ms_org, { text: "Répondez à un fichier audio." });
+        }
+
         const media = await ovl.dl_save_media_ms(msg_Repondu.audioMessage);
         const directory = path.join(__dirname, '../../.temp');
-if (!fs.existsSync(directory)) {
-    fs.mkdirSync(directory, { recursive: true });
-};
-  const audioPath = path.join(directory, Math.random().toString(36).slice(2) + ".mp3");
-        const videoPath = path.join(directory, Math.random().toString(36).slice(2) + ".mp4");
+        const audioPath = path.join(directory, `${Math.random().toString(36).slice(2)}.mp3`);
+        const videoPath = path.join(directory, `${Math.random().toString(36).slice(2)}.mp4`);
 
         try {
             fs.writeFileSync(audioPath, media);
@@ -346,14 +348,16 @@ if (!fs.existsSync(directory)) {
 
             const videoBuffer = fs.readFileSync(videoPath);
             await ovl.sendMessage(ms_org, { video: videoBuffer, caption: "🎥 Voici votre vidéo générée." });
-            fs.unlinkSync(audioPath);
-            fs.unlinkSync(videoPath);
-        } catch {
-            await ovl.sendMessage(ms_org, { text: "❗ Une erreur est survenue lors de la conversion de l'audio." });
+        } catch (error) {
+            await ovl.sendMessage(ms_org, { text: `❗ Une erreur est survenue lors de la conversion de l'audio : ${error.message}` });
+        } finally {
+            if (fs.existsSync(audioPath)) fs.unlinkSync(audioPath);
+            if (fs.existsSync(videoPath)) fs.unlinkSync(videoPath);
         }
     }
 );
 
+// Extraction audio
 ovlcmd(
     {
         nom_cmd: "toaudio",
@@ -363,17 +367,14 @@ ovlcmd(
     },
     async (ms_org, ovl, cmd_options) => {
         const { msg_Repondu } = cmd_options;
-    if (!msg_Repondu || !msg_Repondu.videoMessage) {
-       return ovl.sendMessage(ms_org, { text: "Répondez à un sticker." });
-    }
+        if (!msg_Repondu || !msg_Repondu.videoMessage) {
+            return ovl.sendMessage(ms_org, { text: "Répondez à une vidéo." });
+        }
+
         const media = await ovl.dl_save_media_ms(msg_Repondu.videoMessage);
         const directory = path.join(__dirname, '../../.temp');
-if (!fs.existsSync(directory)) {
-    fs.mkdirSync(directory, { recursive: true });
-};
-
-        const videoPath = path.join(directory, Math.random().toString(36).slice(2) + ".mp4");
-        const audioPath = path.join(directory, Math.random().toString(36).slice(2) + ".mp3");
+        const videoPath = path.join(directory, `${Math.random().toString(36).slice(2)}.mp4`);
+        const audioPath = path.join(directory, `${Math.random().toString(36).slice(2)}.mp3`);
 
         try {
             fs.writeFileSync(videoPath, media);
@@ -387,10 +388,12 @@ if (!fs.existsSync(directory)) {
 
             const audioBuffer = fs.readFileSync(audioPath);
             await ovl.sendMessage(ms_org, { audio: audioBuffer, mimetype: "audio/mp3", caption: "🎵 Voici votre audio extrait." });
-            fs.unlinkSync(videoPath);
-            fs.unlinkSync(audioPath);
-        } catch {
-            await ovl.sendMessage(ms_org, { text: "❗ Une erreur est survenue lors de l'extraction de l'audio." });
+        } catch (error) {
+            await ovl.sendMessage(ms_org, { text: `❗ Une erreur est survenue lors de l'extraction de l'audio : ${error.message}` });
+        } finally {
+            if (fs.existsSync(videoPath)) fs.unlinkSync(videoPath);
+            if (fs.existsSync(audioPath)) fs.unlinkSync(audioPath);
         }
     }
 );
+
