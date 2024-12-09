@@ -288,7 +288,10 @@ ovlcmd(
     }
         const media = await ovl.dl_save_media_ms(msg_Repondu.stickerMessage);
         const directory = path.join(__dirname, '../../.temp');
-        const webpFilePath = path.join(directory, Math.random().toString(36).slice(2) + ".webp");
+if (!fs.existsSync(directory)) {
+    fs.mkdirSync(directory, { recursive: true });
+};
+ const webpFilePath = path.join(directory, Math.random().toString(36).slice(2) + ".webp");
         const mp4FilePath = path.join(directory, Math.random().toString(36).slice(2) + ".mp4");
 
         try {
@@ -325,7 +328,10 @@ ovlcmd(
     }
         const media = await ovl.dl_save_media_ms(msg_Repondu.audioMessage);
         const directory = path.join(__dirname, '../../.temp');
-        const audioPath = path.join(directory, Math.random().toString(36).slice(2) + ".mp3");
+if (!fs.existsSync(directory)) {
+    fs.mkdirSync(directory, { recursive: true });
+};
+  const audioPath = path.join(directory, Math.random().toString(36).slice(2) + ".mp3");
         const videoPath = path.join(directory, Math.random().toString(36).slice(2) + ".mp4");
 
         try {
@@ -362,6 +368,10 @@ ovlcmd(
     }
         const media = await ovl.dl_save_media_ms(msg_Repondu.videoMessage);
         const directory = path.join(__dirname, '../../.temp');
+if (!fs.existsSync(directory)) {
+    fs.mkdirSync(directory, { recursive: true });
+};
+
         const videoPath = path.join(directory, Math.random().toString(36).slice(2) + ".mp4");
         const audioPath = path.join(directory, Math.random().toString(36).slice(2) + ".mp3");
 
