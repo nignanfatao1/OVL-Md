@@ -18,10 +18,6 @@ const Ranks = sequelize.define('Ranks', {
         type: DataTypes.STRING,
         primaryKey: true,
     },
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
     level: {
         type: DataTypes.INTEGER,
         defaultValue: 1,
