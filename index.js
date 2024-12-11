@@ -165,7 +165,7 @@ ovl.ev.on("messages.upsert", async (m) => {
             id: userId,
             name: nom_Auteur_Message,
             level: 1,
-            exp: 0,
+            exp: 100,
             messages: 1,
         });
     } else {
