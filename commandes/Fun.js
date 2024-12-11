@@ -225,8 +225,7 @@ ovlcmd(
         }
 
         const { name, level, exp, messages } = user;
-        const nextLevelExp = levels[level] ? levels[level].expRequired : "Max";
-
+        const nextLevelExp = levels[level - 1] ? levels[level - 1].expRequired : "Max";
         const rankPosition = allUsers.findIndex(u => u.id === userId) + 1;
         const totalUsers = allUsers.length;
         const message = `
@@ -234,7 +233,7 @@ ovlcmd(
 ┃ 🏷️ *Nom :* ${name || "Inconnu"}
 ┃ 🥇 *Classement :* ${rankPosition}/${totalUsers}
 ┃ 🔰 *Niveau :* ${level}
-┃ 🏅 *Titre :* ${levels[level]?.name || "Aucun titre"}
+┃ 🏅 *Titre :* ${levels[level - 1]?.name || "Aucun titre"} 
 ┃ 📊 *EXP :* ${exp}/${nextLevelExp || "Max"}
 ┃ ✉️ *Messages :* ${messages}
 ╰────────────────────╯`;
@@ -265,7 +264,7 @@ ovlcmd(
         }
 
         let rankMessage = `
-╭───🏆 *OVL-MD TOP-RANK* 🏆───╮
+╭───🏆 *OVL-TOP-RANK* 🏆───╮
 `;
 
         topUsers.forEach((user, index) => {
@@ -273,9 +272,9 @@ ovlcmd(
             rankMessage += `
 ┃ ${position}. 🏷️ *Nom :* ${user.name || "Inconnu"}
 ┃    ✉️ *Messages :* ${user.messages}
-┃    🔰 *Niveau :* ${user.level} (${levels[user.level]?.name || "Aucun titre"})\n\n`;
+┃    🔰 *Niveau :* ${user.level} (${levels[user.level - 1]?.name || "Aucun titre"})\n\n`;
         });
-rankMessage += `╰─────────────────────────╯`;
+rankMessage += `╰────────────────────────╯`;
         await ovl.sendMessage(ms_org, { text: rankMessage });
     }
 );
