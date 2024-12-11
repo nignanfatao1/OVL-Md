@@ -224,7 +224,7 @@ ovlcmd(
 ┃ 🏅 *Titre :* ${levels[level - 1]?.name || "Aucun titre"} 
 ┃ 📊 *EXP :* ${exp}/${nextLevelExp || "Max"}
 ┃ ✉️ *Messages :* ${messages}
-╰────────────────────╯`;
+╰──────────────────╯`;
 
         await ovl.sendMessage(ms_org, {
             image: { url: pp },
@@ -260,7 +260,7 @@ ovlcmd(
             rankMessage += `
 ┃ ${position}. 🏷️ *Nom :* ${user.name || "Inconnu"}
 ┃    ✉️ *Messages :* ${user.messages}
-┃    🔰 *Niveau :* ${user.level} (${levels[user.level - 1]?.name || "Aucun titre"})\n\n`;
+┃    🔰 *Niveau :* ${user.level} (${levels[user.level - 1]?.name || "Aucun titre"})\n`;
         });
 rankMessage += `╰────────────────────────╯`;
         await ovl.sendMessage(ms_org, { text: rankMessage });
