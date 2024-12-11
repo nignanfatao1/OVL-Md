@@ -13,7 +13,8 @@ const { Antilink, Antilink_warnings } = require("./DataBase/antilink");
 const { Antibot, AntibotWarnings } = require("./DataBase/antibot");
 const { Bans } = require("./DataBase/ban");
 const { GroupSettings } = require("./DataBase/events");
-
+const { levels, calculateLevel } = require('./DataBase/levels');
+const Ranks = require('./DataBase/rank')
 
  async function ovlAuth(session) {
     let sessionId;
@@ -152,6 +153,37 @@ ovl.ev.on("messages.upsert", async (m) => {
     function repondre(message) {
         ovl.sendMessage(ms_org, { text: message }, { quoted: ms });
     } 
+ 
+//Rank messages && Level up
+ if(texte && auteur_Message.endsWith("s.whatsapp.net")) {
+    let userId = auteur_Message;
+    const user = await Ranks.findOne({ where: { id: userId } });
+
+    if (!user) {
+        await Ranks.create({
+            id: userId,
+            level: 1,
+            exp: 0,
+            messages: 1,
+        });
+    } else {
+        user.messages += 1;
+        user.exp += 10;
+
+        const newLevel = calculateLevel(user.exp);
+
+        if (newLevel > user.level && user.levelUpNotifications === 'oui') {
+            await ovl.sendMessage(ms_org, {
+                text: `Félicitations ${nom_Auteur_Message}! Vous avez atteint le niveau ${newLevel}! 🎉`
+            });
+        }
+
+        user.level = newLevel;
+        await user.save();
+    }
+ };
+ // Fin Rank et Level up
+ 
           //antilink
           const linkRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[^\s]+\.[^\s]+)/gi;
 
