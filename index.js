@@ -14,7 +14,7 @@ const { Antibot, AntibotWarnings } = require("./DataBase/antibot");
 const { Bans } = require("./DataBase/ban");
 const { GroupSettings } = require("./DataBase/events");
 const { levels, calculateLevel } = require('./DataBase/levels');
-const { Ranks, GlobalSettings } = require('./DataBase/rank');
+const { Ranks } = require('./DataBase/rank');
 
  async function ovlAuth(session) {
     let sessionId;
@@ -158,8 +158,6 @@ ovl.ev.on("messages.upsert", async (m) => {
  if (texte && auteur_Message.endsWith("s.whatsapp.net")) {
     let userId = auteur_Message;
     const user = await Ranks.findOne({ where: { id: userId } });
-    const globalSettings = await GlobalSettings.findOne({ where: { id: 'global' } });
-
     if (!user) {
         await Ranks.create({
             id: userId,
@@ -175,7 +173,7 @@ ovl.ev.on("messages.upsert", async (m) => {
 
         const newLevel = calculateLevel(user.exp);
 
-        if (newLevel > user.level && globalSettings.levelUpEnabled) {
+        if (newLevel > user.level && config.LEVEL_UP == 'oui') {
             await ovl.sendMessage(ms_org, {
                 text: `Félicitations ${nom_Auteur_Message}! Vous avez atteint le niveau ${newLevel}! 🎉`
             });
