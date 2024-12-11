@@ -4,7 +4,7 @@ const config = require("../set");
 const fs = require('fs');
 const axios = require('axios');
 const levels = require('../DataBase/levels');
-const Ranks = require('../DataBase/rank')
+const { Ranks, globalSettings } = require('../DataBase/rank')
                       
 ovlcmd(
     {
@@ -185,14 +185,12 @@ ovlcmd(
 );
 */
 
-
-
 ovlcmd(
     {
         nom_cmd: "rank",
         classe: "Fun",
         react: "🏆",
-        desc: "Affiche le rang d'un utilisateur selon ses messages envoyés"
+        desc: "Affiche le rang d'un utilisateur selon ses messages envoyés et gère l'activation/désactivation globale du level up."
     },
     async (ms_org, ovl, cmd_options) => {
         const { arg, auteur_Message, auteur_Msg_Repondu } = cmd_options;
@@ -204,6 +202,18 @@ ovlcmd(
         }
 
         const userId = auteur_Message || (arg[0]?.includes("@") && `${arg[0].replace("@", "")}@s.whatsapp.net`) || auteur_Msg_Repondu;
+
+        if (arg[0] === "msg" && (arg[1] === "on" || arg[1] === "off")) {
+            const globalSettings = await GlobalSettings.findOne({ where: { id: 'global' } });
+            if (!globalSettings) {
+                await GlobalSettings.create({ id: 'global', levelUpEnabled: true });
+            }
+
+            globalSettings.levelUpEnabled = arg[1] === "on";
+            await globalSettings.save();
+
+            return ovl.sendMessage(ms_org, { text: `Les notifications de level up sont maintenant ${arg[1] === "on" ? "activées" : "désactivées"}.` });
+        }
 
         const allUsers = await Ranks.findAll({
             order: [['messages', 'DESC']]
@@ -235,6 +245,7 @@ ovlcmd(
         });
     }
 );
+
 
 ovlcmd(
     {
