@@ -200,7 +200,7 @@ ovlcmd(
         try {
             pp = await ovl.profilePictureUrl(ms_org, 'image');
         } catch {
-            pp = "";
+            pp = "https://files.catbox.moe/ulwqtr.jpg";
         }
 
         const userId = auteur_Message || (arg[0]?.includes("@") && `${arg[0].replace("@", "")}@s.whatsapp.net`) || auteur_Msg_Repondu;
