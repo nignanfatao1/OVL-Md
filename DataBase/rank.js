@@ -39,26 +39,11 @@ const Ranks = sequelize.define('Ranks', {
     timestamps: false,
 });
 
-const GlobalSettings = sequelize.define('GlobalSettings', {
-    id: {
-        type: DataTypes.STRING,
-        primaryKey: true,
-        defaultValue: 'global'
-    },
-    levelUpEnabled: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-    }
-}, {
-    tableName: 'global_settings',
-    timestamps: false,
-});
-
 (async () => {
     await Ranks.sync();
     await GlobalSettings.sync();
-    console.log("Tables 'Ranks' et 'LevelUp' synchronisées avec succès.");
+    console.log("Tables 'Ranks' synchronisée avec succès.");
 })();
 
 
-module.exports = { Ranks, GlobalSettings };
+module.exports = { Ranks };
