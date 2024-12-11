@@ -385,14 +385,8 @@ ovl.ev.on('group-participants.update', async (data) => {
         return jid;
     };
 
-    let groupPic;
-    try {
-        groupPic = await ovl.profilePictureUrl(data.id, 'image');
-    } catch {
-        groupPic = 'https://files.catbox.moe/54ip7g.jpg';
-    }
-
-    try {
+    const  groupPic = 'https://files.catbox.moe/54ip7g.jpg';
+  try {
         const groupInfo = await ovl.groupMetadata(data.id);
         const settings = await GroupSettings.findOne({ where: { id: data.id } });
         if (!settings) return;
