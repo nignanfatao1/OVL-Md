@@ -262,7 +262,7 @@ ovlcmd(
 ┃    ✉️ *Messages :* ${user.messages}
 ┃    🔰 *Niveau :* ${user.level} (${levels[user.level - 1]?.name || "Aucun titre"})\n`;
         });
-rankMessage += `╰────────────────────────╯`;
+rankMessage += `╰──────────────────────╯`;
         await ovl.sendMessage(ms_org, { text: rankMessage });
     }
 );
