@@ -24,7 +24,7 @@ const Ranks = sequelize.define('Ranks', {
     },
     level: {
         type: DataTypes.INTEGER,
-        defaultValue: 1,
+        defaultValue: 0,
     },
     exp: {
         type: DataTypes.INTEGER,
