@@ -101,4 +101,13 @@ const levels = [
   { level: 100, name: "Dieu Suprême", expRequired: 505000 },
 ];
 
-module.exports = levels;
+const calculateLevel = (exp) => {
+  for (let i = levels.length - 1; i >= 0; i--) {
+    if (exp >= levels[i].expRequired) {
+      return levels[i];
+    }
+  }
+  return levels[0];
+};
+
+module.exports = { levels, calculateLevel };
