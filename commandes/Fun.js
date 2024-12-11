@@ -197,7 +197,8 @@ ovlcmd(
         let pp;
         try {
             pp = await ovl.profilePictureUrl(auteur_Message, 'image');
-        } catch {
+        } catch (err) {
+          console.error(err);
             pp = "https://files.catbox.moe/ulwqtr.jpg";
         }
 
