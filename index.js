@@ -162,6 +162,7 @@ ovl.ev.on("messages.upsert", async (m) => {
     if (!user) {
         await Ranks.create({
             id: userId,
+            name: nom_Auteur_Message,
             level: 1,
             exp: 0,
             messages: 1,
