@@ -5,5 +5,6 @@ module.exports = {
   MODE: process.env.MODE || "public",
   MENU: process.env.MENU || "https://i.ibb.co/ynx9QcZ/image.jpg",
   SESSION_ID: process.env.SESSION_ID || "ovl",
+  LEVEL_UP: process.env.LEVEL_UP || 'non',
   DATABASE: process.env.DATABASE || 'postgresql://postgres.qnjvgxwyncnsbpfxwrbq:ovlmdmdpasse@aws-0-eu-central-1.pooler.supabase.com:6543/postgres'
 };
