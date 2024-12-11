@@ -41,7 +41,6 @@ const Ranks = sequelize.define('Ranks', {
 
 (async () => {
     await Ranks.sync();
-    await GlobalSettings.sync();
     console.log("Tables 'Ranks' synchronisée avec succès.");
 })();
 
