@@ -3,7 +3,9 @@ const fancy = require("../framework/style");
 const config = require("../set");
 const fs = require('fs');
 const axios = require('axios');
-
+const levels = require('../DataBase/levels');
+const Ranks = require('../DataBase/rank')
+                      
 ovlcmd(
     {
         nom_cmd: "fliptext",
