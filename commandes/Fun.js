@@ -196,7 +196,7 @@ ovlcmd(
         const { arg, auteur_Message, auteur_Msg_Repondu } = cmd_options;
         let pp;
         try {
-            pp = await ovl.profilePictureUrl(auteur_Message, 'image');
+            pp = await ovl.profilePictureUrl(auteur_Message);
         } catch (err) {
           console.error(err);
             pp = "https://files.catbox.moe/ulwqtr.jpg";
@@ -214,14 +214,14 @@ ovlcmd(
         }
 
         const { name, level, exp, messages } = user;
-        const nextLevelExp = levels[level - 1] ? levels[level - 1].expRequired : "Max";
+        const nextLevelExp = levels[level] ? levels[level].expRequired : "Max";
         const rankPosition = allUsers.findIndex(u => u.id === userId) + 1;
         const totalUsers = allUsers.length;
         const message = `╭───🏆 *OVL-RANK* 🏆───╮
 ┃ 🏷️ *Nom :* ${name || "Inconnu"}
 ┃ 🥇 *Classement :* ${rankPosition}/${totalUsers}
 ┃ 🔰 *Niveau :* ${level}
-┃ 🏅 *Titre :* ${levels[level - 1]?.name || "Aucun titre"} 
+┃ 🏅 *Titre :* ${levels[level]?.name || "Aucun titre"} 
 ┃ 📊 *EXP :* ${exp}/${nextLevelExp || "Max"}
 ┃ ✉️ *Messages :* ${messages}
 ╰──────────────────╯`;
@@ -258,7 +258,7 @@ ovlcmd(
             const position = `${index + 1}`.padStart(2, " ");
             rankMessage += `┃ ${position}. 🏷️ *Nom :* ${user.name || "Inconnu"}
 ┃    ✉️ *Messages :* ${user.messages}
-┃    🔰 *Niveau :* ${user.level} (${levels[user.level - 1]?.name || "Aucun titre"})\n┃`;
+┃    🔰 *Niveau :* ${user.level} (${levels[user.level - 1]?.name || "Aucun titre"})\n┃\n`;
         });
 rankMessage += `╰─────────────────────╯`;
         await ovl.sendMessage(ms_org, { text: rankMessage });
