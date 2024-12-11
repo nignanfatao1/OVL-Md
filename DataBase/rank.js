@@ -33,6 +33,10 @@ const Ranks = sequelize.define('Ranks', {
     messages: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
+    },
+    levelUpNotifications: {
+        type: DataTypes.STRING,
+        defaultValue: 'non',
     }
 }, {
     tableName: 'ranks',
