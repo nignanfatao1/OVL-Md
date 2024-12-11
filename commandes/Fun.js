@@ -196,7 +196,7 @@ ovlcmd(
         const { arg, auteur_Message, auteur_Msg_Repondu } = cmd_options;
         let pp;
         try {
-            pp = await ovl.profilePictureUrl(ms_org, 'image');
+            pp = await ovl.profilePictureUrl(auteur_Message, 'image');
         } catch {
             pp = "https://files.catbox.moe/ulwqtr.jpg";
         }
