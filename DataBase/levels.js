@@ -104,10 +104,10 @@ const levels = [
 const calculateLevel = (exp) => {
   for (let i = levels.length - 1; i >= 0; i--) {
     if (exp >= levels[i].expRequired) {
-      return levels[i];
+      return levels[i].level;
     }
   }
-  return levels[0];
+  return levels[0].level;
 };
 
 module.exports = { levels, calculateLevel };
