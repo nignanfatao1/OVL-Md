@@ -12,7 +12,7 @@
   "author": "Ainz",
   "license": "MIT",
 "dependencies": {
-    "@whiskeysockets/baileys": "6.6.0",
+    "@whiskeysockets/baileys": "github:Nignanfatao/Wa-Baileys",
     "axios": "^1.4.0",
     "@napi-rs/canvas": "^0.1.62",
     "@distube/ytsr": "^2.0.4",
