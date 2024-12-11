@@ -135,7 +135,7 @@ ovlcmd(
 ovlcmd(
     {
         nom_cmd: "blague",
-        classe: "Funn",
+        classe: "Fun",
         react: "😂",
         desc: "Renvoie une blague"
     },
@@ -158,7 +158,7 @@ ovlcmd(
     }
 );
 
-ovlcmd(
+/*ovlcmd(
     {
         nom_cmd: "citation",
         classe: "Fun",
@@ -181,4 +181,4 @@ ovlcmd(
         }
     }
 );
-
+*/
