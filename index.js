@@ -168,6 +168,7 @@ ovl.ev.on("messages.upsert", async (m) => {
             messages: 1,
         });
     } else {
+        user.name = nom_Auteur_Message,
         user.messages += 1;
         user.exp += 10;
 
