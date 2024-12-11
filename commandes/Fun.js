@@ -182,3 +182,87 @@ ovlcmd(
     }
 );
 */
+
+
+
+ovlcmd(
+    {
+        nom_cmd: "rank",
+        classe: "Fun",
+        react: "🏆",
+        desc: "Affiche le rang d'un utilisateur selon ses messages envoyés"
+    },
+    async (ms_org, ovl, cmd_options) => {
+        const { arg, auteur_Message, auteur_Msg_Repondu } = cmd_options;
+        let pp;
+        try {
+            pp = await ovl.profilePictureUrl(ms_org, 'image');
+        } catch {
+            pp = "";
+        }
+
+        const userId = auteur_Message || (arg[0]?.includes("@") && `${arg[0].replace("@", "")}@s.whatsapp.net`) || auteur_Msg_Repondu;
+
+        const allUsers = await Ranks.findAll({
+            order: [['messages', 'DESC']]
+        });
+
+        const user = await Ranks.findOne({ where: { id: userId } });
+        if (!user) {
+            return ovl.sendMessage(ms_org, { text: "Vous n'avez pas encore de rang. Commencez à interagir pour en obtenir un !" });
+        }
+
+        const { name, level, exp, messages } = user;
+        const nextLevelExp = levels[level] ? levels[level].expRequired : "Max";
+
+        const rankPosition = allUsers.findIndex(u => u.id === userId) + 1;
+        const totalUsers = allUsers.length;
+        const message = `
+╭───🏆 *OVL-RANK* 🏆───╮
+┃ 🏷️ *Nom :* ${name || "Inconnu"}
+┃ 🥇 *Classement :* ${rankPosition}/${totalUsers}
+┃ 🔰 *Niveau :* ${level}
+┃ 🏅 *Titre :* ${levels[level]?.name || "Aucun titre"}
+┃ 📊 *EXP :* ${exp}/${nextLevelExp || "Max"}
+┃ ✉️ *Messages :* ${messages}
+╰────────────────────╯`;
+
+        await ovl.sendMessage(ms_org, {
+            image: { url: pp },
+            caption: message,
+        });
+    }
+);
+
+ovlcmd(
+    {
+        nom_cmd: "toprank",
+        classe: "utility",
+        react: "🥇",
+        desc: "Voir les meilleurs utilisateurs"
+    },
+    async (ms_org, ovl) => {
+        const topUsers = await Ranks.findAll({
+            order: [['messages', 'DESC']],
+            limit: 10
+        });
+
+        if (topUsers.length === 0) {
+            return ovl.sendMessage(ms_org, { text: "Aucune donnée disponible pour le moment." });
+        }
+
+        let rankMessage = `
+╭───🏆 *OVL-MD TOP-RANK* 🏆───╮
+`;
+
+        topUsers.forEach((user, index) => {
+            const position = `${index + 1}`.padStart(2, " ");
+            rankMessage += `
+┃ ${position}. 🏷️ *Nom :* ${user.name || "Inconnu"}
+┃    ✉️ *Messages :* ${user.messages}
+┃    🔰 *Niveau :* ${user.level} (${levels[user.level]?.name || "Aucun titre"})\n\n`;
+        });
+rankMessage += `╰─────────────────────────╯`;
+        await ovl.sendMessage(ms_org, { text: rankMessage });
+    }
+);
