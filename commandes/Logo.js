@@ -89,19 +89,19 @@ ovlcmd(
         try {
             // Étape 1 : Obtenir la page initiale
             try {
-                response = await axios.get(baseUrl, {
-                    headers: {
-                        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
-                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-                        'Accept-Encoding': 'gzip, deflate, br',
-                        'Accept-Language': 'fr-FR,fr;q=0.9'
-                    }
-                });
-            } catch (err) {
-                console.error("Erreur lors de la récupération de la page initiale :", err);
-                return ovl.sendMessage(ms_org, { text: "❌ Une erreur est survenue lors de la récupération de la page initiale." });
+                const response = await axios.get('https://textpro.me/create-a-magma-hot-text-effect-online-1030.html', {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Accept-Language': 'fr-FR,fr;q=0.9',
+                'Cookie': 'PHPSESSID=o3a0cngk34kmn581ajnbr2for7; _ga=GA1.1.1271155986.1732471989'
             }
-
+        });
+        console.log("Page récupérée avec succès :", response.data);
+    } catch (err) {
+        console.error("Erreur lors de la récupération de la page :", err.response?.status || err.message);
+            }
             const $ = cheerio.load(response.data);
             token = $('input[name="token"]').attr('value');
 
