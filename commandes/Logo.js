@@ -79,13 +79,7 @@ const axios = require('axios');
         const q = arg.join(' ');
 
         const url = 'https://textpro.me/create-a-magma-hot-text-effect-online-1030.html';
-        const cookies = [
-            "_ga=GA1.1.1271155986.1732471989",
-            "_ga_7FPT6S72YE=GS1.1.1734198780.6.0.1734198780.0.0.0",
-            "PHPSESSID=gs1ohb859h6duu34tm68qbasr0"
-        ].join('; ');
-
-        try {
+         try {
             // Étape 1 : Accéder à la page principale
             const response = await axios.get(url, {
 
@@ -104,7 +98,7 @@ const axios = require('axios');
       })
 
             // Charger le contenu HTML avec Cheerio
-            const $ = cheerio.load(response);
+            const $ = cheerio.load(response.data);
 
             // Extraire le token (ou autres données nécessaires)
             const token = $('input[name="token"]').attr('value');
@@ -114,18 +108,25 @@ const axios = require('axios');
             }
 
             // Étape 2 : Effectuer une requête POST pour générer l'image
-            const postResponse = await cloudscraper.post(`${baseUrl}/api/text-design-endpoint`, {
+            const postResponse = await axios.post(`https://textpro.me/create-a-magma-hot-text-effect-online-1030.html`, {
                 formData: {
                     text: q,
                     token: token
                 },
                 headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-                    'Cookie': cookies
+             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+
+            "Origin": "textpro.me",
+
+            "Referer": url,
+
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188", 
+
+            "Cookie": response.headers.get("set-cookie").join("; "),
                 }
             });
 
-            const result = JSON.parse(postResponse);
+            const result = JSON.parse(postResponse.data);
             if (!result || !result.imageUrl) {
                 await ovl.sendMessage(ms_org, { text: "❌ Erreur : URL de l'image introuvable dans la réponse." });
                 return;
