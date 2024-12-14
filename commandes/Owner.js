@@ -116,7 +116,7 @@ ovlcmd(
 
       const action = arg[0]?.toLowerCase();
       const estDeban = action === "del";
-      const cible = msg_org;
+      const cible = jid;
 
       if (!cible) return repondre("❌ Impossible de récupérer l'identifiant du groupe.");
 
