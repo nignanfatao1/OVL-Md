@@ -59,197 +59,58 @@ addTextproCommand("blackpink", "https://textpro.me/create-blackpink-logo-style-o
 addTextproCommand("cat", "https://textpro.me/write-text-on-foggy-window-online-free-1015.html#google_vignette", "Créez un effet de texte sur une fenêtre brumeuse.");
 addTextproCommand("pottery", "https://textpro.me/create-3d-pottery-text-effect-online-1088.html", "Créez un effet de texte en poterie 3D.");
 addTextproCommand("slice", "https://textpro.me/create-light-glow-sliced-text-effect-online-1068.html", "Créez un effet de texte tranché avec lumière et éclat.");
-
-
 */
 
-
-const axios = require("axios")
-
-const cheerio = require("cheerio")
-
-const FormData = require("form-data")
-
-
-
-async function maker(url, text) {
-
-   if (/https?:\/\/(ephoto360|photooxy|textpro)\/\.(com|me)/i.test(url)) throw new Error("URL Invalid")
-
-   try {
-
-      let a = await axios.get(url, {
-
-         headers: {
-
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-
-            "Origin": (new URL(url)).origin,
-
-            "Referer": url,
-
-            "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
-
-         }
-
-      })
-
-
-
-      let $ = cheerio.load(a.data);
-
-      let server = $('#build_server').val()
-
-      let serverId = $('#build_server_id').val()
-
-      let token = $('#token').val()
-
-      let submit = $('#submit').val()
-
-
-
-      let types = [];
-
-      $('input[name="radio0[radio]"]').each((i, elem) => {
-
-         types.push($(elem).attr("value"));
-
-      })
-
-
-
-      let post;
-
-      if (types.length != 0) {
-
-         post = {
-
-            'radio0[radio]': types[Math.floor(Math.random() * types.length)],
-
-            'submit': submit,
-
-            'token': token,
-
-            'build_server': server,
-
-            'build_server_id': Number(serverId)
-
-         };
-
-      }
-
-      else {
-
-         post = {
-
-            'submit': submit,
-
-            'token': token,
-
-            'build_server': server,
-
-            'build_server_id': Number(serverId)
-
-         }
-
-      }
-
-
-
-      let form = new FormData()
-
-      for (let i in post) {
-
-         form.append(i, post[i])
-
-      }
-
-      if (typeof text == "string") text = [text]
-
-      for (let i of text) form.append("text[]", i)
-
-
-
-      let b = await axios.post(url, form, {
-
-         headers: {
-
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-
-            "Origin": (new URL(url)).origin,
-
-            "Referer": url,
-
-            "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
-
-            "Cookie": a.headers.get("set-cookie").join("; "),
-
-            ...form.getHeaders()
-
-         }
-
-      })
-
-
-
-      $ = cheerio.load(b.data)
-
-      let out = ($('#form_value').first().text() || $('#form_value_input').first().text() || $('#form_value').first().val() || $('#form_value_input').first().val())
-
-
-
-      let c = await axios.post((new URL(url)).origin + "/effect/create-image", JSON.parse(out), {
-
-         headers: {
-
-            "Accept": "*/*",
-
-            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-
-            "Origin": (new URL(url)).origin,
-
-            "Referer": url,
-
-            "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
-
-            "Cookie": a.headers.get("set-cookie").join("; ")
-
-         }
-
-      })
- //      console.log(c);
-
-
-
-      return {
-
-         status: c.data?.success,
-
-         image: server + (c.data?.fullsize_image || c.data?.image || ""),
-
-         session: c.data?.session_id
-
-      }
-
-   } catch (e) {
-
-      throw e
-
-   }
-
-}
-
+const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 
 ovlcmd(
-        {
-            nom_cmd: 'log',
-            classe: "Logo",
-            react: "✨",
-            desc: ''
-        },
-        async (ms_org, ovl, cmd_options) => {
-            let a = maker("https://textpro.me/create-a-metallic-text-effect-free-online-1041.html", "hey");
-console.log(a);
+    {
+        nom_cmd: "logo",
+        classe: "Logo",
+        react: "✨",
+        desc: "Crée un logo stylisé avec un texte personnalisé."
+    },
+    async (ms_org, ovl, cmd_options) => {
+        const { arg } = cmd_options;
 
+        // Vérifie si un texte est fourni
+        if (!arg || arg.length === 0) {
+            return ovl.sendMessage(ms_org, { text: "❌ Veuillez fournir un texte pour générer le logo." });
         }
-    );
+
+        const userInput = arg.join(" "); // Combine le texte en un seul argument
+        const url = `https://textpro.me/create-a-magma-hot-text-effect-online-1030.html/${encodeURIComponent(userInput)}`;
+
+        try {
+            // Étape 1: Générer le logo (simule une requête vers un service API TextPro-like)
+            const response = await axios.post(url, {}, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (!response.data || !response.data.url) {
+                throw new Error("Impossible de récupérer le logo.");
+            }
+
+            const logoUrl = response.data.url;
+
+            // Étape 2: Télécharger le fichier généré
+            const imageResponse = await axios.get(logoUrl, { responseType: 'arraybuffer' });
+            const outputPath = path.join(__dirname, 'temp_logo.png');
+            fs.writeFileSync(outputPath, imageResponse.data);
+
+            // Étape 3: Envoyer le logo via WhatsApp
+            await ovl.sendMessage(ms_org, {
+                image: { url: outputPath },
+                caption: `✨ Logo généré pour : *${userInput}*`
+            });
+
+            // Supprimer le fichier temporaire après envoi
+            fs.unlinkSync(outputPath);
+        } catch (error) {
+            console.error("Erreur lors de la génération ou de l'envoi du logo :", error);
+            ovl.sendMessage(ms_org, { text: "❌ Une erreur est survenue lors de la génération du logo." });
+        }
+    }
+);
