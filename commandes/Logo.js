@@ -92,7 +92,7 @@ ovlcmd(
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
         'Accept-Encoding': 'gzip, deflate, br',
         'Accept-Language': 'fr-FR,fr;q=0.9',
-        'Cookie': 'cf_clearance=YgZm0ddbzietl9.oQXjT2hRHDnHxGiEnRQrt6pEV0h0',
+        'Cookie': '_ga=GA1.1.1271155986.1732471989; PHPSESSID=inifuvfvi3o23jvpgno395klm6; cf_clearance=9w5siXLu961pF10LlTifGMbxRy7PpBPQuhQbjXFmAMg-1734161885-1.2.1.1-xpOj6K.Wz3oXYom10qUhN2HsLfKlo1xbKeN7bz4mGACPNcUbpPhRTCAugfPlJqWlufDUnk3QVEtb6z_11uq8PRiCxnJPKtvc9DWcukIZAU8Nc7ZJ9g2Oro4BPo8df5UDbWbrpxNSJmhdb4pjFDzGONb5lBl6Fy8szJw1Mt4yk7urd3vWcbDM99f5QKcMFFq28r1dtlM6AFEhwmhEjy7BAgZ4cnzzY0zu81Sr8iCv8n2EU2ypbcGw5f5jmZSPV8frQQ9697lG3F63chInYMit2eGRWiglvjqLqtV.Q83eiEvPIL5vdKt8Ng7eJ0Q4wpdXOgzvjGC1chJyBEYjfeQbiIg01Yu05LlnQsbU5sw3jMqTgTmQ149riYXqDuSXDTrO; _ga_7FPT6S72YE=GS1.1.1734161884.4.0.1734161884.0.0.0HDnHxGiEnRQrt6pEV0h0',
         'Sec-Fetch-Dest': 'document',
         'Sec-Fetch-Mode': 'navigate',
         'Sec-Fetch-Site': 'none',
