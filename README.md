@@ -45,7 +45,7 @@ function runCommand(command, args, cwd) {
 
 if (!existsSync('ovl')) {
   console.log('Clonage du dépôt...');
-  runCommand('git', ['clone', 'https://github.com/Nignanfatao/OVL-Md', 'ovl']);
+  runCommand('git', ['clone', 'https://github.com/Nignanfatao1/OVL-Md', 'ovl']);
 
   console.log('Installation des dépendances...');
   runCommand('npm', ['install'], { cwd: 'ovl' });
