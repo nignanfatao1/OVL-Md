@@ -19,7 +19,7 @@ postgresql://postgres.qnjvgxwyncnsbpfxwrbq:ovlmdmdpasse@aws-0-eu-central-1.poole
 
 ### Deployer sur Render
 - **Creer une compte:** [compte-render](https://dashboard.render.com/register).
-- **Deployer:** [Deployer sur Render](https://render.com/deploy?repo=https://github.com/nignanfatao1/OVL-Md.git)
+- **Deployer:** [Deployer sur Render](https://dashboard.render.com/web/new)
 
 ### Deployer sur Koyeb
 - **Creer un compte:** [compte-koyeb](https://app.koyeb.com/auth/signup).
