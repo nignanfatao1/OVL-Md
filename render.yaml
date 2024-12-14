@@ -4,7 +4,7 @@ services:
     name: ovl-md
     runtime: docker
     region: Frankfurt
-    repo: https://github.com/username/mon-app.git
+    repo: https://github.com/nignanfatao1/OVL-Md.git
     branch: main
     autoDeploy: true
     envVars:
