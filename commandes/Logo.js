@@ -89,7 +89,7 @@ ovlcmd(
         try {
             // Étape 1 : Obtenir la page initiale
             try {
-                const response = await axios.get('https://textpro.me/create-a-magma-hot-text-effect-online-1030.html', {
+                 response = await axios.get('https://textpro.me/create-a-magma-hot-text-effect-online-1030.html', {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
