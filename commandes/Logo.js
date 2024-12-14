@@ -61,110 +61,72 @@ addTextproCommand("pottery", "https://textpro.me/create-3d-pottery-text-effect-o
 addTextproCommand("slice", "https://textpro.me/create-light-glow-sliced-text-effect-online-1068.html", "Créez un effet de texte tranché avec lumière et éclat.");
 */
 
-const axios = require('axios');
-const cheerio = require('cheerio');
-const fs = require('fs');
-const path = require('path');
+const cloudscraper = require('cloudscraper');
+        const cheerio = require('cheerio');
+        const fs = require('fs');
+        const path = require('path');
 
-ovlcmd(
+ ovlcmd(
     {
-        nom_cmd: "logo",
-        classe: "Logo",
-        react: "✨",
-        desc: "Génère un logo avec un effet stylisé et l'envoie sur WhatsApp"
+        nom_cmd: "generate_logo",
+        classe: "Design",
+        react: "🎨",
+        desc: "Générer un logo personnalisé à partir d'un texte."
     },
     async (ms_org, ovl, cmd_options) => {
-        const { arg } = cmd_options;
 
-        // Vérifier si un texte est fourni
-        if (!arg || arg.length === 0) {
-            return ovl.sendMessage(ms_org, { text: "❌ Veuillez fournir un texte pour générer un logo. Exemple : *logo Salut*" });
-        }
-
-        const text = arg.join(" "); // Combine les arguments pour former le texte
-        const baseUrl = "https://textpro.me/create-a-magma-hot-text-effect-online-1030.html";
-
-        let response, token, postResponse, imageUrl, imageResponse;
+        const baseUrl = 'https://textpro.me';
+        const cookies = [
+            "_ga=GA1.1.1271155986.1732471989",
+            "_ga_7FPT6S72YE=GS1.1.1734198780.6.0.1734198780.0.0.0",
+            "PHPSESSID=gs1ohb859h6duu34tm68qbasr0"
+        ].join('; ');
 
         try {
-            // Étape 1 : Obtenir la page initiale
-            try {
-                 response = await axios.get('https://textpro.me/create-a-magma-hot-text-effect-online-1030.html', {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Accept-Language': 'fr-FR,fr;q=0.9',
-                'Cookie': 'PHPSESSID=o3a0cngk34kmn581ajnbr2for7; _ga=GA1.1.1271155986.1732471989'
-            }
-        });
-        console.log("Page récupérée avec succès :", response.data);
-    } catch (err) {
-        console.error("Erreur lors de la récupération de la page :", err.response?.status || err.message);
-            }
-            const $ = cheerio.load(response.data);
-            token = $('input[name="token"]').attr('value');
-
-            // Vérifier si le token est présent
-            if (!token) {
-                console.error("Erreur : Token introuvable.");
-                return ovl.sendMessage(ms_org, { text: "❌ Impossible de récupérer le token. Réessayez plus tard." });
-            }
-
-            // Étape 2 : Soumettre le texte pour générer le logo
-            try {
-                postResponse = await axios.post(baseUrl, new URLSearchParams({
-                    text1: text,
-                    token
-                }).toString(), {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'Cookie': response.headers['set-cookie']?.join('; ') || ''
-                    }
-                });
-            } catch (err) {
-                console.error("Erreur lors de la soumission du texte :", err);
-                return ovl.sendMessage(ms_org, { text: "❌ Une erreur est survenue lors de la soumission du texte." });
-            }
-
-            // Étape 3 : Trouver l'URL de l'image générée
-            try {
-                const resultPage = cheerio.load(postResponse.data);
-                imageUrl = resultPage('img').attr('src');
-
-                if (!imageUrl) {
-                    console.error("Erreur : URL de l'image introuvable.");
-                    return ovl.sendMessage(ms_org, { text: "❌ Impossible de générer le logo. Réessayez plus tard." });
+            // Étape 1 : Accéder à la page principale
+            const response = await cloudscraper.get(`${baseUrl}/any-design-page`, {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+                    'Cookie': cookies
                 }
-            } catch (err) {
-                console.error("Erreur lors de l'analyse de la réponse HTML :", err);
-                return ovl.sendMessage(ms_org, { text: "❌ Une erreur est survenue lors de l'analyse de la réponse." });
+            });
+
+            // Charger le contenu HTML avec Cheerio
+            const $ = cheerio.load(response);
+
+            // Extraire le token (ou autres données nécessaires)
+            const token = $('input[name="token"]').attr('value');
+            if (!token) {
+                await ovl.sendMessage(ms_org, { text: "❌ Erreur : Impossible de récupérer le token pour générer le logo." });
+                return;
             }
 
-            // Étape 4 : Télécharger l'image localement
-            try {
-                imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-            } catch (err) {
-                console.error("Erreur lors du téléchargement de l'image :", err);
-                return ovl.sendMessage(ms_org, { text: "❌ Une erreur est survenue lors du téléchargement de l'image." });
+            // Étape 2 : Effectuer une requête POST pour générer l'image
+            const postResponse = await cloudscraper.post(`${baseUrl}/api/text-design-endpoint`, {
+                formData: {
+                    text: cmd_options.text || "Texte par défaut",
+                    token: token
+                },
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+                    'Cookie': cookies
+                }
+            });
+
+            const result = JSON.parse(postResponse);
+            if (!result || !result.imageUrl) {
+                await ovl.sendMessage(ms_org, { text: "❌ Erreur : URL de l'image introuvable dans la réponse." });
+                return;
             }
 
-            const outputPath = path.join(__dirname, 'logo.png');
-            fs.writeFileSync(outputPath, imageResponse.data);
-
-            // Étape 5 : Envoyer l'image via le bot
-            try {
-                await ovl.sendMessage(ms_org, {
-                    image: { url: outputPath },
-                    caption: `✨ Voici votre logo pour : *${text}*`
-                });
-            } catch (err) {
-                console.error("Erreur lors de l'envoi de l'image :", err);
-                return ovl.sendMessage(ms_org, { text: "❌ Une erreur est survenue lors de l'envoi de l'image." });
-            }
-        } catch (globalErr) {
-            console.error("Erreur globale lors de l'exécution de la commande logo :", globalErr);
-            return ovl.sendMessage(ms_org, { text: "❌ Une erreur inattendue est survenue." });
+            // Envoyer l'image au groupe ou à l'utilisateur
+            await ovl.sendMessage(ms_org, {
+                image: { url: result.imageUrl },
+                caption: `🌟 Logo généré avec succès !`
+            });
+        } catch (err) {
+            console.error("Erreur lors de l'exécution :", err.message);
+            await ovl.sendMessage(ms_org, { text: `❌ Une erreur est survenue : ${err.message}` });
         }
     }
 );
