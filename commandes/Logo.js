@@ -65,6 +65,7 @@ const cloudscraper = require('cloudscraper');
         const cheerio = require('cheerio');
         const fs = require('fs');
         const path = require('path');
+const axios = require('axios');
 
  ovlcmd(
     {
@@ -77,7 +78,7 @@ const cloudscraper = require('cloudscraper');
         const { arg } = cmd_options;
         const q = arg.join(' ');
 
-        const baseUrl = 'https://textpro.me/create-a-magma-hot-text-effect-online-1030.html';
+        const url = 'https://textpro.me/create-a-magma-hot-text-effect-online-1030.html';
         const cookies = [
             "_ga=GA1.1.1271155986.1732471989",
             "_ga_7FPT6S72YE=GS1.1.1734198780.6.0.1734198780.0.0.0",
@@ -86,12 +87,21 @@ const cloudscraper = require('cloudscraper');
 
         try {
             // Étape 1 : Accéder à la page principale
-            const response = await cloudscraper.get(`https://textpro.me/create-a-magma-hot-text-effect-online-1030.html`, {
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-                    'Cookie': cookies
-                }
-            });
+            const response = await axios.get(url, {
+
+         headers: {
+
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+
+            "Origin": textpro.me,
+
+            "Referer": url,
+
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.188"
+
+         }
+
+      })
 
             // Charger le contenu HTML avec Cheerio
             const $ = cheerio.load(response);
