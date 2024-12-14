@@ -62,6 +62,7 @@ addTextproCommand("slice", "https://textpro.me/create-light-glow-sliced-text-eff
 */
 
 const axios = require('axios');
+const cheerio = require('cheerio');
 const fs = require('fs');
 const path = require('path');
 
@@ -70,47 +71,59 @@ ovlcmd(
         nom_cmd: "logo",
         classe: "Logo",
         react: "✨",
-        desc: "Crée un logo stylisé avec un texte personnalisé."
+        desc: "Génère un logo avec un effet stylisé et l'envoie sur WhatsApp"
     },
     async (ms_org, ovl, cmd_options) => {
         const { arg } = cmd_options;
 
-        // Vérifie si un texte est fourni
+        // Vérifier si un texte est fourni
         if (!arg || arg.length === 0) {
-            return ovl.sendMessage(ms_org, { text: "❌ Veuillez fournir un texte pour générer le logo." });
+            return ovl.sendMessage(ms_org, { text: "❌ Veuillez fournir un texte pour générer un logo. Exemple : *logo Salut*" });
         }
 
-        const userInput = arg.join(" "); // Combine le texte en un seul argument
-        const url = `https://textpro.me/create-a-magma-hot-text-effect-online-1030.html/${encodeURIComponent(userInput)}`;
+        const text = arg.join(" "); // Combine les arguments pour former le texte
+        const baseUrl = "https://textpro.me/create-a-magma-hot-text-effect-online-1030.html";
 
         try {
-            // Étape 1: Générer le logo (simule une requête vers un service API TextPro-like)
-            const response = await axios.post(url, {}, {
-                headers: { 'Content-Type': 'application/json' }
+            // Étape 1 : Obtenir la page initiale
+            const response = await axios.get(baseUrl);
+            const $ = cheerio.load(response.data);
+
+            // Récupérer le token de session si nécessaire
+            const token = $('input[name="token"]').attr('value');
+
+            // Étape 2 : Soumettre le texte pour générer le logo
+            const postResponse = await axios.post(baseUrl, new URLSearchParams({
+                text1: text,
+                token
+            }).toString(), {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Cookie': response.headers['set-cookie'].join('; ')
+                }
             });
 
-            if (!response.data || !response.data.url) {
-                throw new Error("Impossible de récupérer le logo.");
+            // Étape 3 : Trouver l'URL de l'image générée
+            const resultPage = cheerio.load(postResponse.data);
+            const imageUrl = resultPage('img').attr('src');
+
+            if (!imageUrl) {
+                return ovl.sendMessage(ms_org, { text: "❌ Impossible de générer le logo. Réessayez plus tard." });
             }
 
-            const logoUrl = response.data.url;
-
-            // Étape 2: Télécharger le fichier généré
-            const imageResponse = await axios.get(logoUrl, { responseType: 'arraybuffer' });
-            const outputPath = path.join(__dirname, 'temp_logo.png');
+            // Étape 4 : Télécharger l'image localement
+            const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+            const outputPath = path.join(__dirname, 'logo.png');
             fs.writeFileSync(outputPath, imageResponse.data);
 
-            // Étape 3: Envoyer le logo via WhatsApp
+            // Étape 5 : Envoyer l'image via le bot
             await ovl.sendMessage(ms_org, {
                 image: { url: outputPath },
-                caption: `✨ Logo généré pour : *${userInput}*`
+                caption: `✨ Voici votre logo pour : *${text}*`
             });
-
-            // Supprimer le fichier temporaire après envoi
-            fs.unlinkSync(outputPath);
-        } catch (error) {
-            console.error("Erreur lors de la génération ou de l'envoi du logo :", error);
-            ovl.sendMessage(ms_org, { text: "❌ Une erreur est survenue lors de la génération du logo." });
+        } catch (err) {
+            console.error("Erreur lors de la génération du logo :", err);
+            return ovl.sendMessage(ms_org, { text: "❌ Une erreur est survenue lors de la génération du logo. Réessayez plus tard." });
         }
     }
 );
