@@ -68,14 +68,16 @@ const cloudscraper = require('cloudscraper');
 
  ovlcmd(
     {
-        nom_cmd: "generate_logo",
-        classe: "Design",
+        nom_cmd: "logo",
+        classe: "Logo",
         react: "🎨",
         desc: "Générer un logo personnalisé à partir d'un texte."
     },
     async (ms_org, ovl, cmd_options) => {
+        const { arg } = cmd_options;
+        const q = arg.join(' ');
 
-        const baseUrl = 'https://textpro.me';
+        const baseUrl = 'https://textpro.me/create-a-magma-hot-text-effect-online-1030.html';
         const cookies = [
             "_ga=GA1.1.1271155986.1732471989",
             "_ga_7FPT6S72YE=GS1.1.1734198780.6.0.1734198780.0.0.0",
@@ -84,7 +86,7 @@ const cloudscraper = require('cloudscraper');
 
         try {
             // Étape 1 : Accéder à la page principale
-            const response = await cloudscraper.get(`${baseUrl}/any-design-page`, {
+            const response = await cloudscraper.get(`https://textpro.me/create-a-magma-hot-text-effect-online-1030.html`, {
                 headers: {
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
                     'Cookie': cookies
@@ -104,7 +106,7 @@ const cloudscraper = require('cloudscraper');
             // Étape 2 : Effectuer une requête POST pour générer l'image
             const postResponse = await cloudscraper.post(`${baseUrl}/api/text-design-endpoint`, {
                 formData: {
-                    text: cmd_options.text || "Texte par défaut",
+                    text: q,
                     token: token
                 },
                 headers: {
