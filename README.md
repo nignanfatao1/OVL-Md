@@ -23,7 +23,7 @@ postgresql://postgres.qnjvgxwyncnsbpfxwrbq:ovlmdmdpasse@aws-0-eu-central-1.poole
 
 ### Deployer sur Koyeb
 - **Creer un compte:** [compte-koyeb](https://app.koyeb.com/auth/signup).
-- **Deployer:**  [Deployer sur Koyeb](https://app.koyeb.com/deploy?name=ovl-md&repository=nignanfatao1%2FOVL-Md&branch=main&builder=dockerfile&instance_type=free&env%5BMODE%5D=public&env%5BNOM_OWNER%5D=Ainz&env%5BNUMERO_OWNER%5D=226xxxxxxxx&env%5BPREFIXE%5D=%F0%9F%8E%90&env%5BMENU%5D=https%3A%2F%2Fi.ibb.co%2Fynx9QcZ%2Fimage.jpg&env%5BDATABASE%5D=postgresql%3A%2F%2Fpostgres.qnjvgxwyncnsbpfxwrbq%3Aovlmdmdpasse%40aws-0-eu-central-1.pooler.supabase.com%3A6543%2Fpostgres&env%5BLEVEL_UP%5D=non&env%5BSESSION_ID%5D=ovl))
+- **Deployer:**  [Deployer sur Koyeb](https://app.koyeb.com/deploy?name=ovl-md&repository=nignanfatao1%2FOVL-Md&branch=main&builder=dockerfile&instance_type=free&env%5BMODE%5D=public&env%5BNOM_OWNER%5D=Ainz&env%5BNUMERO_OWNER%5D=226xxxxxxxx&env%5BPREFIXE%5D=%F0%9F%8E%90&env%5BMENU%5D=https%3A%2F%2Fi.ibb.co%2Fynx9QcZ%2Fimage.jpg&env%5BDATABASE%5D=postgresql%3A%2F%2Fpostgres.qnjvgxwyncnsbpfxwrbq%3Aovlmdmdpasse%40aws-0-eu-central-1.pooler.supabase.com%3A6543%2Fpostgres&env%5BLEVEL_UP%5D=non&env%5BSESSION_ID%5D=ovl)
 ### Deployer sur panel
 - **Créer un compte:** [compte-panel](https://bot-hosting.net) 
 - **Deployer:**
