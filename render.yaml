@@ -1,0 +1,26 @@
+services:
+  - type: web
+    plan: free
+    name: ovl-md
+    runtime: docker
+    region: Frankfurt
+    repo: https://github.com/username/mon-app.git
+    branch: main
+    autoDeploy: true
+    envVars:
+      - key: PREFIXE
+        value: ""
+      - key: NOM_OWNER
+        value: "Ainz"
+      - key: NUMERO_OWNER  
+        value: "226xxxxxxxx"
+      - key: MODE
+        value: "public"
+      - key: MENU
+        value: "https://i.ibb.co/ynx9QcZ/image.jpg"
+      - key: SESSION_ID
+        value: ""
+      - key: DATABASE
+        value: "postgresql://postgres.qnjvgxwyncnsbpfxwrbq:ovlmdmdpasse@aws-0-eu-central-1.pooler.supabase.com:6543/postgres"
+      - key: LEVEL_UP
+        value: "non"
