@@ -138,8 +138,8 @@ ovlcmd(
       try {
         const stickerBuffer = await ovl.dl_save_media_ms(msg_Repondu.stickerMessage);
         const sticker = new Sticker(stickerBuffer, {
-          pack: arg.join(' ') ? arg : nom_Auteur_Message,
-          author: "OVL Bot",
+          pack: arg.join(' ') ? arg.join(' '): nom_Auteur_Message,
+          author: "",
           type: StickerTypes.FULL,
         });
 
