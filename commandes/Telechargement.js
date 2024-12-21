@@ -2,6 +2,27 @@ const { ovlcmd } = require("../framework/ovlcmd");
 const axios = require("axios");
 const ytsr = require('@distube/ytsr');
 
+// Constantes API globales
+const API_URL = 'https://api-rv21.onrender.com';
+const API_KEY = '9zue2v4aembd292lhfrwqo';
+
+// Fonction pour effectuer un téléchargement avec tentatives multiples
+async function attemptDownload(url, maxRetries = 5) {
+    let attempts = 0;
+    while (attempts < maxRetries) {
+        try {
+            console.log(`Tentative ${attempts + 1} de téléchargement...`);
+            const response = await axios.get(url, { responseType: 'arraybuffer' });
+            return response.data;
+        } catch (error) {
+            attempts++;
+            console.error(`Erreur tentative ${attempts}:`, error.message || error);
+            if (attempts >= maxRetries) throw new Error('Échec après plusieurs tentatives.');
+        }
+    }
+}
+
+// Commande Song
 ovlcmd(
     {
         nom_cmd: "song",
@@ -11,165 +32,185 @@ ovlcmd(
         alias: ["play"],
     },
     async (ms_org, ovl, cmd_options) => {
-        const { repondre, arg, ms } = cmd_options;
-
+        const { arg, ms } = cmd_options;
         if (!arg.length) {
-            return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un titre de chanson ou un lien YouTube." });
+            return await ovl.sendMessage(ms_org, {
+                text: "Veuillez spécifier un titre de chanson ou un lien YouTube.",
+            });
         }
- 
+
         const query = arg.join(" ");
-          try {
-                const searchResults = await ytsr(query, { limit: 1 });
-                if (searchResults.items.length === 0) {
-                    return await ovl.sendMessage(ms_org, { text: "Aucun résultat trouvé pour cette recherche." });
-                }
-                const song = searchResults.items[0];
-                videoInfo = {
-                    url: song.url,
-                    title: song.name,
-                    views: song.views,
-                    duration: song.duration,
-                    thumbnail: song.thumbnail
-                };
-            
+        try {
+            const searchResults = await ytsr(query, { limit: 1 });
+            if (searchResults.items.length === 0) {
+                return await ovl.sendMessage(ms_org, { text: "Aucun résultat trouvé." });
+            }
 
-            const caption = `╭─── 〔 OVL-MD SONG 〕 ──⬣
-⬡ Titre: ${videoInfo.title}
-⬡ URL: ${videoInfo.url}
-⬡ Vues: ${videoInfo.views}
-⬡ Durée: ${videoInfo.duration}
-╰───────────────────⬣`;
+            const song = searchResults.items[0];
+            const videoInfo = {
+                url: song.url,
+                title: song.name,
+                views: song.views,
+                duration: song.duration,
+                thumbnail: song.thumbnail,
+            };
 
-            await ovl.sendMessage(ms_org, { image: { url: videoInfo.thumbnail }, caption: caption }); 
-                    const audioResponse = await axios.get(`https://api-rv21.onrender.com/api/v2/ytmp3?url=${videoInfo.url}?si=EmeS9fJvS_OkDk7p&apikey=9zue2v4aembd292lhfrwqo`, {
-                        responseType: 'arraybuffer'
-                    });
+            const caption = `╭─── 〔 OVL-MD SONG 〕 ──⬣\n⬡ Titre: ${videoInfo.title}\n⬡ URL: ${videoInfo.url}\n⬡ Vues: ${videoInfo.views}\n⬡ Durée: ${videoInfo.duration}\n╰───────────────────⬣`;
 
-                    await ovl.sendMessage(ms_org, {
-                        audio: Buffer.from(audioResponse.data),
-                        mimetype: 'audio/mp4',
-                        fileName: `${videoInfo.title}.mp3`
-                    }, { quoted: ms });
+            await ovl.sendMessage(ms_org, { image: { url: videoInfo.thumbnail }, caption });
+
+            const downloadUrl = `${API_URL}/api/v2/ytmp3?url=${videoInfo.url}&apikey=${API_KEY}`;
+            const audioBuffer = await attemptDownload(downloadUrl);
+
+            await ovl.sendMessage(ms_org, {
+                audio: Buffer.from(audioBuffer),
+                mimetype: 'audio/mp4',
+                fileName: `${videoInfo.title}.mp3`,
+            }, { quoted: ms });
         } catch (error) {
-            console.error("Erreur générale :", error.message || error);
-            await ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors du traitement de votre commande." });
+            console.error("Erreur Song Downloader:", error.message);
+            await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement." });
         }
     }
 );
-
-
+// Commande 1: Recherche et téléchargement de vidéo depuis YouTube
 ovlcmd(
     {
         nom_cmd: "video",
         classe: "Téléchargement",
         react: "🎥",
-        desc: "Télécharge une vidéo depuis YouTube avec un terme de recherche ou un lien YouTube"
+        desc: "Télécharge une vidéo depuis YouTube avec un terme de recherche ou un lien YouTube",
     },
     async (ms_org, ovl, cmd_options) => {
         const { repondre, arg, ms } = cmd_options;
 
         if (!arg.length) {
-            return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un titre de vidéo ou un lien YouTube." });
+            return await ovl.sendMessage(ms_org, {
+                text: "Veuillez spécifier un titre de vidéo ou un lien YouTube.",
+            });
         }
+
         const query = arg.join(" ");
         try {
-                const searchResults = await ytsr(query, { limit: 1 });
-                if (searchResults.items.length === 0) {
-                    return await ovl.sendMessage(ms_org, { text: "Aucun résultat trouvé pour cette recherche." });
-                }
-                const video = searchResults.items[0];
-                videoInfo = {
-                    url: video.url,
-                    title: video.name,
-                    views: video.views,
-                    duration: video.duration,
-                    thumbnail: video.thumbnail
-                };
-            
+            const searchResults = await ytsr(query, { limit: 1 });
+            if (searchResults.items.length === 0) {
+                return await ovl.sendMessage(ms_org, { text: "Aucun résultat trouvé pour cette recherche." });
+            }
 
-            const caption = `╭─── 〔 OVL-MD VIDEO 〕 ──⬣
-⬡ Titre: ${videoInfo.title}
-⬡ URL: ${videoInfo.url}
-⬡ Vues: ${videoInfo.views}
-⬡ Durée: ${videoInfo.duration}
-╰───────────────────⬣`;
+            const video = searchResults.items[0];
+            const videoInfo = {
+                url: video.url,
+                title: video.name,
+                views: video.views,
+                duration: video.duration,
+                thumbnail: video.thumbnail,
+            };
 
-            await ovl.sendMessage(ms_org, { image: { url: videoInfo.thumbnail }, caption: caption });
-                 // Téléchargement de la vidéo
-            const videoResponse = await axios.get(`https://api-rv21.onrender.com/api/v2/ytmp4?url=${videoInfo.url}?si=EmeS9fJvS_OkDk7p&apikey=9zue2v4aembd292lhfrwqo`, {
-                responseType: 'arraybuffer'
-            });
+            const caption = `╭─── 〔 OVL-MD VIDEO 〕 ──⬣\n⬡ Titre: ${videoInfo.title}\n⬡ URL: ${videoInfo.url}\n⬡ Vues: ${videoInfo.views}\n⬡ Durée: ${videoInfo.duration}\n╰───────────────────⬣`;
 
             await ovl.sendMessage(ms_org, {
-                video: Buffer.from(videoResponse.data),
-                mimetype: 'video/mp4',
-                fileName: `${videoInfo.title}.mp4`
-            }, { quoted: ms });
-
+                image: { url: videoInfo.thumbnail },
+                caption: caption,
+            });
+            const url = `${API_URL}/api/v2/ytmp4?url=${videoInfo.url}&apikey=${API_KEY}`;
+            const videoBuffer = await attemptDownload(url);
+            await ovl.sendMessage(
+                ms_org,
+                {
+                    video: Buffer.from(videoBuffer),
+                    mimetype: 'video/mp4',
+                    fileName: `${videoInfo.title}.mp4`,
+                    caption: "```Powered By OVL-MD```",
+                },
+                { quoted: ms }
+            );
         } catch (error) {
-            console.error("Erreur lors du téléchargement de la vidéo :", error.message || error);
-            await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la vidéo." });
+            await ovl.sendMessage(ms_org, {
+                text: "Une erreur est survenue lors du traitement de votre commande.",
+            });
         }
     }
 );
 
+// Commande 2: Téléchargement d'audio YouTube depuis un lien
 ovlcmd(
     {
         nom_cmd: "ytmp3",
         classe: "Téléchargement",
-        react: "🎥",
+        react: "🎵",
         desc: "Télécharge un audio YouTube depuis un lien",
-       },
+    },
     async (ms_org, ovl, cmd_options) => {
         const { arg, ms } = cmd_options;
+
         if (!arg.length) {
-            return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un lien youtube." });
+            return await ovl.sendMessage(ms_org, {
+                text: "Veuillez spécifier un lien YouTube.",
+            });
         }
-        const url = arg.join(" ");
-        console.log(url);
+
+        const url = `${API_URL}/api/v2/ytmp3?url=${arg.join(" ")}&apikey=${API_KEY}`;
+
         try {
-            const response = await axios.get(`https://api-rv21.onrender.com/api/v2/ytmp3?url=${url}?si=EmeS9fJvS_OkDk7p&apikey=9zue2v4aembd292lhfrwqo`, {
-                responseType: 'arraybuffer'});
-            await ovl.sendMessage(ms_org, { audio: Buffer.from(response.data),
-                                           mimetype: 'audio/mp4',
-                                           fileName: 'audio.mp3',
-                                           caption: `\`\`\`Powered By OVL-MD\`\`\``
-                                           }, { quoted: ms });
+            const audioBuffer = await attemptDownload(url);
+            await ovl.sendMessage(
+                ms_org,
+                {
+                    audio: Buffer.from(audioBuffer),
+                    mimetype: 'audio/mp4',
+                    fileName: `audio.mp3`,
+                    caption: "```Powered By OVL-MD```",
+                },
+                { quoted: ms }
+            );
         } catch (error) {
-            console.error("Erreur Yt Downloader :", error.message);
-            await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de l'audio YouTube" });
+            await ovl.sendMessage(ms_org, {
+                text: "Erreur lors du téléchargement de l'audio YouTube.",
+            });
         }
     }
 );
 
+// Commande 3: Téléchargement de vidéo YouTube depuis un lien
 ovlcmd(
     {
         nom_cmd: "ytmp4",
         classe: "Téléchargement",
         react: "🎥",
         desc: "Télécharge une vidéo YouTube depuis un lien",
-       },
+    },
     async (ms_org, ovl, cmd_options) => {
         const { arg, ms } = cmd_options;
+
         if (!arg.length) {
-            return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un lien youtube." });
+            return await ovl.sendMessage(ms_org, {
+                text: "Veuillez spécifier un lien YouTube.",
+            });
         }
-        const url = arg.join(" ");
+
+        const url = `${API_URL}/api/v2/ytmp4?url=${arg.join(" ")}&apikey=${API_KEY}`;
+
         try {
-            const response = await axios.get(`https://api-rv21.onrender.com/api/v2/ytmp4?url=${url}?si=EmeS9fJvS_OkDk7p&apikey=9zue2v4aembd292lhfrwqo`, {
-                responseType: 'arraybuffer'});
-            await ovl.sendMessage(ms_org, { video: Buffer.from(response.data),
-                                           mimetype: 'video/mp4',
-                                           fileName: 'video.mp4',
-                                           caption: `\`\`\`Powered By OVL-MD\`\`\``
-                                           }, { quoted: ms });
+            const videoBuffer = await attemptDownload(url);
+            await ovl.sendMessage(
+                ms_org,
+                {
+                    video: Buffer.from(videoBuffer),
+                    mimetype: 'video/mp4',
+                    fileName: `video.mp4`,
+                    caption: "```Powered By OVL-MD```",
+                },
+                { quoted: ms }
+            );
         } catch (error) {
-            console.error("Erreur Yt Downloader :", error.message);
-            await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la vidéo YouTube" });
+            await ovl.sendMessage(ms_org, {
+                text: "Erreur lors du téléchargement de la vidéo YouTube.",
+            });
         }
     }
 );
 
+// Commande TikTok
 ovlcmd(
     {
         nom_cmd: "tiktokdl",
@@ -183,24 +224,24 @@ ovlcmd(
         if (!arg.length) {
             return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un lien TikTok." });
         }
-        const url = arg.join(" ");
+        const url = `${API_URL}/api/tiktokv2?url=${arg.join(" ")}&apikey=${API_KEY}`;
+
         try {
-            const response = await axios.get(
-    `https://api-rv21.onrender.com/api/tiktokv2?url=${url}&apikey=9zue2v4aembd292lhfrwqo`,
-    { responseType: 'arraybuffer' }
-);
-            await ovl.sendMessage(ms_org, { video: Buffer.from(response.data),
-                                           mimetype: 'video/mp4',
-                                           fileName: 'video.mp4',
-                                           caption: `\`\`\`Powered By OVL-MD\`\`\``
-                                           }, { quoted: ms });
+            const videoBuffer = await attemptDownload(url);
+            await ovl.sendMessage(ms_org, {
+                video: Buffer.from(videoBuffer),
+                mimetype: 'video/mp4',
+                fileName: 'video.mp4',
+                caption: "```Powered By OVL-MD```",
+            }, { quoted: ms });
         } catch (error) {
-            console.error("Erreur TikTok Downloader :", error.message);
+            console.error("Erreur TikTok Downloader:", error.message);
             await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la vidéo TikTok." });
         }
     }
 );
 
+// Commande Facebook
 ovlcmd(
     {
         nom_cmd: "facebookdl",
@@ -211,36 +252,30 @@ ovlcmd(
     },
     async (ms_org, ovl, cmd_options) => {
         const { arg, ms } = cmd_options;
-
         if (!arg.length) {
             return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un lien Facebook." });
         }
+        const url = `${API_URL}/api/facebook?url=${arg.join(" ")}&apikey=${API_KEY}`;
 
-        const url = arg.join(" ");
         try {
-            const response = await axios.get(`https://api-rv21.onrender.com/api/facebook?url=${url}&apikey=9zue2v4aembd292lhfrwqo`);
+            const response = await axios.get(url);
             const videoUrl = response?.data?.resultado?.data;
-            if (!videoUrl || typeof videoUrl !== "string") {
-                throw new Error("Réponse inattendue de l'API. Lien vidéo manquant.");
-            }
+            if (!videoUrl) throw new Error("Lien vidéo manquant.");
 
-            await ovl.sendMessage(
-                ms_org,
-                {
-                    video: { url: videoUrl },
-                    mimetype: 'video/mp4',
-                    fileName: 'video.mp4',
-                    caption: "```Powered By OVL-MD```",
-                },
-                { quoted: ms }
-            );
+            await ovl.sendMessage(ms_org, {
+                video: { url: videoUrl },
+                mimetype: 'video/mp4',
+                fileName: 'video.mp4',
+                caption: "```Powered By OVL-MD```",
+            }, { quoted: ms });
         } catch (error) {
-            console.error("Erreur Facebook Downloader :", error.message);
-            await ovl.sendMessage(ms_org, { text: `Erreur lors du téléchargement de la vidéo Facebook : ${error.message}` });
+            console.error("Erreur Facebook Downloader:", error.message);
+            await ovl.sendMessage(ms_org, { text: `Erreur lors du téléchargement : ${error.message}` });
         }
     }
 );
 
+// Commande Twitter
 ovlcmd(
     {
         nom_cmd: "twitterdl",
@@ -254,22 +289,22 @@ ovlcmd(
         if (!arg.length) {
             return await ovl.sendMessage(ms_org, { text: "Veuillez spécifier un lien Twitter." });
         }
-        const url = arg.join(" ");
+        const url = `${API_URL}/api/twitterdl?url=${arg.join(" ")}&apikey=${API_KEY}`;
+
         try {
-            const response = await axios.get(`https://api-rv21.onrender.com/api/twitterdl?url=${url}&apikey=9zue2v4aembd292lhfrwqo`);
+            const response = await axios.get(url);
             const media = response.data.resultado.media.find(item => item.type === 'video');
-            if (!media) {
-                return await ovl.sendMessage(ms_org, { text: "Aucune vidéo trouvée dans le lien fourni." });
-            }
+            if (!media) throw new Error("Aucune vidéo trouvée.");
+
             await ovl.sendMessage(ms_org, {
                 video: { url: media.url },
                 mimetype: 'video/mp4',
                 fileName: 'video.mp4',
-                caption: `\`\`\`Powered By OVL-MD\`\`\``
+                caption: "```Powered By OVL-MD```",
             }, { quoted: ms });
         } catch (error) {
-            console.error("Erreur Twitter Downloader :", error.message);
-            await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement de la vidéo Twitter." });
+            console.error("Erreur Twitter Downloader:", error.message);
+            await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement." });
         }
     }
 );
