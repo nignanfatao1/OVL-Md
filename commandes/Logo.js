@@ -1,5 +1,5 @@
 const { ovlcmd } = require("../framework/ovlcmd");
-const maker = require('mumaker');
+const mumaker = require('mumaker');
 
 function addTextproCommand(nom_cmd, text_pro_url, desc, type) {
     ovlcmd(
