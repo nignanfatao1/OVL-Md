@@ -13,11 +13,26 @@ async function attemptDownload(url, maxRetries = 5) {
         try {
             console.log(`Tentative ${attempts + 1} de téléchargement...`);
             const response = await axios.get(url, { responseType: 'arraybuffer' });
+
+            // Vérifiez la taille des données
+            if (!response.data || response.data.byteLength === 0) {
+                throw new Error('Données reçues sont vides.');
+            }
+
+            // Vérifiez le type MIME
+            const contentType = response.headers['content-type'];
+            if (!contentType || (!contentType.includes('audio') && !contentType.includes('video'))) {
+                throw new Error('Le contenu reçu n\'est pas du type attendu (audio/vidéo).');
+            }
+
+            console.log('Téléchargement réussi.');
             return response.data;
         } catch (error) {
             attempts++;
             console.error(`Erreur tentative ${attempts}:`, error.message || error);
-            if (attempts >= maxRetries) throw new Error('Échec après plusieurs tentatives.');
+            if (attempts >= maxRetries) {
+                throw new Error('Échec après plusieurs tentatives.');
+            }
         }
     }
 }
