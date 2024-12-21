@@ -4,7 +4,7 @@ const ytsr = require('@distube/ytsr');
 
 // Constantes API globales
 const API_URL = 'https://api-rv21.onrender.com';
-const API_KEY = '9zue2v4aembd292lhfrwqo';
+const API_KEY = 'BrunoSobrino';
 
 // Fonction pour effectuer un téléchargement avec tentatives multiples
 async function attemptDownload(url, maxRetries = 5) {
