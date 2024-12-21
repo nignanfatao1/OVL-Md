@@ -75,3 +75,9 @@ function addTextproCommand(nom_cmd, text_pro_url, desc, type) {
     );
 }
 
+addTextproCommand(
+    "dragonball", // Nom de la commande
+    "https://ephoto360.com/tao-hieu-ung-chu-phong-cach-dragon-ball-truc-tuyen-1000.html", // URL du style
+    "Créer un logo Dragon Ball", // Description de la commande
+    1 // Type : cette commande accepte un seul mot ou texte
+);
