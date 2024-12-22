@@ -83,17 +83,17 @@ addTextproCommand(
 );
 
 addTextproCommand(
-    "", // Nom de la commande
-    "", // URL du style
-    "", // Description de la commande
-     // Type : cette commande accepte un seul mot ou texte
+    "deadpool", // Nom de la commande
+    "https://en.ephoto360.com/create-text-effects-in-the-style-of-the-deadpool-logo-818.html", // URL du style
+    "Créez des effets de texte dans le style du logo Deadpool", // Description de la commande
+    2 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
-    "", // URL du style
-    "", // Description de la commande
-     // Type : cette commande accepte un seul mot ou texte
+    "blackpink", // Nom de la commande
+    "https://en.ephoto360.com/create-a-blackpink-style-logo-with-members-signatures-810.html", // URL du style
+    "Créez un logo de style BLACKPINK avec les signatures des membres", // Description de la commande
+    1 // Type : cette commande accepte un seul mot ou texte
 );
 
  addTextproCommand(
