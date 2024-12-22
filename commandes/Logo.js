@@ -97,10 +97,10 @@ addTextproCommand(
 );
 
  addTextproCommand(
-    "", // Nom de la commande
-    "", // URL du style
-    "", // Description de la commande
-     // Type : cette commande accepte un seul mot ou texte
+    "neon_bleu", // Nom de la commande
+    "https://en.ephoto360.com/blue-neon-text-effect-117.html", // URL du style
+    "Effet de texte néon bleu", // Description de la commande
+    1  // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
