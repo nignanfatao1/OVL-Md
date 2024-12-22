@@ -4,7 +4,7 @@ const FormData = require("form-data");
 const cookie = require("cookie");
 
 const textMaker = async (url, texts, radioOption = '') => {
-  texts = texts.split(";");
+ // texts = texts.split(";");
 
   // Initial GET request to retrieve token and server data
   const initialResponse = await fetch(url, {
