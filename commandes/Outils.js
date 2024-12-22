@@ -79,8 +79,8 @@ ovlcmd(
         desc: "affiche le menu du bot",
     },
     async (ms_org, ovl, cmd_options) => {
-        try { 
-            const seconds = process.uptime(); 
+        try {
+            const seconds = process.uptime();
             const j = Math.floor(seconds / 86400);
             const h = Math.floor((seconds / 3600) % 24);
             const m = Math.floor((seconds % 3600) / 60);
@@ -101,6 +101,7 @@ ovlcmd(
 │ ✿ Développeur => AINZ
 ╰══════════════⊷\n\n`;
 
+            // Regrouper les commandes par classe
             const cmd_classe = {};
             commandes.forEach((cmd) => {
                 if (!cmd_classe[cmd.classe]) {
@@ -109,6 +110,14 @@ ovlcmd(
                 cmd_classe[cmd.classe].push(cmd);
             });
 
+            // Trier chaque classe par nom_cmd
+            for (const [classe, cmds] of Object.entries(cmd_classe)) {
+                cmd_classe[classe] = cmds.sort((a, b) =>
+                    a.nom_cmd.localeCompare(b.nom_cmd, undefined, { numeric: true })
+                );
+            }
+
+            // Générer le menu
             for (const [classe, cmds] of Object.entries(cmd_classe)) {
                 menu += `╭───❏ ${classe} ❏\n`;
                 cmds.forEach((cmd) => {
@@ -124,6 +133,7 @@ ovlcmd(
         }
     }
 );
+
 
 ovlcmd(
     {
