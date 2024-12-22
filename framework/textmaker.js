@@ -76,7 +76,7 @@ const textmaker = async (url, texts, radioOption = '') => {
     finalFormData.append("radio0[radio]", resultData.radio0.radio);
   }
 
-  const finalResponse = await fetch(`${buildServer}effect/create-image`, {
+  const finalResponse = await fetch(`${url.split('/').slice(0, 3).join('/')}/effect/create-image`, {
     method: "POST",
     headers: {
       "Accept": "*/*",
@@ -93,7 +93,6 @@ const textmaker = async (url, texts, radioOption = '') => {
   if (!finalResult.image) {
     throw new Error(`textmaker: Erreur lors de la génération de l'image`);
   }
-
   return {
     status: finalResult.success,
     url: `${buildServer}${finalResult.image}`,
