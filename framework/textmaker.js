@@ -4,7 +4,7 @@ const FormData = require("form-data");
 const cookie = require("cookie");
 
 const textmaker = async (url, texts, radioOption = '') => {
- texts = texts.split(";");
+  texts = texts.split(";");
 
   // Initial GET request to retrieve token and server data
   const initialResponse = await fetch(url, {
@@ -15,7 +15,11 @@ const textmaker = async (url, texts, radioOption = '') => {
   });
 
   const initialHtml = await initialResponse.text();
-  const initialCookies = initialResponse.headers.get("set-cookie").split(",").map(cookie.parse).reduce((acc, curr) => ({ ...acc, ...curr }), {});
+  const initialCookies = initialResponse.headers
+    .get("set-cookie")
+    .split(",")
+    .map(cookie.parse)
+    .reduce((acc, curr) => ({ ...acc, ...curr }), {});
   const sessionCookies = Object.entries({
     __cfduid: initialCookies.__cfduid,
     PHPSESSID: initialCookies.PHPSESSID,
@@ -28,7 +32,19 @@ const textmaker = async (url, texts, radioOption = '') => {
   const buildServer = $("input[name=\"build_server\"]").attr("value");
   const buildServerId = $("input[name=\"build_server_id\"]").attr("value");
 
-  // Prepare the POST request with form data
+  // Récupérer les options pour radio0[radio]
+  const radioOptions = $("input[name^='radio0[radio]']")
+    .map((i, el) => $(el).val())
+    .get();
+
+  // Choisir une option aléatoire si `radioOption` n'est pas fourni
+  if (radioOptions.length > 0 && !radioOption) {
+    const randomIndex = Math.floor(Math.random() * radioOptions.length);
+    radioOption = radioOptions[randomIndex];
+    console.log(`Option radio sélectionnée aléatoirement : ${radioOption}`);
+  }
+
+  // Préparer la requête POST avec les données du formulaire
   const formData = new FormData();
   texts.forEach(text => formData.append("text[]", text.trim()));
   formData.append("submit", "Go");
@@ -39,7 +55,7 @@ const textmaker = async (url, texts, radioOption = '') => {
   formData.append("build_server", buildServer);
   formData.append("build_server_id", buildServerId);
 
-  // Send the POST request
+  // Envoyer la requête POST
   const postResponse = await fetch(url, {
     method: "POST",
     headers: {
@@ -65,7 +81,7 @@ const textmaker = async (url, texts, radioOption = '') => {
 
   const resultData = JSON.parse(resultValue);
 
-  // Prepare final POST request to create the image
+  // Préparer la requête finale pour créer l'image
   const finalFormData = new FormData();
   finalFormData.append("id", resultData.id);
   resultData.text.forEach(text => finalFormData.append("text[]", text));
