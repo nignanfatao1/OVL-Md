@@ -3,7 +3,7 @@ const fetch = (...args) => import("node-fetch").then(({ default: fetch }) => fet
 const FormData = require("form-data");
 const cookie = require("cookie");
 
-const textMaker = async (url, texts, radioOption = '') => {
+const textmaker = async (url, texts, radioOption = '') => {
  texts = texts.split(";");
 
   // Initial GET request to retrieve token and server data
@@ -100,4 +100,4 @@ const textMaker = async (url, texts, radioOption = '') => {
   };
 };
 
-module.exports = textMaker;
+module.exports = textmaker;
