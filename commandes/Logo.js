@@ -118,10 +118,10 @@ addTextproCommand(
 );
 
 addTextproCommand(
-    "", // Nom de la commande
-    "", // URL du style
-    "", // Description de la commande
-     // Type : cette commande accepte un seul mot ou texte
+    "peint", // Nom de la commande
+    "https://en.ephoto360.com/paint-splatter-text-effect-72.html", // URL du style
+    "Effet de texte avec éclaboussures de peinture", // Description de la commande
+    1 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
