@@ -195,9 +195,12 @@ ovlcmd(
       const context = canvas.getContext("2d");
 
       context.drawImage(image, 0, 0, canvas.width, canvas.height);
-      context.font = "bold 36px Arial";
-      context.fillStyle = "white";
+      context.font = "bold 60px Arial";
       context.textAlign = "center";
+      context.strokeStyle = "black";
+      context.lineWidth = 8;
+      context.strokeText(arg.join(" "), canvas.width / 2, canvas.height - 50);
+      context.fillStyle = "white";
       context.fillText(arg.join(" "), canvas.width / 2, canvas.height - 50);
 
       const outputBuffer = canvas.toBuffer("image/png");
@@ -220,13 +223,13 @@ ovlcmd(
       fs.unlinkSync(fileName);
       fs.unlinkSync(media);
     } catch (error) {
-      console.error("Erreur lors de l'ajout du texte à l'image:", error);
       await ovl.sendMessage(ms_org, {
         text: `Une erreur est survenue lors de l'ajout du texte : ${error.message}`,
       });
     }
   }
 );
+
 
   // Commande ToImage
   ovlcmd(
