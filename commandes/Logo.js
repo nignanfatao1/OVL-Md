@@ -104,17 +104,17 @@ addTextproCommand(
 );
 
 addTextproCommand(
-    "", // Nom de la commande
-    "", // URL du style
-    "", // Description de la commande
-     // Type : cette commande accepte un seul mot ou texte
+    "football", // Nom de la commande
+    "https://en.ephoto360.com/paul-scholes-shirt-foot-ball-335.html", // URL du style
+    "Maillot de foot de Paul Scholes", // Description de la commande
+    2 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
-    "", // URL du style
-    "", // Description de la commande
-     // Type : cette commande accepte un seul mot ou texte
+    "acier_h", // Nom de la commande
+    "https://en.ephoto360.com/heated-steel-lettering-effect-65.html", // URL du style
+    "Effet lettrage en acier chauffé", // Description de la commande
+    2 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
