@@ -58,7 +58,7 @@ function addTextproCommand(nom_cmd, text_pro_url, desc, type) {
                 await ovl.sendMessage(
                     ms_org,
                     {
-                        image: { url: logo_url.image },
+                        image: { url: logo_url.url },
                         caption: "\`\`\`Powered By OVL-MD\`\`\`"
                     },
                     { quoted: ms }
