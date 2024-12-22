@@ -1,13 +1,13 @@
 const { ovlcmd } = require("../framework/ovlcmd");
 const textmaker = require("../framework/textmaker");
 
-function addTextproCommand(nom_cmd, text_pro_url, desc, type) {
+function addTextproCommand(nom_cmd, text_pro_url, type) {
     ovlcmd(
         {
             nom_cmd: nom_cmd,
             classe: "Logo",
             react: "✨",
-            desc: desc
+            desc: "Effet de texte avec Ephoto360"
         },
         async (ms_org, ovl, cmd_options) => {
             const { arg, ms } = cmd_options;
@@ -30,7 +30,7 @@ function addTextproCommand(nom_cmd, text_pro_url, desc, type) {
                         if (query.includes(';')) {
                             return await ovl.sendMessage(
                                 ms_org,
-                                { text: "Veuillez fournir un seul mot ou texte sans point-virgule (;) pour cette commande." },
+                                { text: "Veuillez fournir du texte sans point-virgule (;) pour cette commande." },
                                 { quoted: ms }
                             );
                         }
@@ -43,7 +43,7 @@ function addTextproCommand(nom_cmd, text_pro_url, desc, type) {
                         if (textParts.length < 2) {
                             return await ovl.sendMessage(
                                 ms_org,
-                                { text: "Veuillez fournir exactement deux textes séparés par un point-virgule (;), par exemple : Salut;Ça va." },
+                                { text: "Veuillez fournir exactement deux textes séparés par un point-virgule (;), par exemple : Ovl;Md." },
                                 { quoted: ms }
                             );
                         }
@@ -302,7 +302,7 @@ addTextproCommand(
 addTextproCommand(
     "sci_fi", // Nom de la commande
     "https://en.ephoto360.com/create-a-awesome-logo-sci-fi-effects-492.html", // URL du style
-     3 // Type : cette commande accepte un seul mot ou texte
+     2 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
