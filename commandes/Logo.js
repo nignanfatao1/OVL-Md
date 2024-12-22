@@ -47,7 +47,7 @@ function addTextproCommand(nom_cmd, text_pro_url, type) {
                                 { quoted: ms }
                             );
                         }
-                        logo_url = await textmaker(text_pro_url, textParts);
+                        logo_url = await textmaker(text_pro_url, query);
                         break;
 
                     default:
