@@ -94,7 +94,7 @@ addTextproCommand(
 );
 
  addTextproCommand(
-    "neon_bleu", // Nom de la commande
+    "neon1", // Nom de la commande
     "https://en.ephoto360.com/blue-neon-text-effect-117.html", // URL du style
     1  // Type : cette commande accepte un seul mot ou texte
 );
@@ -106,13 +106,13 @@ addTextproCommand(
 );
 
 addTextproCommand(
-    "acier_h", // Nom de la commande
+    "steel", // Nom de la commande
     "https://en.ephoto360.com/heated-steel-lettering-effect-65.html", // URL du style
      2 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "peint", // Nom de la commande
+    "paint", // Nom de la commande
     "https://en.ephoto360.com/paint-splatter-text-effect-72.html", // URL du style
     1 // Type : cette commande accepte un seul mot ou texte
 );
@@ -142,7 +142,7 @@ addTextproCommand(
 );
 
 addTextproCommand(
-    "neon_green", // Nom de la commande
+    "neon2", // Nom de la commande
     "https://en.ephoto360.com/create-light-effects-green-neon-online-429.html", // URL du style
      1 // Type : cette commande accepte un seul mot ou texte
 );
@@ -172,146 +172,146 @@ addTextproCommand(
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "graffiti2", // Nom de la commande
     "https://en.ephoto360.com/graffiti-text-5-180.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+    1 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "hacker", // Nom de la commande
     "https://en.ephoto360.com/create-anonymous-hacker-avatars-cyan-neon-677.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+    1 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "rain", // Nom de la commande
     "https://en.ephoto360.com/foggy-rainy-text-effect-75.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+    1 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "typography", // Nom de la commande
     "https://en.ephoto360.com/create-online-typography-art-effects-with-multiple-layers-811.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+    1 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "gold3", // Nom de la commande
     "https://en.ephoto360.com/glossy-chrome-text-effect-online-424.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+    1 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "wood", // Nom de la commande
     "https://en.ephoto360.com/create-3d-wood-text-effects-online-free-705.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+    2 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "captain_america", // Nom de la commande
     "https://en.ephoto360.com/create-a-cinematic-captain-america-text-effect-online-715.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+    2 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "cubic", // Nom de la commande
     "https://en.ephoto360.com/3d-cubic-text-effect-online-88.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+    1 // Type : cette commande accepte un seul mot ou texte
 );
 
 
 addTextproCommand(
-    "", // Nom de la commande
+    "green_effect", // Nom de la commande
     "https://en.ephoto360.com/create-unique-word-green-light-63.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+    1 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "naruto", // Nom de la commande
     "https://en.ephoto360.com/naruto-shippuden-logo-style-text-effect-online-808.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+     1 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "sand", // Nom de la commande
     "https://en.ephoto360.com/realistic-3d-sand-text-effect-online-580.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+     1 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "plasma", // Nom de la commande
     "https://en.ephoto360.com/plasma-text-effects-online-71.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+     1 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "avengers", // Nom de la commande
     "https://en.ephoto360.com/create-logo-3d-style-avengers-online-427.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+     2 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "underwater", // Nom de la commande
     "https://en.ephoto360.com/3d-underwater-text-effect-online-682.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+     1 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "glass", // Nom de la commande
     "https://en.ephoto360.com/write-text-on-wet-glass-online-589.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+     1 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "graffiti3", // Nom de la commande
     "https://en.ephoto360.com/cover-graffiti-181.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+    1 // Type : cette commande accepte un seul mot ou texte
 );
 
 
 addTextproCommand(
-    "", // Nom de la commande
+    "summery", // Nom de la commande
     "https://en.ephoto360.com/create-a-summery-sand-writing-text-effect-577.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+    1 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "gold4", // Nom de la commande
     "https://en.ephoto360.com/modern-gold-silver-210.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+     1 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "cloud", // Nom de la commande
     "https://en.ephoto360.com/cloud-text-effect-139.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+    1 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "metal", // Nom de la commande
     "https://en.ephoto360.com/metal-text-effect-online-110.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+     1 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "watercolor", // Nom de la commande
     "https://en.ephoto360.com/create-a-watercolor-text-effect-online-655.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+     1// Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "sci_fi", // Nom de la commande
     "https://en.ephoto360.com/create-a-awesome-logo-sci-fi-effects-492.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+     3 // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
+    "gold5", // Nom de la commande
     "https://en.ephoto360.com/free-glitter-text-effect-maker-online-656.html", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+     2 // Type : cette commande accepte un seul mot ou texte
 );
 
-addTextproCommand(
+/*addTextproCommand(
     "", // Nom de la commande
     "", // URL du style
      // Type : cette commande accepte un seul mot ou texte
@@ -378,3 +378,4 @@ addTextproCommand(
      // Type : cette commande accepte un seul mot ou texte
 );
 
+*/
