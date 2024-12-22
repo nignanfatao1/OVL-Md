@@ -91,7 +91,7 @@ const textMaker = async (url, texts, radioOption = '') => {
   const finalResult = await finalResponse.json();
 
   if (!finalResult.image) {
-    throw new Error("textmaker: failed image processing");
+    throw new Error(`textmaker: Erreur lors de la génération de l'image`);
   }
 
   return {
