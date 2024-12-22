@@ -81,3 +81,347 @@ addTextproCommand(
     "Créer un logo Dragon Ball", // Description de la commande
     1 // Type : cette commande accepte un seul mot ou texte
 );
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+ addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "", // Nom de la commande
+    "", // URL du style
+    "", // Description de la commande
+     // Type : cette commande accepte un seul mot ou texte
+);
+
