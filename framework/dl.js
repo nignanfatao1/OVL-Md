@@ -186,3 +186,31 @@ async function fbdl(Link) {
 	})
 	return hasil[0]
 }
+
+
+div class="embed-responsive embed-responsive-16by9">
+								<video controls="controls" allowfullscreen id="video" controlsList="nodownload">
+									<source src="https://video-yyz1-1.xx.fbcdn.net/o1/v/t2/f2/m69/AQOQBw7cIjHHfcKvjcVLVlVGCN6WgUNiqim97HcSSH5LxVmIgZ18rOiQwaCo8v3qwH8RGZTO1UdaMt8oijpcJwrT.mp4?efg=eyJ4cHZfYXNzZXRfaWQiOjk3NTM2NjIwNzQ4NjQ1OCwidmVuY29kZV90YWciOiJ4cHZfcHJvZ3Jlc3NpdmUuRkFDRUJPT0suLkMzLjU3Ni5kYXNoX2gyNjQtYmFzaWMtZ2VuMl83MjBwIn0&_nc_ht=video-yyz1-1.xx.fbcdn.net&_nc_cat=103&strext=1&vs=bfede0c8b14d4932&_nc_vs=HBksFQIYOnBhc3N0aHJvdWdoX2V2ZXJzdG9yZS9HRUYzanh1eTlUdUt6cThGQUV0d0RfSlhvcHMyYm1kakFBQUYVAALIAQAVAhg6cGFzc3Rocm91Z2hfZXZlcnN0b3JlL0dINWJBQnJ2VlZiMWhHOEJBT09SNEdCUVgxMTdidjRHQUFBRhUCAsgBACgAGAAbAogHdXNlX29pbAExEnByb2dyZXNzaXZlX3JlY2lwZQExFQAAJvTnlcXkxbsDFQIoAkMzLBdAYgd0vGp--hgZZGFzaF9oMjY0LWJhc2ljLWdlbjJfNzIwcBEAdQIA&ccb=9-4&oh=00_AYDLKYrIyNPOFd3DuOHmsE3eiOyXYnbvgG3Q65FygcCCKQ&oe=676B0D86&_nc_sid=1d576d" type="video/mp4" />
+								</video>
+
+       <div class="col-md-4 btns-download">
+
+						        										<p>
+										<a href="https://video-yyz1-1.xx.fbcdn.net/o1/v/t2/f2/m69/AQOQBw7cIjHHfcKvjcVLVlVGCN6WgUNiqim97HcSSH5LxVmIgZ18rOiQwaCo8v3qwH8RGZTO1UdaMt8oijpcJwrT.mp4?efg=eyJ4cHZfYXNzZXRfaWQiOjk3NTM2NjIwNzQ4NjQ1OCwidmVuY29kZV90YWciOiJ4cHZfcHJvZ3Jlc3NpdmUuRkFDRUJPT0suLkMzLjU3Ni5kYXNoX2gyNjQtYmFzaWMtZ2VuMl83MjBwIn0&_nc_ht=video-yyz1-1.xx.fbcdn.net&_nc_cat=103&strext=1&vs=bfede0c8b14d4932&_nc_vs=HBksFQIYOnBhc3N0aHJvdWdoX2V2ZXJzdG9yZS9HRUYzanh1eTlUdUt6cThGQUV0d0RfSlhvcHMyYm1kakFBQUYVAALIAQAVAhg6cGFzc3Rocm91Z2hfZXZlcnN0b3JlL0dINWJBQnJ2VlZiMWhHOEJBT09SNEdCUVgxMTdidjRHQUFBRhUCAsgBACgAGAAbAogHdXNlX29pbAExEnByb2dyZXNzaXZlX3JlY2lwZQExFQAAJvTnlcXkxbsDFQIoAkMzLBdAYgd0vGp--hgZZGFzaF9oMjY0LWJhc2ljLWdlbjJfNzIwcBEAdQIA&ccb=9-4&oh=00_AYDLKYrIyNPOFd3DuOHmsE3eiOyXYnbvgG3Q65FygcCCKQ&oe=676B0D86&_nc_sid=1d576d" target="_blank" class="btn btn-download"  rel="nofollow" download>Download in <strong>HD</strong> Quality</a>
+									</p>
+									
+																		<p>
+										<a href="https://video-yyz1-1.xx.fbcdn.net/o1/v/t2/f2/m69/AQNWTE7a1Uis9yZrGTaH9ex12OAuun8uJkU4DMCRl3o3jW_TQ43M4pUQ5cUZ16IhFxAcQJKf9AmUYlhuIPrt-j5V.mp4?strext=1&_nc_cat=100&_nc_sid=8bf8fe&_nc_ht=video-yyz1-1.xx.fbcdn.net&_nc_ohc=D4K1u-SEO1UQ7kNvgFBVn6m&efg=eyJ2ZW5jb2RlX3RhZyI6Inhwdl9wcm9ncmVzc2l2ZS5GQUNFQk9PSy4uQzMuMzYwLnN2ZV9zZCIsInhwdl9hc3NldF9pZCI6OTc1MzY2MjA3NDg2NDU4LCJ1cmxnZW5fc291cmNlIjoid3d3In0%3D&ccb=9-4&_nc_zt=28&oh=00_AYARGFasjHdkoVUkRWuOfEfydm5ce_MVNkVPFHnFQ7mTQA&oe=676F148B" target="_blank" class="btn btn-download" rel="nofollow" download>Download in Normal Quality</a>
+									</p>
+									
+																		<p>
+										<a href="https://video-yyz1-1.xx.fbcdn.net/o1/v/t2/f2/m69/AQOvTiSBP7aoidWGaTrm-MzgWZ96HeQov7zBIpsayoAkJTfqHHtjEtKjWuJK8nxaqhMVuOe3l00y68ftfkG3QmpW.mp4?strext=1&_nc_cat=102&_nc_sid=9ca052&_nc_ht=video-yyz1-1.xx.fbcdn.net&_nc_ohc=fqDwZCXeK5IQ7kNvgENyJBX&efg=eyJ2ZW5jb2RlX3RhZyI6ImRhc2hfYXVkaW9fYWFjcF80OF9mbm9ybTE0X2ZyYWdfMl9hdWRpbyIsInZpZGVvX2lkIjoxOTIzODExMDU0Njg4OTEyLCJjbGllbnRfbmFtZSI6InVua25vd24iLCJvaWxfdXJsZ2VuX2FwcF9pZCI6MCwidXJsZ2VuX3NvdXJjZSI6Ind3dyJ9&ccb=9-4&_nc_zt=28&oh=00_AYApq1xBVf5poYiOYxmH7hZemOr7OyVz-Ukxgzk-sxbASQ&oe=676F1061" target="_blank" class="btn btn-download" rel="nofollow" download>Audio Only</a>
+									</p>
+									
+						        </div>
+						    </div>
+						</div>
+
+						<!--<div class="adHorizontal
+
+url: https://www.facebook.com/100054789318088/videos/1923811054688912/?mibextid=NnVzG8
