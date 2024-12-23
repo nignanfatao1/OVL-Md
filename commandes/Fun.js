@@ -231,7 +231,7 @@ ovlcmd(
 ovlcmd(
     {
         nom_cmd: "toprank",
-        classe: "utility",
+        classe: "Fun",
         react: "🥇",
         desc: "Voir les meilleurs utilisateurs"
     },
