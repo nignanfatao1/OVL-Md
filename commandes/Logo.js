@@ -311,71 +311,68 @@ addTextproCommand(
      2 // Type : cette commande accepte un seul mot ou texte
 );
 
-/*addTextproCommand(
-    "", // Nom de la commande
-    "", // URL du style
+addTextproCommand(
+    "blackpink2", // Nom de la commande
+    "https://en.ephoto360.com/create-blackpink-s-born-pink-album-logo-online-779.html", // URL du style
+     2 // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "cloud2", // Nom de la commande
+    "https://en.ephoto360.com/create-a-cloud-text-effect-in-the-sky-618.html", // URL du style
+     1 // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "neon3", // Nom de la commande
+    "https://en.ephoto360.com/neon-text-effect-171.html", // URL du style
+    1 // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "space", // Nom de la commande
+    "https://en.ephoto360.com/latest-space-3d-text-effect-online-559.html", // URL du style
+     2 // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "boobs", // Nom de la commande
+    "https://en.ephoto360.com/music-equalizer-text-effect-259.html", // URL du style
+     1 // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "blackpink3", // Nom de la commande
+    "https://en.ephoto360.com/create-a-blackpink-neon-logo-text-effect-online-710.html", // URL du style
+     1 // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "onepiece", // Nom de la commande
+    "https://en.ephoto360.com/create-one-piece-facebook-cover-online-553.html", // URL du style
+     1 // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "dragonball2", // Nom de la commande
+    "https://en.ephoto360.com/free-online-dragon-ball-facebook-cover-photos-maker-443.html", // URL du style
+     1// Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "football2", // Nom de la commande
+    "https://en.ephoto360.com/text-on-shirt-club-real-madrid-267.html", // URL du style
+     2 // Type : cette commande accepte un seul mot ou texte
+);
+
+addTextproCommand(
+    "football3", // Nom de la commande
+    "https://en.ephoto360.com/create-football-shirt-messi-barca-online-268.html", // URL du style
      // Type : cette commande accepte un seul mot ou texte
 );
 
 addTextproCommand(
-    "", // Nom de la commande
-    "", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
+    "futuris", // Nom de la commande
+    "https://en.ephoto360.com/light-text-effect-futuristic-technology-style-648.html", // URL du style
+     1 // Type : cette commande accepte un seul mot ou texte
 );
-
-addTextproCommand(
-    "", // Nom de la commande
-    "", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
-);
-
-addTextproCommand(
-    "", // Nom de la commande
-    "", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
-);
-
-addTextproCommand(
-    "", // Nom de la commande
-    "", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
-);
-
-addTextproCommand(
-    "", // Nom de la commande
-    "", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
-);
-
-addTextproCommand(
-    "", // Nom de la commande
-    "", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
-);
-
-
-addTextproCommand(
-    "", // Nom de la commande
-    "", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
-);
-
-addTextproCommand(
-    "", // Nom de la commande
-    "", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
-);
-
-addTextproCommand(
-    "", // Nom de la commande
-    "", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
-);
-
-addTextproCommand(
-    "", // Nom de la commande
-    "", // URL du style
-     // Type : cette commande accepte un seul mot ou texte
-);
-
-*/
