@@ -76,8 +76,7 @@ ovlcmd(
     try {
       const mediaMessage =
         msg_Repondu.imageMessage ||
-        msg_Repondu.videoMessage ||
-        msg_Repondu.stickerMessage;
+        msg_Repondu.videoMessage;
 
       if (!mediaMessage) {
         return ovl.sendMessage(ms_org, {
@@ -94,8 +93,8 @@ ovlcmd(
       const buffer = fs.readFileSync(media);
 
       const sticker = new Sticker(buffer, {
-        pack: "wa-bot",
-        author: "OVL-MD",
+        pack: config.STICKER_PACK_NAME,
+        author: config.STICKER_AUTHOR_NAME,
         type: StickerTypes.FULL,
         quality: 100,
       });
@@ -120,6 +119,185 @@ ovlcmd(
   }
 );
 
+// Commande Crop
+ovlcmd(
+  {
+    nom_cmd: "crop",
+    classe: "Conversion",
+    react: "✂️",
+    desc: "Crée un sticker croppé à partir d'une image ou vidéo",
+  },
+  async (ms_org, ovl, cmd_options) => {
+    const { msg_Repondu, ms } = cmd_options;
+
+    if (!msg_Repondu) {
+      return ovl.sendMessage(ms_org, {
+        text: "Répondez à une image ou vidéo.",
+      });
+    }
+
+    let media;
+    try {
+      const mediaMessage =
+        msg_Repondu.imageMessage ||
+        msg_Repondu.videoMessage;
+
+      if (!mediaMessage) {
+        return ovl.sendMessage(ms_org, {
+          text: "Veuillez répondre à une image ou vidéo valide.",
+        });
+      }
+
+      media = await ovl.dl_save_media_ms(mediaMessage);
+
+      const buffer = fs.readFileSync(media);
+
+      const sticker = new Sticker(buffer, {
+        pack: config.STICKER_PACK_NAME,
+        author: config.STICKER_AUTHOR_NAME,
+        type: StickerTypes.CROPPED,
+        quality: 100,
+      });
+
+      const stickerFileName = `${Math.floor(Math.random() * 10000)}.webp`;
+      await sticker.toFile(stickerFileName);
+
+      await ovl.sendMessage(
+        ms_org,
+        { sticker: fs.readFileSync(stickerFileName) },
+        { quoted: ms }
+      );
+
+      fs.unlinkSync(media);
+      fs.unlinkSync(stickerFileName);
+    } catch (error) {
+      console.error("Erreur lors de la création du sticker :", error);
+      await ovl.sendMessage(ms_org, {
+        text: `Erreur lors de la création du sticker : ${error.message}`,
+      });
+    }
+  }
+);
+
+// Commande Circle
+ovlcmd(
+  {
+    nom_cmd: "circle",
+    classe: "Conversion",
+    react: "🔵",
+    desc: "Crée un sticker circulaire à partir d'une image ou vidéo",
+  },
+  async (ms_org, ovl, cmd_options) => {
+    const { msg_Repondu, ms } = cmd_options;
+
+    if (!msg_Repondu) {
+      return ovl.sendMessage(ms_org, {
+        text: "Répondez à une image ou vidéo.",
+      });
+    }
+
+    let media;
+    try {
+      const mediaMessage =
+        msg_Repondu.imageMessage ||
+        msg_Repondu.videoMessage;
+
+      if (!mediaMessage) {
+        return ovl.sendMessage(ms_org, {
+          text: "Veuillez répondre à une image ou vidéo valide.",
+        });
+      }
+
+      media = await ovl.dl_save_media_ms(mediaMessage);
+
+      const buffer = fs.readFileSync(media);
+
+      const sticker = new Sticker(buffer, {
+        pack: config.STICKER_PACK_NAME,
+        author: config.STICKER_AUTHOR_NAME,
+        type: StickerTypes.CIRCLE,
+        quality: 100,
+      });
+
+      const stickerFileName = `${Math.floor(Math.random() * 10000)}.webp`;
+      await sticker.toFile(stickerFileName);
+
+      await ovl.sendMessage(
+        ms_org,
+        { sticker: fs.readFileSync(stickerFileName) },
+        { quoted: ms }
+      );
+
+      fs.unlinkSync(media);
+      fs.unlinkSync(stickerFileName);
+    } catch (error) {
+      console.error("Erreur lors de la création du sticker :", error);
+      await ovl.sendMessage(ms_org, {
+        text: `Erreur lors de la création du sticker : ${error.message}`,
+      });
+    }
+  }
+);
+
+// Commande Round
+ovlcmd(
+  {
+    nom_cmd: "round",
+    classe: "Conversion",
+    react: "🔲",
+    desc: "Crée un sticker avec des coins arrondis à partir d'une image ou vidéo",
+  },
+  async (ms_org, ovl, cmd_options) => {
+    const { msg_Repondu, ms } = cmd_options;
+
+    if (!msg_Repondu) {
+      return ovl.sendMessage(ms_org, {
+        text: "Répondez à une image ou vidéo.",
+      });
+    }
+
+    let media;
+    try {
+      const mediaMessage =
+        msg_Repondu.imageMessage ||
+        msg_Repondu.videoMessage;
+
+      if (!mediaMessage) {
+        return ovl.sendMessage(ms_org, {
+          text: "Veuillez répondre à une image ou vidéo valide.",
+        });
+      }
+
+      media = await ovl.dl_save_media_ms(mediaMessage);
+
+      const buffer = fs.readFileSync(media);
+
+      const sticker = new Sticker(buffer, {
+        pack: config.STICKER_PACK_NAME,
+        author: config.STICKER_AUTHOR_NAME,
+        type: StickerTypes.ROUNDED,
+        quality: 100,
+      });
+
+      const stickerFileName = `${Math.floor(Math.random() * 10000)}.webp`;
+      await sticker.toFile(stickerFileName);
+
+      await ovl.sendMessage(
+        ms_org,
+        { sticker: fs.readFileSync(stickerFileName) },
+        { quoted: ms }
+      );
+
+      fs.unlinkSync(media);
+      fs.unlinkSync(stickerFileName);
+    } catch (error) {
+      console.error("Erreur lors de la création du sticker :", error);
+      await ovl.sendMessage(ms_org, {
+        text: `Erreur lors de la création du sticker : ${error.message}`,
+      });
+    }
+  }
+);
 
   // Commande Take
   ovlcmd(
@@ -276,7 +454,7 @@ ovlcmd(
     }
   }
 );
-
+/*
 ovlcmd(
     {
         nom_cmd: "stovideo",
@@ -398,5 +576,5 @@ ovlcmd(
             if (fs.existsSync(audioPath)) fs.unlinkSync(audioPath);
         }
     }
-);
+);*/
 
