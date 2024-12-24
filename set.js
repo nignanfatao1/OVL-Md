@@ -6,5 +6,7 @@ module.exports = {
   MENU: process.env.MENU || "https://i.ibb.co/ynx9QcZ/image.jpg",
   SESSION_ID: process.env.SESSION_ID || "ovl",
   LEVEL_UP: process.env.LEVEL_UP || 'non',
+  STICKER_PACK_NAME: process.env.STICKER_PACK_NAME || 'Wa-sticker',
+  STICKER_AUTHOR_NAME: process.env.STICKER_AUTHOR_NAME || 'OVL-MD',
   DATABASE: process.env.DATABASE || 'postgresql://postgres.qnjvgxwyncnsbpfxwrbq:ovlmdmdpasse@aws-0-eu-central-1.pooler.supabase.com:6543/postgres'
 };
