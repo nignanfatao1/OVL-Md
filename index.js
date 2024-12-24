@@ -443,12 +443,10 @@ ovl.ev.on("connection.update", async (con) => {
             try {
                 require(path.join(__dirname, "commandes", fichier));
                 console.log(`${fichier} installé avec succès`);
-                await  delay(300); // Pause de 300 ms
             } catch (e) {
                 console.log(`Erreur lors du chargement de ${fichier} :    ${e}`);
             }
         }
-        delay(700);
       let start_msg = `╭────《 OVL-MD 》─────⊷
 ⫸  *Préfixe*       : ${prefixe}
 ⫸  *Mode*          : ${config.MODE}
