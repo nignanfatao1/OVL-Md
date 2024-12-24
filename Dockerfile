@@ -1,7 +1,7 @@
 FROM node:lts-alpine
 
 RUN apk add --no-cache git && \
-    git clone https://github.com/Nignanfatao1/OVL-Md /root/ovl_bot
+    git clone https://github.com/Nignanfatao/OVL-Md /root/ovl_bot
 
 WORKDIR /root/ovl_bot
 
