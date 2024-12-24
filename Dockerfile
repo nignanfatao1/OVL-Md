@@ -1,18 +1,16 @@
-FROM node:lts-buster
+FROM node:lts-alpine
 
-RUN apt-get update && \
-    apt-get install -y ffmpeg webp git && \
-    apt-get upgrade -y && \
-    rm -rf /var/lib/apt/lists/*
-    
-RUN git clone https://github.com/Nignanfatao1/OVL-Md /root/ovl_bot
+RUN  apk add --no-cache git && \
+    git clone https://github.com/Nignanfatao1/OVL-Md /root/ovl_bot
 
 WORKDIR /root/ovl_bot
 
 COPY package.json .
-RUN npm i
+RUN npm install
+
 COPY . .
 
 EXPOSE 8000
 
-CMD ["npm","run","Ovl"]
+CMD ["npm", "run", "Ovl"]
+
