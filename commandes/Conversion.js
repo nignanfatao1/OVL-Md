@@ -5,6 +5,7 @@ const { Canvas, loadImage, createCanvas } = require("@napi-rs/canvas");
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
 const { execSync, exec } = require("child_process");
 const path = require('path');
+const config = require('../set');
 const catbox = new Catbox();
 
 async function uploadToCatbox(filePath) {
