@@ -7,6 +7,8 @@ WORKDIR /ovl_bot
 
 COPY package.json .
 
+RUN npm i
+
 COPY . .
 
 EXPOSE 8000
