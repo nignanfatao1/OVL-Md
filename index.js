@@ -455,7 +455,9 @@ ovl.ev.on("connection.update", async (con) => {
 ⫸  *Commandes*     : ${evt.cmd.length}
 
              𝙈𝙖𝙙𝙚 𝙗𝙮 Ainz`;
-        await ovl.sendMessage(ovl.user.id, { text: start_msg });    
+     if (ovl.user && ovl.user.id) {
+        await ovl.sendMessage(ovl.user.id, { text: start_msg }); 
+     }
     } else if (connection === 'close') {
                 if (lastDisconnect.error?.output?.statusCode === DisconnectReason.loggedOut) {
                     console.log('Connexion fermée: Déconnecté');
