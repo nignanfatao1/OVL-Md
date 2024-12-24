@@ -35,7 +35,7 @@ async function sendMedia(ms_org, ovl, url, format, type) {
 ovlcmd(
     {
         nom_cmd: "song",
-        classe: "Téléchargement",
+        classe: "Telechargement",
         react: "🎵",
         desc: "Télécharge une chanson depuis YouTube avec un terme de recherche",
         alias: ["play"],
@@ -79,7 +79,7 @@ ovlcmd(
 ovlcmd(
     {
         nom_cmd: "video",
-        classe: "Téléchargement",
+        classe: "Telechargement",
         react: "🎥",
         desc: "Télécharge une vidéo depuis YouTube avec un terme de recherche",
     },
@@ -114,7 +114,7 @@ ovlcmd(
                 image: { url: videoInfo.thumbnail },
                 caption: caption,
             });
-            await sendMedia(ms_org, ovl, videoInfo.url, "360", "video");
+            await sendMedia(ms_org, ovl, videoInfo.url, "480", "video");
         } catch (error) {
             await ovl.sendMessage(ms_org, {
                 text: "Une erreur est survenue lors du traitement de votre commande.",
@@ -168,7 +168,7 @@ ovlcmd(
     }
 
     try {
-      await sendMedia(ms_org, ovl, videoLink, "360", "video");
+      await sendMedia(ms_org, ovl, videoLink, "480", "video");
     } catch (error) {
       ovl.sendMessage(ms_org, { text: `Erreur: ${error.message}` });
     }
