@@ -1,15 +1,13 @@
-FROM node:lts-alpine
+FROM node:lts-buster
 
-RUN  apk add --no-cache git && \
-    git clone https://github.com/Nignanfatao1/OVL-Md /root/ovl_bot
+RUN git clone https://github.com/Nignanfatao1/OVL-Md /root/ovl_bot
 
 WORKDIR /root/ovl_bot
 
 COPY package.json .
-RUN npm install
-
+RUN npm i
 COPY . .
 
 EXPOSE 8000
 
-CMD ["npm", "run", "Ovl"]
+CMD ["npm","run","Ovl"]
