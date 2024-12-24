@@ -1,5 +1,10 @@
 FROM node:lts-buster
 
+RUN apt-get update && \
+    apt-get install -y ffmpeg webp git && \
+    apt-get upgrade -y && \
+    rm -rf /var/lib/apt/lists/*
+    
 RUN git clone https://github.com/Nignanfatao1/OVL-Md /root/ovl_bot
 
 WORKDIR /root/ovl_bot
