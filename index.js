@@ -141,14 +141,14 @@ ovl.ev.on("messages.upsert", async (m) => {
         ms_org,
     };
 
-    console.log("{}=={}= OVL-MD LOG-MESSAGES ={}=={}");
+/*    console.log("{}=={}= OVL-MD LOG-MESSAGES ={}=={}");
     if (verif_Groupe) {
         console.log("Groupe: " + nom_Groupe);
     }
     console.log(`Auteur message: ${nom_Auteur_Message}\nNumero: ${auteur_Message.split("@")[0]}`);
     console.log("Type: " + mtype);
     console.log("Message:");
-    console.log(texte);
+    console.log(texte);*/
 
     function repondre(message) {
         ovl.sendMessage(ms_org, { text: message }, { quoted: ms });
