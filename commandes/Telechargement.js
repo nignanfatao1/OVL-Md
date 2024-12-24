@@ -1,7 +1,7 @@
 const { ovlcmd } = require("../framework/ovlcmd");
 const { fbdl, ttdl, igdl, twitterdl, ytdl } = require("../framework/dl");
 const ytsr = require('@distube/ytsr');
-const axios = requiere('axios');
+const axios = require('axios');
 
 async function sendMedia(ms_org, ovl, url, format, type) {
   try {
@@ -127,7 +127,7 @@ ovlcmd(
 ovlcmd(
   {
     nom_cmd: "yta",
-    classe: "download",
+    classe: "Telechargement",
     react: "🎧",
     desc: "Télécharger de l'audio depuis YouTube à l\'aide d'un lien",
     alias: ["ytmp3"],
@@ -153,7 +153,7 @@ ovlcmd(
 ovlcmd(
   {
     nom_cmd: "ytv",
-    classe: "download",
+    classe: "Telechargement",
     react: "🎬",
     desc: "Télécharger une vidéo depuis YouTube à l\'aide d'un lien ",
     alias: ["ytmp4"],
@@ -178,7 +178,7 @@ ovlcmd(
 ovlcmd(
   {
     nom_cmd: "fbdl",
-    classe: "download",
+    classe: "Telechargement",
     react: "📥",
     desc: "Télécharger ou envoyer directement une vidéo depuis Facebook en HD"
   },
@@ -208,7 +208,7 @@ ovlcmd(
 ovlcmd(
   {
     nom_cmd: "ttdl",
-    classe: "download",
+    classe: "Telechargement",
     react: "📥",
     desc: "Télécharger ou envoyer directement une vidéo depuis TikTok"
   },
@@ -237,7 +237,7 @@ ovlcmd(
 ovlcmd(
   {
     nom_cmd: "igdl",
-    classe: "download",
+    classe: "Telechargement",
     react: "📥",
     desc: "Télécharger ou envoyer directement une vidéo depuis Instagram",
   },
@@ -275,7 +275,7 @@ ovlcmd(
 ovlcmd(
   {
     nom_cmd: "twitterdl",
-    classe: "download",
+    classe: "Telechargement",
     react: "📥",
     desc: "Télécharger ou envoyer directement une vidéo depuis Twitter",
   },
