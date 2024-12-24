@@ -198,4 +198,4 @@ async function ytdl(url, format = "m4a") {
   }
 }
 
-modul.exports = { fbdl, ttdl, igdl, twitterdl, ytdl };
+module.exports = { fbdl, ttdl, igdl, twitterdl, ytdl };
