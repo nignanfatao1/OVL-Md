@@ -384,8 +384,8 @@ ovlcmd(
 
       const outputBuffer = canvas.toBuffer("image/png");
       const sticker = new Sticker(outputBuffer, {
-        pack: nom_Auteur_Message,
-        author: "OVL Bot",
+        pack: config.STICKER_PACK_NAME,
+        author: config.STICKER_AUTHOR_NAME,
         type: StickerTypes.FULL,
       });
 
