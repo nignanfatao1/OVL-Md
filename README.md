@@ -1,3 +1,8 @@
+<p align="center"> 
+    <img alt="OVL" height="600" width="600" src="https://files.catbox.moe/k1gddi.jpg">
+    <h1 align="center">OVL-MD</h1>
+</p>   
+
 # Déploiement de OVL-MD
 
 ### Étape 1 : Créer un fork du projet
