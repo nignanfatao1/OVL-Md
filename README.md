@@ -1,6 +1,5 @@
 <p align="center"> 
     <img alt="OVL" src="https://files.catbox.moe/k1gddi.jpg">
-    <h1 align="center">OVL-MD</h1>
 </p>   
 
 # Déploiement de OVL-MD
