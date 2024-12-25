@@ -37,7 +37,7 @@ const { writeFileSync, existsSync, mkdirSync } = require('fs');
 const { spawnSync } = require('child_process');
 const path = require('path');
 
-const env_file =  ``; //mettez votre fichier .env ici
+const env_file = ``; //Entrée votre fichier .env ici
 
 if (!env_file.trim()) {
   console.error("Aucune donnée de configuration trouvée dans 'env_file'. Veuillez remplir vos informations dans le code.");
@@ -57,8 +57,11 @@ function runCommand(command, args, options = {}) {
 }
 
 if (!existsSync('ovl')) {
+  console.log("Clonage du bot en cours...");
   runCommand('git', ['clone', 'https://github.com/Nignanfatao1/OVL-Md', 'ovl']);
+  console.log("Clonage terminé, installation des dépendances...");
   runCommand('npm', ['install'], { cwd: 'ovl' });
+  console.log("Dépendances installées avec succès !");
 }
 
 if (!existsSync(envPath)) {
@@ -66,6 +69,7 @@ if (!existsSync(envPath)) {
     const envDir = path.dirname(envPath);
     if (!existsSync(envDir)) {
       mkdirSync(envDir, { recursive: true });
+      console.log(`Répertoire créé: ${envDir}`);
     }
     writeFileSync(envPath, env_file.trim());
     console.log("Fichier .env créé avec succès !");
@@ -75,6 +79,7 @@ if (!existsSync(envPath)) {
   }
 }
 
+console.log("Démarrage du bot...");
 runCommand('npm', ['run', 'Ovl'], { cwd: 'ovl' });
 console.log('Le bot est en cours d\'exécution...');
 
