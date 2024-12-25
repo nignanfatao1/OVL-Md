@@ -32,11 +32,12 @@ postgresql://postgres.qnjvgxwyncnsbpfxwrbq:ovlmdmdpasse@aws-0-eu-central-1.poole
 - Étape 3: Démarrer le bot
 - Fichier a coller dans l'index:
 ```sh
-const { writeFileSync, existsSync } = require('fs');
+
+const { writeFileSync, existsSync, mkdirSync } = require('fs');
 const { spawnSync } = require('child_process');
 const path = require('path');
 
-const env_file = ``; //mettez votre fichier .env ici
+const env_file =  ``; //mettez votre fichier .env ici
 
 if (!env_file.trim()) {
   console.error("Aucune donnée de configuration trouvée dans 'env_file'. Veuillez remplir vos informations dans le code.");
@@ -44,16 +45,6 @@ if (!env_file.trim()) {
 }
 
 const envPath = path.join(__dirname, 'ovl', '.env');
-
-if (!existsSync(envPath)) {
-  try {
-    writeFileSync(envPath, env_file.trim());
-    console.log("Fichier .env créé avec succès !");
-  } catch (error) {
-    console.error(`Erreur lors de la création du fichier .env : ${error.message}`);
-    process.exit(1);
-  }
-}
 
 function runCommand(command, args, options = {}) {
   const result = spawnSync(command, args, { stdio: 'inherit', ...options });
@@ -68,6 +59,20 @@ function runCommand(command, args, options = {}) {
 if (!existsSync('ovl')) {
   runCommand('git', ['clone', 'https://github.com/Nignanfatao1/OVL-Md', 'ovl']);
   runCommand('npm', ['install'], { cwd: 'ovl' });
+}
+
+if (!existsSync(envPath)) {
+  try {
+    const envDir = path.dirname(envPath);
+    if (!existsSync(envDir)) {
+      mkdirSync(envDir, { recursive: true });
+    }
+    writeFileSync(envPath, env_file.trim());
+    console.log("Fichier .env créé avec succès !");
+  } catch (error) {
+    console.error(`Erreur lors de la création du fichier .env : ${error.message}`);
+    process.exit(1);
+  }
 }
 
 runCommand('npm', ['run', 'Ovl'], { cwd: 'ovl' });
