@@ -268,6 +268,11 @@ ovlcmd(
       
       if (!verif_Ovl_Admin) {
         return ovl.sendMessage(ms_org, { text: "Je dois être administrateur pour effectuer cette action." });
+      } 
+      const settings = await GroupSettings.findOne({ where: { id: ms_org } });
+      const { goodbye } = settings;
+      if (goodbye === 'oui') {
+          return ovl.sendMessage(ms_org, { text: "Désactivez le goodbye message (goodbye off) avant de continuer"});
       }
       const nonAdmins = membres.filter((m) => !m.admin).map((m) => m.id);
 
