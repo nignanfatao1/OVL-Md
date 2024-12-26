@@ -68,7 +68,7 @@ ovlcmd(
 
             await ovl.sendMessage(ms_org, { image: { url: videoInfo.thumbnail }, caption });
 
-            await sendMedia(ms_org, ovl, videoInfo.url, "m4a", "audio");
+            await sendMedia(ms_org, ovl, song.url, "m4a", "audio");
         } catch (error) {
             console.error("Erreur Song Downloader:", error.message);
             await ovl.sendMessage(ms_org, { text: "Erreur lors du téléchargement." });
@@ -114,7 +114,7 @@ ovlcmd(
                 image: { url: videoInfo.thumbnail },
                 caption: caption,
             });
-            await sendMedia(ms_org, ovl, videoInfo.url, "480", "video");
+            await sendMedia(ms_org, ovl, video.url, "480", "video");
         } catch (error) {
             await ovl.sendMessage(ms_org, {
                 text: "Une erreur est survenue lors du traitement de votre commande.",
