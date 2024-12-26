@@ -421,7 +421,7 @@ ovlcmd(
 
 ovlcmd(
   {
-    nom_cmd: "gedit",
+    nom_cmd: "lock",
     classe: "Groupe",
     react: "✅",
     desc: "Tout le monde peut modifier les paramètres du groupe",
@@ -442,7 +442,7 @@ ovlcmd(
 
 ovlcmd(
   {
-    nom_cmd: "g_restrict",
+    nom_cmd: "unlock",
     classe: "Groupe",
     react: "✅",
     desc: "Seuls les admins peuvent modifier les paramètres du groupe",
