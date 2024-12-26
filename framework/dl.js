@@ -2,39 +2,42 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const cookie = require("cookie");
 
-async function fbdl(url) {
-  try {
-    const response = await axios.post(
-      "https://www.getfvid.com/downloader",
-      new URLSearchParams({
-        url: url,
-      }),
-      {
-        headers: {
-          "accept": "*/*",
-          "content-type": "application/x-www-form-urlencoded",
-          "user-agent": "GoogleBot",
-        },
+async function fbdl(url, maxRetries = 5) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await axios.post(
+        "https://www.getfvid.com/downloader",
+        new URLSearchParams({
+          url: url,
+        }),
+        {
+          headers: {
+            "accept": "*/*",
+            "content-type": "application/x-www-form-urlencoded",
+            "user-agent": "GoogleBot",
+          },
+        }
+      );
+
+      const $ = cheerio.load(response.data);
+      const firstDownloadLink = $('a.btn-download').first().attr('href');
+
+      if (!firstDownloadLink) {
+        throw new Error('Aucun lien de téléchargement trouvé.');
       }
-    );
 
-    const $ = cheerio.load(response.data);
-
-    const firstDownloadLink = $('a.btn-download').first().attr('href');
-    
-    if (!firstDownloadLink) {
-      throw new Error('Aucun lien de téléchargement trouvé.');
+      return firstDownloadLink;
+    } catch (error) {
+      if (attempt === maxRetries) {
+        throw error;
+      }
+      await new Promise(resolve => setTimeout(resolve, 2000));
     }
-
-    return firstDownloadLink;
-  } catch (error) {
-    console.error('Error fetching the page:', error);
-    throw new Error('Erreur lors de la récupération du lien de téléchargement.');
   }
 }
 
-async function ttdl(url) {
-  return new Promise(async (resolve, reject) => {
+async function ttdl(url, maxRetries = 5) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       const response = await axios.get("https://ttdownloader.com", {
         headers: {
@@ -46,15 +49,19 @@ async function ttdl(url) {
       });
 
       const cookies = response.headers["set-cookie"];
-      const initialCookies = cookies.map(cookieStr => cookie.parse(cookieStr)).reduce((acc, curr) => ({ ...acc, ...curr }), {});
+      const initialCookies = cookies
+        .map(cookieStr => cookie.parse(cookieStr))
+        .reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
       const $ = cheerio.load(response.data);
       const token = $('#token').attr('value');
-      
+
       const sessionCookies = Object.entries({
         __cfduid: initialCookies.__cfduid,
         PHPSESSID: initialCookies.PHPSESSID,
-      }).map(([key, value]) => cookie.serialize(key, value)).join("; ");
+      })
+        .map(([key, value]) => cookie.serialize(key, value))
+        .join("; ");
 
       const downloadResponse = await axios.post(
         "https://ttdownloader.com/search/",
@@ -83,20 +90,26 @@ async function ttdl(url) {
         },
       };
 
-      if (result.result.nowatermark && result.result.audio) {
-        resolve(result);
+      if (result.result.nowatermark || result.result.audio) {
+        return result;
       } else {
-        reject("Liens de téléchargement non trouvés");
+        throw new Error("Liens de téléchargement non trouvés.");
       }
     } catch (error) {
-      reject(error);
+      if (attempt === maxRetries) {
+        throw error;
+      }
+        await new Promise(resolve => setTimeout(resolve, 2000));
     }
-  });
+  }
 }
 
-async function igdl(url) {
-  return new Promise(async (resolve, reject) => {
+async function igdl(url, maxRetries = 5) {
+  let attempts = 0;
+
+  while (attempts < maxRetries) {
     try {
+      attempts++;
       const response = await axios.get("https://downloadgram.org/", {
         headers: {
           "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
@@ -136,26 +149,32 @@ async function igdl(url) {
           },
         }
       );
+
       const videoPage = cheerio.load(videoResponse.data);
       let videoLink = videoPage("video source").attr("src");
 
       if (videoLink) {
-        videoLink = videoLink.replace(/^\\\"|\\\"$/g, '');
-        resolve({ status: videoResponse.status, result: { video: videoLink } });
-     
+        videoLink = videoLink.replace(/^\\\"|\\\"$/g, "");
+        return { status: videoResponse.status, result: { video: videoLink } };
       } else {
-        reject("Lien de vidéo introuvable.");
+        throw new Error("Lien de vidéo introuvable.");
       }
     } catch (error) {
-      reject(error);
+      if (attempts >= maxRetries) {
+        throw error;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 2000));
     }
-  });
+  }
 }
 
-async function twitterdl(url) {
-  return new Promise(async (resolve, reject) => {
+async function twitterdl(url, maxRetries = 5) {
+  let attempts = 0;
+
+  while (attempts < maxRetries) {
     try {
-      const response = await axios.get(`https://twitsave.com/info?url=${url}`, {
+      attempts++;
+       const response = await axios.get(`https://twitsave.com/info?url=${url}`, {
         headers: {
           "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
           "accept-language": "en-US,en;q=0.9,id;q=0.8",
@@ -167,34 +186,45 @@ async function twitterdl(url) {
       const videoLink = $("video").attr("src");
 
       if (videoLink) {
-        resolve({ status: response.status, result: { video: videoLink } });
+        return { status: response.status, result: { video: videoLink } };
       } else {
-        reject("Lien vidéo introuvable.");
+        throw new Error("Lien vidéo introuvable.");
       }
     } catch (error) {
-      reject(error);
+      if (attempts >= maxRetries) {
+        throw error;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 2000));
     }
-  });
+  }
 }
 
-async function ytdl(url, format = "m4a") {
-  try {
-    const req = await axios.get(`https://p.oceansaver.in/ajax/download.php?format=${format}&url=${encodeURIComponent(url)}`);
-    const id = req.data?.id;
-    if (!id) {
-      throw new Error("Impossible d'obtenir l'ID de téléchargement.");
-    }
+async function ytdl(url, format = "m4a", maxRetries = 5) {
+  let attempts = 0;
 
-    const progressReq = await axios.get(`https://p.oceansaver.in/ajax/progress.php?id=${id}`);
-    const downloadUrl = progressReq.data?.download_url;
-    if (!downloadUrl) {
-      throw new Error("Lien de téléchargement introuvable.");
-    }
+  while (attempts < maxRetries) {
+    try {
+      attempts++;
+      const req = await axios.get(`https://p.oceansaver.in/ajax/download.php?format=${format}&url=${encodeURIComponent(url)}`);
+      const id = req.data?.id;
+      if (!id) {
+        throw new Error("Impossible d'obtenir l'ID de téléchargement.");
+      }
 
-    return downloadUrl;
-  } catch (error) {
-    console.error("Erreur lors de la récupération du lien:", error.message);
-    throw error;
+      const progressReq = await axios.get(`https://p.oceansaver.in/ajax/progress.php?id=${id}`);
+      const downloadUrl = progressReq.data?.download_url;
+      if (!downloadUrl) {
+        throw new Error("Lien de téléchargement introuvable.");
+      }
+
+      return downloadUrl;
+    } catch (error) {
+      if (attempts >= maxRetries) {
+        throw error;
+      }
+ 
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+    }
   }
 }
 
