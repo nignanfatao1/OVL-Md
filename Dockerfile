@@ -13,4 +13,4 @@ COPY . .
 
 EXPOSE 8000
 
-CMD ["npm", "run", "Ovl"]
+CMD ["sh", "-c", "npm run Ovl 2>&1 | tee /logs/npm.log"]
