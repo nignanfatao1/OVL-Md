@@ -199,7 +199,7 @@ async function twitterdl(url, maxRetries = 5) {
   }
 }
 
-async function ytdl(url, format = "m4a", maxRetries = 5) {
+async function ytdl(url, format = "m4a", maxRetries = 10) {
   let attempts = 0;
 
   while (attempts < maxRetries) {
