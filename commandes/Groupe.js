@@ -379,40 +379,85 @@ ovlcmd(
 
 ovlcmd(
   {
-    nom_cmd: "gset",
+    nom_cmd: "close",
     classe: "Groupe",
     react: "✅",
-    desc: "Permet de modifier les paramètres du groupe",
+    desc: "Seuls les admins peuvent envoyer des messages",
   },
   async (jid, ovl, cmd_options) => {
-    const { verif_Groupe, verif_Admin, verif_Ovl_Admin, arg } = cmd_options;
+    const { verif_Groupe, verif_Admin, verif_Ovl_Admin } = cmd_options;
 
-    if (!verif_Groupe) return ovl.sendMessage(jid, { text: "Commande utilisable uniquement dans les groupes." });
+    if (!verif_Groupe) 
+      return ovl.sendMessage(jid, { text: "Commande utilisable uniquement dans les groupes." });
 
-    if (verif_Admin && verif_Ovl_Admin) {
-      if (!arg) return ovl.sendMessage(jid, { text: 'Mode d\'emploi:\n\n gset 1 (seuls les admins peuvent envoyer des messages),\ngset 2 (tout le monde peut envoyer des messages),\ngset 3 (tout le monde peut modifier les paramètres du groupe),\ngset 4 (seuls les admins peuvent modifier les paramètres du groupe).' });
-
-      const mode = arg.join(' ');
-
-      switch (mode) {
-        case '1':
-          await ovl.groupSettingUpdate(jid, 'announcement');
-          break;
-        case '2':
-          await ovl.groupSettingUpdate(jid, 'not_announcement');
-          break;
-        case '3':
-          await ovl.groupSettingUpdate(jid, 'unlocked');
-          break;
-        case '4':
-          await ovl.groupSettingUpdate(jid, 'locked');
-          break;
-        default:
-          return ovl.sendMessage(jid, { text: 'Mode inconnu. Utilisez gset 1 pour "announcements", gset 2 pour "not announcements", gset 3 pour "unlocked", ou gset 4 pour "locked".' });
-      }
-    } else {
+    if (!verif_Admin || !verif_Ovl_Admin)
       return ovl.sendMessage(jid, { text: "Je n'ai pas les droits requis pour exécuter cette commande." });
-    }
+
+    await ovl.groupSettingUpdate(jid, "announcement");
+    return ovl.sendMessage(jid, { text: "Mode défini : seuls les admins peuvent envoyer des messages." });
+  }
+);
+
+ovlcmd(
+  {
+    nom_cmd: "open",
+    classe: "Groupe",
+    react: "✅",
+    desc: "Tout le monde peut envoyer des messages",
+  },
+  async (jid, ovl, cmd_options) => {
+    const { verif_Groupe, verif_Admin, verif_Ovl_Admin } = cmd_options;
+
+    if (!verif_Groupe) 
+      return ovl.sendMessage(jid, { text: "Commande utilisable uniquement dans les groupes." });
+
+    if (!verif_Admin || !verif_Ovl_Admin)
+      return ovl.sendMessage(jid, { text: "Je n'ai pas les droits requis pour exécuter cette commande." });
+
+    await ovl.groupSettingUpdate(jid, "not_announcement");
+    return ovl.sendMessage(jid, { text: "Mode défini : tout le monde peut envoyer des messages." });
+  }
+);
+
+ovlcmd(
+  {
+    nom_cmd: "gedit",
+    classe: "Groupe",
+    react: "✅",
+    desc: "Tout le monde peut modifier les paramètres du groupe",
+  },
+  async (jid, ovl, cmd_options) => {
+    const { verif_Groupe, verif_Admin, verif_Ovl_Admin } = cmd_options;
+
+    if (!verif_Groupe) 
+      return ovl.sendMessage(jid, { text: "Commande utilisable uniquement dans les groupes." });
+
+    if (!verif_Admin || !verif_Ovl_Admin)
+      return ovl.sendMessage(jid, { text: "Je n'ai pas les droits requis pour exécuter cette commande." });
+
+    await ovl.groupSettingUpdate(jid, "unlocked");
+    return ovl.sendMessage(jid, { text: "Mode défini : tout le monde peut modifier les paramètres du groupe." });
+  }
+);
+
+ovlcmd(
+  {
+    nom_cmd: "g_restrict",
+    classe: "Groupe",
+    react: "✅",
+    desc: "Seuls les admins peuvent modifier les paramètres du groupe",
+  },
+  async (jid, ovl, cmd_options) => {
+    const { verif_Groupe, verif_Admin, verif_Ovl_Admin } = cmd_options;
+
+    if (!verif_Groupe) 
+      return ovl.sendMessage(jid, { text: "Commande utilisable uniquement dans les groupes." });
+
+    if (!verif_Admin || !verif_Ovl_Admin)
+      return ovl.sendMessage(jid, { text: "Je n'ai pas les droits requis pour exécuter cette commande." });
+
+    await ovl.groupSettingUpdate(jid, "locked");
+    return ovl.sendMessage(jid, { text: "Mode défini : seuls les admins peuvent modifier les paramètres du groupe." });
   }
 );
 
