@@ -21,7 +21,7 @@ async function sendMedia(ms_org, ovl, url, format, type) {
     const message = {
       [type]: Buffer.from(media.data),
       mimetype: format === "m4a" ? "audio/mpeg" : "video/mp4",
-      caption: `Voici le ${type === "audio" ? "fichier audio 🎧" : "fichier vidéo 🎬"}`,
+      caption: `\`\`\`Powered By OVL-MD\`\`\``
     };
 
     return await ovl.sendMessage(ms_org, message);
@@ -195,7 +195,7 @@ ovlcmd(
       const response = await axios.get(videoDownloadLink, { responseType: 'arraybuffer' });
       const videoBuffer = Buffer.from(response.data);
 
-      return ovl.sendMessage(ms_org, { video: videoBuffer, caption: "Voici la vidéo en HD" });
+      return ovl.sendMessage(ms_org, { video: videoBuffer, caption: `\`\`\`Powered By OVL-MD\`\`\`` });
 
     } catch (error) {
       ovl.sendMessage(ms_org, { text: `Erreur: ${error.message}` });
@@ -225,7 +225,7 @@ ovlcmd(
 
       const video = await axios.get(downloadLinks.result.nowatermark, { responseType: 'arraybuffer' });
 
-      return ovl.sendMessage(ms_org, { video: Buffer.from(video.data), caption: "Voici la vidéo sans watermark" });
+      return ovl.sendMessage(ms_org, { video: Buffer.from(video.data), caption: `\`\`\`Powered By OVL-MD\`\`\`` });
 
     } catch (error) {
       ovl.sendMessage(ms_org, { text: `Erreur: ${error}` });
@@ -263,7 +263,7 @@ ovlcmd(
 	    
       return ovl.sendMessage(ms_org, {
         video: Buffer.from(video.data),
-        caption: "Voici la vidéo depuis Instagram",
+        caption: `\`\`\`Powered By OVL-MD\`\`\``
       });
     } catch (error) {
       ovl.sendMessage(ms_org, { text: `Erreur: ${error.message}` });
@@ -303,7 +303,7 @@ ovlcmd(
 
       return ovl.sendMessage(ms_org, {
         video: Buffer.from(video.data),
-        caption: "Voici la vidéo depuis Twitter",
+        caption: `\`\`\`Powered By OVL-MD\`\`\``
       });
     } catch (error) {
       ovl.sendMessage(ms_org, { text: `Erreur: ${error.message}` });
