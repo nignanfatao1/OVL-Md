@@ -57,8 +57,8 @@ async function ttdl(url, maxRetries = 5) {
       const token = $('#token').attr('value');
 
       const sessionCookies = Object.entries({
-        __cfduid: initialCookies.__cfduid,
-        PHPSESSID: initialCookies.PHPSESSID,
+        __cfduid: initialCookies.__cfduid || "",
+        PHPSESSID: initialCookies.PHPSESSID || "",
       })
         .map(([key, value]) => cookie.serialize(key, value))
         .join("; ");
