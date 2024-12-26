@@ -223,7 +223,14 @@ ovlcmd(
     try {
       const downloadLinks = await ttdl(videoLink);
 
-      const video = await axios.get(downloadLinks.result.nowatermark, { responseType: 'arraybuffer' });
+      const video = await axios.get(downloadLinks.result.nowatermark, {
+        responseType: "arraybuffer",
+        headers: {
+          "Accept": "application/octet-stream",
+          "Content-Type": "application/octet-stream",
+          "User-Agent": "GoogleBot",
+        },
+      });
 
       return ovl.sendMessage(ms_org, { video: Buffer.from(video.data), caption: `\`\`\`Powered By OVL-MD\`\`\`` });
 
