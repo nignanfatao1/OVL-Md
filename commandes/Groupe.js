@@ -138,6 +138,15 @@ ovlcmd(
                     });
                     const sticker_buffer = await sticker_msg.toBuffer();
                     contenu_msg = { sticker: sticker_buffer, mentions: membres_Groupe };
+                } else if (msg_Repondu.pollMessage) {
+                    let poll = msg_Repondu.pollMessage;
+                    await ovl.sendMessage(dest, {
+                        poll: {
+                            name: poll.poll.name,
+                            values: poll.poll.options,
+                        },
+                        mentions: membres_Groupe
+                    }, { quoted: ms });
                 } else {
                     contenu_msg = {
                         text: msg_Repondu.conversation,
