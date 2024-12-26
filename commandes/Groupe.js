@@ -43,6 +43,50 @@ ovlcmd(
 
 ovlcmd(
     {
+        nom_cmd: "tagadmin",
+        classe: "Groupe",
+        react: "💬",
+        desc: "Commande pour taguer tous les administrateurs d'un groupe"
+    },
+    async (dest, ovl, cmd_options) => {
+        try {
+            const { ms, repondre, arg, verif_Groupe, infos_Groupe, nom_Auteur_Message, verif_Admin } = cmd_options;
+
+            if (!verif_Groupe) {
+                return repondre("Cette commande ne fonctionne que dans les groupes");
+            }
+
+            const messageTexte = arg && arg.length > 0 ? arg.join(' ') : '';
+            const membresGroupe = verif_Groupe ? await infos_Groupe.participants : [];
+            const adminsGroupe = membresGroupe.filter(membre => membre.admin).map(membre => membre.id);
+
+            if (adminsGroupe.length === 0) {
+                return repondre("Aucun administrateur trouvé dans ce groupe.");
+            }
+
+            let tagMessage = `╭───〔  TAG ADMINS 〕───⬣\n`;
+            tagMessage += `│👤 Auteur : *${nom_Auteur_Message}*\n`;
+            tagMessage += `│💬 Message : *${messageTexte}*\n│\n`;
+
+            membresGroupe.forEach(membre => {
+                if (membre.admin) {
+                    tagMessage += `│◦❒ @${membre.id.split("@")[0]}\n`;
+                }
+            });
+            tagMessage += `╰═══════════════⬣\n`;
+
+            if (verif_Admin) {
+                await ovl.sendMessage(dest, { text: tagMessage, mentions: adminsGroupe }, { quoted: ms });
+            } else {
+                repondre('Seuls les administrateurs peuvent utiliser cette commande');
+            }
+        } catch (error) {
+            console.error("Erreur lors de l'envoi du message avec tagadmins :", error);
+        }
+    });
+
+ovlcmd(
+    {
         nom_cmd: "tag",
         classe: "Groupe",
         react: "💬",
@@ -121,6 +165,50 @@ ovlcmd(
 
 ovlcmd(
   {
+    nom_cmd: "poll",
+    classe: "Groupe",
+    react: "📊",
+    desc: "Crée un sondage dans le groupe.",
+  },
+  async (dest, ovl, cmd_options) => {
+    try {
+      const { ms, repondre, arg, verif_Groupe, infos_Groupe, nom_Auteur_Message, verif_Admin } = cmd_options;
+
+      if (!verif_Groupe) {
+        return repondre("Cette commande ne fonctionne que dans les groupes.");
+      }
+
+      let [pollName, pollOptions] = arg.join(' ').split(';');
+
+      if (!pollOptions) {
+        return repondre("Veuillez fournir une question suivie des options, séparées par des virgules. Exemple : poll question;option1,option2,option3");
+      }
+
+      let options = pollOptions.split(',').map(option => option.trim()).filter(option => option.length > 0);
+
+      if (options.length < 2) {
+        return repondre("Le sondage doit contenir au moins deux options.");
+      }
+      
+      if (verif_Admin) {
+        await ovl.sendMessage(dest, {
+          poll: {
+            name: pollName,
+            values: options,
+          },
+        }, { quoted: ms });
+      } else {
+        repondre('Seuls les administrateurs peuvent utiliser cette commande.');
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'envoi du sondage :", error);
+      repondre("Une erreur est survenue lors de la création du sondage.");
+    }
+  }
+);
+
+ovlcmd(
+  {
     nom_cmd: "kick",
     classe: "Groupe",
     react: "🛑",
@@ -150,6 +238,84 @@ ovlcmd(
     }
     } else { return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
            };
+  }
+);
+
+ovlcmd(
+  {
+    nom_cmd: "kickall",
+    classe: "Groupe",
+    react: "🛑",
+    desc: "Supprime tous les membres non administrateurs du groupe.",
+  },
+  async (ms_org, ovl, cmd_options) => {
+    const { verif_Groupe, verif_Admin, verif_Ovl_Admin, infos_Groupe, prenium_id } = cmd_options;
+    
+    if (!verif_Groupe) return ovl.sendMessage(ms_org, { text: "Commande utilisable uniquement dans les groupes." });
+    
+    if (prenium_id || verif_Admin) {
+      const membres = await infos_Groupe.participants;
+      const admins = membres.filter((m) => m.admin).map((m) => m.id);
+      
+      if (!verif_Ovl_Admin) {
+        return ovl.sendMessage(ms_org, { text: "Je dois être administrateur pour effectuer cette action." });
+      }
+      const nonAdmins = membres.filter((m) => !m.admin).map((m) => m.id);
+
+      if (nonAdmins.length === 0) {
+        return ovl.sendMessage(ms_org, { text: "Il n'y a aucun membre non administrateur à exclure." });
+      }
+
+      try {
+        await ovl.groupParticipantsUpdate(ms_org, nonAdmins, "remove");
+        ovl.sendMessage(ms_org, { text: "Tous les membres non administrateurs ont été exclus du groupe." });
+      } catch (err) {
+        console.error("Erreur :", err);
+        ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de l'exclusion des membres non administrateurs." });
+      }
+    } else {
+      return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
+    }
+  }
+);
+
+ovlcmd(
+  {
+    nom_cmd: "ckick",
+    classe: "Groupe",
+    react: "🛑",
+    desc: "Supprime tous les membres dont le JID commence par un indicatif spécifique.",
+  },
+  async (ms_org, ovl, cmd_options) => {
+    const { verif_Groupe, verif_Admin, verif_Ovl_Admin, infos_Groupe, prenium_id, arg } = cmd_options;
+    
+    if (!verif_Groupe) return ovl.sendMessage(ms_org, { text: "Commande utilisable uniquement dans les groupes." });
+    
+    if (prenium_id || verif_Admin) {
+      if (!arg[0]) return ovl.sendMessage(ms_org, { text: "Veuillez spécifier l'indicatif." });
+
+      const indicatif = arg[0];
+      const membres = await infos_Groupe.participants;
+
+      if (!verif_Ovl_Admin) {
+        return ovl.sendMessage(ms_org, { text: "Je dois être administrateur pour effectuer cette action." });
+      }
+         const membresToKick = membres.filter((m) => m.id.startsWith(indicatif)).map((m) => m.id);
+
+      if (membresToKick.length === 0) {
+        return ovl.sendMessage(ms_org, { text: `Aucun membre trouvé avec l'indicatif ${indicatif}.` });
+      }
+
+      try { 
+          await ovl.groupParticipantsUpdate(ms_org, membresToKick, "remove");
+        ovl.sendMessage(ms_org, { text: `Tous les membres dont le JID commence par ${indicatif} ont été exclus du groupe.` });
+      } catch (err) {
+        console.error("Erreur :", err);
+        ovl.sendMessage(ms_org, { text: "Une erreur est survenue lors de l'exclusion des membres." });
+      }
+    } else {
+      return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
+    }
   }
 );
 
@@ -229,50 +395,37 @@ ovlcmd(
     desc: "Supprimer un message dans le groupe.",
   },
   async (ms_org, ovl, cmd_options) => {
-    const {
-      auteur_Msg_Repondu,
-      id_Bot,
-      msg_Repondu,
-      verif_Admin,
-      verif_Ovl_Admin,
-      verif_Groupe,
-    } = cmd_options;
+    const { msg_Repondu, verif_Admin, verif_Ovl_Admin, verif_Groupe } = cmd_options;
 
     if (!verif_Groupe) {
       return ovl.sendMessage(ms_org, { text: "Commande utilisable uniquement dans les groupes." });
     }
 
-    if (!msg_Repondu) {
-      return ovl.sendMessage(ms_org, { text: "Veuillez répondre à un message pour le supprimer." });
-    }
-
     if (!verif_Admin) {
-      return ovl.sendMessage(ms_org, { text: "Vous n'avez pas la permission d'utiliser cette commande." });
+      return ovl.sendMessage(ms_org, { text: "Vous devez être administrateur pour utiliser cette commande." });
     }
 
     if (!verif_Ovl_Admin) {
       return ovl.sendMessage(ms_org, { text: "Je dois être administrateur pour effectuer cette action." });
     }
 
-    try {
-      const stanzaId = msg_Repondu.key.id;
-      const participant = msg_Repondu.key.participant || msg_Repondu.key.remoteJid;
-      const fromMe = msg_Repondu.key.fromMe;
+    if (!msg_Repondu) {
+      return ovl.sendMessage(ms_org, { text: "Veuillez répondre à un message pour le supprimer." });
+    }
 
+    try {
       const key = {
         remoteJid: ms_org,
-        id: stanzaId,
-        fromMe: auteur_Msg_Repondu === id_Bot, // Vérifie si c'est le message du bot.
-        participant: fromMe ? undefined : participant, // `participant` est requis pour les messages qui ne viennent pas du bot.
+        id: msg_Repondu.key.id,
+        participant: msg_Repondu.key.participant || msg_Repondu.key.remoteJid,
       };
 
       await ovl.sendMessage(ms_org, { delete: key });
-    } catch (error) {
-      ovl.sendMessage(ms_org, { text: `Une erreur est survenue lors de la suppression du message: ${error.message}` });
+      } catch (error) {
+      ovl.sendMessage(ms_org, { text: `Erreur lors de la suppression : ${error.message}` });
     }
   }
 );
-
 
 ovlcmd(
   {
