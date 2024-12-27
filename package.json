@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "Ovl": "pm2 start index.js --attach --name ovl --restart-delay 5000 --max-restarts 5 --max-memory-restart 200M"
+    "Ovl": "pm2 start index.js --attach --name ovl --restart-delay 5000 --max-restarts 5 --max-memory-restart 200M",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": ["Ainz", "Ovl-Md", "Baileys"],
