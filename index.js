@@ -525,6 +525,7 @@ main();
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
+const os = require('os');
 
 let dernierPingRecu = Date.now();
 
@@ -554,8 +555,32 @@ app.get('/', (req, res) => {
 });
 
 app.get('/ping', (req, res) => {
-    dernierPingRecu = Date.now();
-    res.send('OVL-MD est en ligne');
+    try {
+        const cpus = os.cpus();
+
+        let totalIdle = 0;
+        let totalTick = 0;
+
+        cpus.forEach(cpu => {
+            for (type in cpu.times) {
+                totalTick += cpu.times[type];
+            }
+            totalIdle += cpu.times.idle;
+        });
+
+        const cpuUsage = (1 - totalIdle / totalTick) * 100;
+
+        const systemCheck = cpuUsage < 80;
+
+        if (systemCheck) {
+            res.send('OVL-MD est en ligne');
+        } else {
+            throw new Error('Problème de CPU : Utilisation excessive du CPU');
+        }
+    } catch (error) {
+        console.error(error.message);
+        process.exit(1);
+    }
 });
 
 app.listen(port, () => {
