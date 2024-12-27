@@ -524,8 +524,9 @@ main();
 
 
 const express = require('express');
+const axios = require('axios');
 const app = express();
-const port = process.env.PORT || 3000; // Assurez-vous d'ajouter cette ligne pour définir le port
+const port = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
   res.send(`<!DOCTYPE html>
@@ -536,14 +537,11 @@ app.get('/', (req, res) => {
     <meta name="description" content="Page d'accueil pour OVL-MD Bot">
     <title>OVL-Bot Web Page</title>
     <style>
-        /* Reset */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
-        /* Body styling */
         body {
             display: flex;
             justify-content: center;
@@ -554,8 +552,6 @@ app.get('/', (req, res) => {
             color: #ffffff;
             overflow: hidden;
         }
-
-        /* Content box styling */
         .content {
             text-align: center;
             padding: 30px;
@@ -564,22 +560,16 @@ app.get('/', (req, res) => {
             box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
-        /* Content hover effect */
         .content:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 30px rgba(255, 255, 255, 0.15);
         }
-
-        /* Heading styling */
         h1 {
             font-size: 2em;
             color: #f0f0f0;
             margin-bottom: 15px;
             letter-spacing: 1px;
         }
-
-        /* Text paragraph styling */
         p {
             font-size: 1.1em;
             color: #d3d3d3;
@@ -596,6 +586,22 @@ app.get('/', (req, res) => {
 </html>`);
 });
 
+app.get('/ping', (req, res) => {
+    res.send('OVL-MD est en ligne');
+});
+
 app.listen(port, () => {
   console.log("Listening on port: " + port);
+  setupAutoPing(`http://localhost:${port}/ping`);
 });
+
+function setupAutoPing(url) {
+    setInterval(async () => {
+        try {
+            const res = await axios.get(url);
+            console.log(`Ping réussi : ${res.data}`);
+        } catch (err) {
+            console.error('Erreur lors du ping', err.message);
+        }
+    }, 30 * 1000); // Pinger toutes les 30 secondes
+}
