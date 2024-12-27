@@ -583,3 +583,15 @@ function checkHealth() {
         }
     }, 60000);
 }
+
+setInterval(() => {
+    const usedMemory = process.memoryUsage().heapUsed / 1024 / 1024;
+    if (usedMemory > 120) {
+        if (global.gc) {
+         global.gc();
+         console.log('mémoire liberé');
+        } else {
+            console.warn("Garbage Collection non disponible. Lancez Node.js avec '--expose-gc'.");
+        }
+    }
+}, 60000);
