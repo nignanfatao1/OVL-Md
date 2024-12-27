@@ -49,6 +49,7 @@ async function main() {
             logger: pino({ level: "silent" }),
             browser: [ "Ubuntu", "Chrome", "20.0.04" ],
             generateHighQualityLinkPreview: true,
+            syncFullHistory: false,
             auth: {
             creds: state.creds,
             keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "silent" }).child({ level: "silent" }))
