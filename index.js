@@ -577,9 +577,9 @@ function setupAutoPing(url) {
 
 function checkHealth() {
     setInterval(() => {
-        if (Date.now() - dernierPingRecu > 60000) {
+        if (Date.now() - dernierPingRecu > 30000) {
             console.error('Le ping est inactif, redémarrage...');
             process.exit(1);
         }
-    }, 60000);
+    }, 30000);
 }
