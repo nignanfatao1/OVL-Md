@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "Ovl": "pm2 start index.js --attach --name ovl"
+    "stop": "pm2 stop ovl",
+    "restart": "npm run stop && npm run Ovl"
   },
   "keywords": ["Ainz", "Ovl-Md", "Baileys"],
   "author": "Ainz",
