@@ -573,6 +573,7 @@ app.get('/ping', (req, res) => {
         const systemCheck = cpuUsage < 80;
 
         if (systemCheck) {
+            dernierPingRecu = Date.now();
             res.send('OVL-MD est en ligne');
         } else {
             throw new Error('Problème de CPU : Utilisation excessive du CPU');
