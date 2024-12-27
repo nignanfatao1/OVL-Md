@@ -581,5 +581,5 @@ function checkHealth() {
             console.error('Le ping est inactif, redémarrage...');
             process.exit(1);
         }
-    }, 30000);
+    }, 60000);
 }
