@@ -141,7 +141,7 @@ ovl.ev.on("messages.upsert", async (m) => {
         ms_org,
     };
 
-  console.log("{}=={}= OVL-MD LOG-MESSAGES ={}=={}");
+ /* console.log("{}=={}= OVL-MD LOG-MESSAGES ={}=={}");
     if (verif_Groupe) {
         console.log("Groupe: " + nom_Groupe);
     }
@@ -149,7 +149,7 @@ ovl.ev.on("messages.upsert", async (m) => {
     console.log("Type: " + mtype);
     console.log("Message:");
     console.log(texte);
-
+*/
     function repondre(message) {
         ovl.sendMessage(ms_org, { text: message }, { quoted: ms });
     } 
@@ -586,6 +586,7 @@ function checkHealth() {
 
 setInterval(() => {
     const usedMemory = process.memoryUsage().heapUsed / 1024 / 1024;
+ console.log('mempry');
     if (usedMemory > 120) {
         if (global.gc) {
          global.gc();
